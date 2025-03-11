@@ -6,7 +6,7 @@ namespace EMR_BMED.Backend.Services
 {
   public class DbService : DbContext
   {
-    public DbSet<UserModel> Users { get; set; }
+    public DbSet<AccountModel> Accounts { get; set; }
 
     public static void SeedTestData()
     {
@@ -15,8 +15,8 @@ namespace EMR_BMED.Backend.Services
       {
         return;
       }
-      dbService.Add(new UserModel("M1841", "1234"));
-      dbService.Add(new UserModel("admin", "0000"));
+      dbService.Add(new AccountModel("M1841", "1234"));
+      dbService.Add(new AccountModel("admin", "0000"));
       dbService.SaveChanges();
     }
 

@@ -22,7 +22,7 @@ namespace EMR_BMED.Backend.Tests
     [Fact]
     public async void UserNotFound()
     {
-      LoginDTO credentials = new("unregistered_user", "");
+      LoginDTO credentials = new("unregistered_account", "");
 
       await Assert.ThrowsAsync<UserNotFoundException>(
         () => authService.LoginAsync(credentials));

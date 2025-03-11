@@ -11,10 +11,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Database Libaries -->
+    <!-- Authentication -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
+
+    <!-- Database -->
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.2" />
 
-    <!-- Test Libraries -->
+    <!-- Tests -->
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">

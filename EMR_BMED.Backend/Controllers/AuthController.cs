@@ -11,11 +11,12 @@ namespace EMR_BMED.Backend.Controllers
   public class AuthController(AuthService authService) : ControllerBase
   {
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromForm] LoginDTO credentials)
+    public async Task<IActionResult> Login([FromBody] LoginDTO credentials)
     {
       try
       {
-        return Ok(await authService.LoginAsync(credentials));
+        string token = await authService.LoginAsync(credentials);
+        return Ok(new { token });
       }
       catch (UserNotFoundException)
       {

@@ -5,4 +5,10 @@ namespace EMR_BMED.Backend.Models
     string Password
   )
   { }
+
+  public record TokensDTO(
+    string AccessToken,
+    string RefreshToken
+  )
+  { }
 }
