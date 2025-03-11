@@ -8,16 +8,16 @@ namespace EMR_BMED.Backend.Services
   {
     public DbSet<UserModel> Users { get; set; }
 
-    public static void InitPlaceholderData()
+    public static void SeedTestData()
     {
-      using DbService db = new();
-      if (!db.Database.EnsureCreated())
+      using DbService dbService = new();
+      if (!dbService.Database.EnsureCreated())
       {
         return;
       }
-      db.Add(new UserModel("M1841", "1234"));
-      db.Add(new UserModel("admin", "0000"));
-      db.SaveChanges();
+      dbService.Add(new UserModel("M1841", "1234"));
+      dbService.Add(new UserModel("admin", "0000"));
+      dbService.SaveChanges();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

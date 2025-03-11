@@ -6,7 +6,7 @@ namespace EMR_BMED.Backend.Services
 {
   public class AuthService(DbService dbService)
   {
-    public async Task<string> Login(LoginDTO credentials)
+    public async Task<string> LoginAsync(LoginDTO credentials)
     {
       var user = await dbService.Users
         .FirstOrDefaultAsync(

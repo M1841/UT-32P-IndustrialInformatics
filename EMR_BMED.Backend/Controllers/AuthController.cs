@@ -15,7 +15,7 @@ namespace EMR_BMED.Backend.Controllers
     {
       try
       {
-        return Ok(await authService.Login(credentials));
+        return Ok(await authService.LoginAsync(credentials));
       }
       catch (UserNotFoundException)
       {

@@ -31,7 +31,7 @@ namespace EMR_BMED.Backend
         endpoints.MapControllers();
       });
 
-      DbService.InitPlaceholderData();
+      DbService.SeedTestData();
     }
   }
 }
