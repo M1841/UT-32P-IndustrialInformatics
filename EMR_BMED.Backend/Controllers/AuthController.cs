@@ -20,11 +20,11 @@ namespace EMR_BMED.Backend.Controllers
       }
       catch (UserNotFoundException)
       {
-        return NotFound($"User doesn't exist");
+        return NotFound(new { message = $"User doesn't exist" });
       }
       catch (IncorrectPasswordException)
       {
-        return Unauthorized("Password is incorrect");
+        return Unauthorized(new { message = "Password is incorrect" });
       }
     }
   }

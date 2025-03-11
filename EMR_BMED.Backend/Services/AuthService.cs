@@ -25,7 +25,7 @@ namespace EMR_BMED.Backend.Services
       return GenerateToken(account.Username);
     }
 
-    private string GenerateToken(string username)
+    public string GenerateToken(string username)
     {
       Claim[] claims = [
         new (JwtRegisteredClaimNames.Sub, username),
