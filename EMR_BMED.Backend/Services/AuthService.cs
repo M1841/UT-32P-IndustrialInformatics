@@ -1,10 +1,8 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
+
 using EMR_BMED.Backend.Exceptions;
 using EMR_BMED.Backend.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using EMR_BMED.Backend.Utils;
 
 namespace EMR_BMED.Backend.Services
 {
@@ -22,28 +20,7 @@ namespace EMR_BMED.Backend.Services
         throw new IncorrectPasswordException();
       }
 
-      return GenerateToken(account.Username);
-    }
-
-    public string GenerateToken(string username)
-    {
-      Claim[] claims = [
-        new (JwtRegisteredClaimNames.Sub, username),
-        new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-      ];
-
-      SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes("EVo2@bvz^9NEt$3J78x43TPWD&AvHz%#"));
-      SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
-
-      JwtSecurityToken token = new(
-        issuer: "localhost:8080",
-        audience: "localhost:4200",
-        claims: claims,
-        expires: DateTime.Now.AddHours(1),
-        signingCredentials: credentials
-      );
-
-      return new JwtSecurityTokenHandler().WriteToken(token);
+      return TokenUtils.GenerateToken(account.Username);
     }
   }
 }

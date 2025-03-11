@@ -12,19 +12,25 @@ import { CookieService } from 'ngx-cookie-service';
       <label>
         Username
         <input type="text" formControlName="username" />
+
+        @if (errors.username() !== null) {
+          <span>{{ errors.username() }}</span>
+        }
       </label>
+      <br />
 
       <label>
         Password
         <input type="password" formControlName="password" />
+
+        @if (errors.password() !== null) {
+          <span>{{ errors.password() }}</span>
+        }
       </label>
+      <br />
 
       <button type="submit">Login</button>
     </form>
-
-    @if(error() != null) {
-      <p>{{ error() }}</p>
-    }
   `,
   styles: ``,
 })
@@ -33,31 +39,35 @@ export class LoginComponent {
     username: new FormControl(''),
     password: new FormControl(''),
   });
-  readonly error = signal<string | null>(null);
+  readonly errors = {
+    username: signal<string | null>(null),
+    password: signal<string | null>(null),
+  };
 
   handleLogin() {
-    this.http
+    this.httpService
       .post<{ token: string; error?: string }>(
         'http://localhost:8080/auth/login',
         this.loginForm.value,
         {
           observe: 'response',
-        }
+        },
       )
       .subscribe({
         next: (response) => {
-          this.error.set(null);
-          this.cookies.set('access_token', response.body!.token);
-          this.router.navigate(['/']);
+          this.errors.username.set(null);
+          this.errors.password.set(null);
+          this.cookieService.set('access_token', response.body!.token);
+          this.routerService.navigate(['/']);
         },
         error: (response) => {
-          this.error.set(response?.error?.message ?? 'Unknown error');
-          console.error(response);
+          this.errors.username.set(response?.error?.username ?? null);
+          this.errors.password.set(response?.error?.password ?? null);
         },
       });
   }
 
-  private http = inject(HttpClient);
-  private router = inject(Router);
-  private cookies = inject(CookieService);
+  private httpService = inject(HttpClient);
+  private cookieService = inject(CookieService);
+  private routerService = inject(Router);
 }

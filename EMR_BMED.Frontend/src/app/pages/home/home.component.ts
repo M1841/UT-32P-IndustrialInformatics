@@ -1,9 +1,40 @@
-import { Component } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-home',
   imports: [],
-  template: ` <p>home works!</p> `,
+  template: `
+    @if (username() !== null) {
+      <p>Welcome {{ username() }}!</p>
+    } @else {
+      <a href="auth/login">Not signed in</a>
+    }
+  `,
   styles: ``,
 })
-export class HomeComponent {}
+export class HomeComponent {
+  readonly username = signal<string | null>(null);
+
+  ngOnInit() {
+    const token = this.cookieService.get('access_token');
+    if (token) {
+      this.httpService
+        .get<{ username: string }>('http://localhost:8080/auth/whoami', {
+          headers: new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+          }),
+          observe: 'response',
+        })
+        .subscribe({
+          next: (response) => {
+            this.username.set(response.body?.username ?? null);
+          },
+        });
+    }
+  }
+
+  private httpService = inject(HttpClient);
+  private cookieService = inject(CookieService);
+}

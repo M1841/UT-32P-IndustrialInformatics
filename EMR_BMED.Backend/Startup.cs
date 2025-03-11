@@ -1,7 +1,7 @@
-using System.Text;
-using EMR_BMED.Backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+
+using EMR_BMED.Backend.Services;
+using EMR_BMED.Backend.Utils;
 
 namespace EMR_BMED.Backend
 {
@@ -11,19 +11,16 @@ namespace EMR_BMED.Backend
 
     public static void ConfigureServices(IServiceCollection services)
     {
+      // Add services here:
+      // services.AddScoped<SomeService>();
+
+      services.AddScoped<DbService>();
+      services.AddScoped<AuthService>();
+
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
-          options.TokenValidationParameters = new TokenValidationParameters
-          {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = "localhost:8080",
-            ValidAudience = "localhost:4200",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("EVo2@bvz^9NEt$3J78x43TPWD&AvHz%#"))
-          };
+          options.TokenValidationParameters = TokenUtils.Parameters;
         });
       services.AddAuthorization();
 
@@ -31,18 +28,12 @@ namespace EMR_BMED.Backend
       {
         options.AddDefaultPolicy(policy =>
         {
-          policy.WithOrigins("http://localhost:4200")
+          policy.WithOrigins(Environment.GetEnvironmentVariable("FRONTEND_URL")!)
             .AllowAnyHeader()
             .AllowAnyHeader()
             .AllowAnyMethod();
         });
       });
-
-      // Add services here:
-      // services.AddScoped<SomeService>();
-
-      services.AddScoped<DbService>();
-      services.AddScoped<AuthService>();
 
       services.AddControllers();
     }
