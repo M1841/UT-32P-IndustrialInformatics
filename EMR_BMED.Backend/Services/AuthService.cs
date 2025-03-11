@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using EMR_BMED.Backend.Exceptions;
 using EMR_BMED.Backend.Models;
 using EMR_BMED.Backend.Utils;
+using BCrypt.Net;
 
 namespace EMR_BMED.Backend.Services
 {
@@ -15,7 +16,7 @@ namespace EMR_BMED.Backend.Services
           user => user.Username == credentials.Username)
         ?? throw new UserNotFoundException();
 
-      if (account.Password != credentials.Password)
+      if (!BCrypt.Net.BCrypt.Verify(credentials.Password, account.Password))
       {
         throw new IncorrectPasswordException();
       }

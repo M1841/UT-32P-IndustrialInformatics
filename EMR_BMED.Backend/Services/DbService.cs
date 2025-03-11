@@ -15,8 +15,14 @@ namespace EMR_BMED.Backend.Services
       {
         return;
       }
-      dbService.Add(new AccountModel("M1841", "1234"));
-      dbService.Add(new AccountModel("admin", "0000"));
+      dbService.Add(new AccountModel(
+        "M1841",
+        BCrypt.Net.BCrypt.HashPassword("1234")
+      ));
+      dbService.Add(new AccountModel(
+        "admin",
+        BCrypt.Net.BCrypt.HashPassword("0000")
+      ));
       dbService.SaveChanges();
     }
 
