@@ -9,7 +9,9 @@ import { CookieService } from 'ngx-cookie-service';
     @if (username() !== null) {
       <p>Welcome {{ username() }}!</p>
     } @else {
-      <a href="auth/login">Not signed in</a>
+      <a href="auth/login">Login</a> <br />
+      <a href="auth/register">Register (Patient)</a> <br />
+      <a href="auth/register/doctor">Register (Doctor)</a>
     }
   `,
   styles: ``,

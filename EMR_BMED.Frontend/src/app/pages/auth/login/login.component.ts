@@ -9,12 +9,15 @@ import { CookieService } from 'ngx-cookie-service';
   imports: [ReactiveFormsModule],
   template: `
     <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
-      <label>
-        Username
-        <input type="text" formControlName="username" />
+      <h2>Login Form</h2>
+      <a href="auth/register">Don't have an account?</a><br />
 
-        @if (errors.username() !== null) {
-          <span>{{ errors.username() }}</span>
+      <label>
+        Email
+        <input type="text" formControlName="email" />
+
+        @if (errors.email() !== null) {
+          <span>{{ errors.email() }}</span>
         }
       </label>
       <br />
@@ -36,11 +39,11 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class LoginComponent {
   readonly loginForm = new FormGroup({
-    username: new FormControl(''),
+    email: new FormControl(''),
     password: new FormControl(''),
   });
   readonly errors = {
-    username: signal<string | null>(null),
+    email: signal<string | null>(null),
     password: signal<string | null>(null),
   };
 
@@ -55,13 +58,13 @@ export class LoginComponent {
       )
       .subscribe({
         next: (response) => {
-          this.errors.username.set(null);
+          this.errors.email.set(null);
           this.errors.password.set(null);
           this.cookieService.set('access_token', response.body!.token);
           this.routerService.navigate(['/']);
         },
         error: (response) => {
-          this.errors.username.set(response?.error?.username ?? null);
+          this.errors.email.set(response?.error?.email ?? null);
           this.errors.password.set(response?.error?.password ?? null);
         },
       });
