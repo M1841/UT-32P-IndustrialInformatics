@@ -6,23 +6,41 @@ namespace EMR_BMED.Backend.Services
 {
   public class DbService : DbContext
   {
-    public DbSet<AccountModel> Accounts { get; set; }
+    public DbSet<UserModel> Users { get; set; }
 
     public static void SeedTestData()
     {
-      using DbService dbService = new();
+      using var dbService = new DbService();
       if (!dbService.Database.EnsureCreated())
       {
         return;
       }
-      dbService.Add(new AccountModel(
-        "M1841",
-        BCrypt.Net.BCrypt.HashPassword("1234")
-      ));
-      dbService.Add(new AccountModel(
-        "admin",
-        BCrypt.Net.BCrypt.HashPassword("0000")
-      ));
+      dbService.Add(new PatientModel
+      {
+        Name = "John",
+        Surname = "Doe",
+        Email = "jdoe@email.com",
+        Password = BCrypt.Net.BCrypt.HashPassword("1234"),
+        Gender = "Male",
+        Birthday = new DateTime(1996, 02, 29),
+        Phone = "012346789",
+        Allergies = "Nuts",
+        Intolerances = "Lactose",
+        Conditions = "Asthma",
+        Blood = "AB"
+      });
+      dbService.Add(new DoctorModel
+      {
+        Name = "Jane",
+        Surname = "Smith",
+        Email = "jane.smith@bmed.co",
+        Password = BCrypt.Net.BCrypt.HashPassword("5678"),
+        Gender = "Female",
+        Birthday = new DateTime(1987, 11, 9),
+        Phone = "0987654321",
+        Address = "22 Hilda Street",
+        MedicalField = "Orthopedics"
+      });
       dbService.SaveChanges();
     }
 

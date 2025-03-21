@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 using EMR_BMED.Backend.Services;
 using EMR_BMED.Backend.Models;
 using EMR_BMED.Backend.Exceptions;
-using EMR_BMED.Backend.Utils;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
 
 namespace EMR_BMED.Backend.Controllers
 {
@@ -23,7 +22,7 @@ namespace EMR_BMED.Backend.Controllers
       }
       catch (UserNotFoundException)
       {
-        return NotFound(new { username = $"User doesn't exist" });
+        return NotFound(new { email = $"User doesn't exist" });
       }
       catch (IncorrectPasswordException)
       {
@@ -34,13 +33,16 @@ namespace EMR_BMED.Backend.Controllers
     // Temporary
     [Authorize]
     [HttpGet("whoami")]
-    public IActionResult WhoAmI([FromHeader(Name = "Authorization")] string authHeader)
+    public async Task<IActionResult> WhoAmI([FromHeader(Name = "Authorization")] string authHeader)
     {
       try
       {
-        string token = authHeader.Split(' ').LastOrDefault()!;
-        string username = TokenUtils.ExtractUsername(token);
-        return Ok(new { username });
+        var user = await authService.WhoAmI(authHeader);
+        return Ok(new { user.Name, user.Surname });
+      }
+      catch (UserNotFoundException)
+      {
+        return NotFound(new { username = $"Access token doesn't belond to a user" });
       }
       catch (SecurityTokenMalformedException)
       {

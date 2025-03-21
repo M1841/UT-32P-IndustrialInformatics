@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EMR_BMED.Backend.Models
 {
-  [Index(nameof(Name)), Index(nameof(Method)), Index(nameof(Form)), ]
+  [Index(nameof(Name)), Index(nameof(Method)), Index(nameof(Form)),]
   public class MedicationModel
   {
     // identification
@@ -48,7 +48,7 @@ namespace EMR_BMED.Backend.Models
     public string? Storing { get; set; }
 
     // for foreign keys (the references to the other tables)
-    public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
+    // public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
   }
 
 
@@ -76,7 +76,7 @@ namespace EMR_BMED.Backend.Models
     [Column(TypeName = "date")]
     public required DateTime Issued { get; set; } // should be automatically generated from frontend
     [Column(TypeName = "bit")]
-    public required Boolean IsAfterMeal { get; set; }
+    public required bool IsAfterMeal { get; set; }
 
     // optional fields
     [Column(TypeName = "text")]
@@ -89,7 +89,7 @@ namespace EMR_BMED.Backend.Models
     // for foreign keys (the references to the other tables)
     public virtual required DoctorModel Doctor { get; set; }
     public virtual required UserModel User { get; set; }
-    public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
+    // public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
   }
 
 
@@ -97,16 +97,16 @@ namespace EMR_BMED.Backend.Models
   /// <summary>
   /// Intermediary table between the Prescriptions and Meds, Users and Doctors
   /// </summary>
-  public class PrescriptionRecordModel
-  {
-    [ForeignKey("PrescriptionModel")]
-    public required int PID { get; set; }
-    [ForeignKey("MedicationModel")]
-    public required int MID { get; set; }
-    
+  // public class PrescriptionRecordModel
+  // {
+  //   [ForeignKey("PrescriptionModel")]
+  //   public required int PID { get; set; }
+  //   [ForeignKey("MedicationModel")]
+  //   public required int MID { get; set; }
 
-    // for foreign keys (the references to the other tables)
-    public virtual required MedicationModel   Meds { get; set; }
-    public virtual required PrescriptionModel Prescriptions { get; set; }
-  }
+
+  //   // for foreign keys (the references to the other tables)
+  //   public virtual required MedicationModel Meds { get; set; }
+  //   public virtual required PrescriptionModel Prescriptions { get; set; }
+  // }
 }
