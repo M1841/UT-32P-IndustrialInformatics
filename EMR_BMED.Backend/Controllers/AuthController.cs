@@ -42,7 +42,7 @@ namespace EMR_BMED.Backend.Controllers
       }
       catch (UserNotFoundException)
       {
-        return NotFound(new { username = $"Access token doesn't belond to a user" });
+        return NotFound(new { username = $"Access token doesn't belong to a user" });
       }
       catch (SecurityTokenMalformedException)
       {
