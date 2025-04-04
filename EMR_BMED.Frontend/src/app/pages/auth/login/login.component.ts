@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
+
+import { ApiService } from '@/services/api/api.service';
 
 @Component({
   selector: 'app-login',
@@ -48,29 +48,19 @@ export class LoginComponent {
   };
 
   handleLogin() {
-    this.httpService
-      .post<{ token: string; error?: string }>(
-        'http://localhost:8080/auth/login',
-        this.loginForm.value,
-        {
-          observe: 'response',
-        },
-      )
-      .subscribe({
-        next: (response) => {
-          this.errors.email.set(null);
-          this.errors.password.set(null);
-          this.cookieService.set('access_token', response.body!.token);
-          this.routerService.navigate(['/']);
-        },
-        error: (response) => {
-          this.errors.email.set(response?.error?.email ?? null);
-          this.errors.password.set(response?.error?.password ?? null);
-        },
-      });
+    this.api.login(this.loginForm.value).subscribe({
+      next: () => {
+        this.errors.email.set(null);
+        this.errors.password.set(null);
+        this.router.navigate(['/']);
+      },
+      error: (response) => {
+        this.errors.email.set(response?.error?.email ?? null);
+        this.errors.password.set(response?.error?.password ?? null);
+      },
+    });
   }
 
-  private httpService = inject(HttpClient);
-  private cookieService = inject(CookieService);
-  private routerService = inject(Router);
+  private api = inject(ApiService);
+  private router = inject(Router);
 }
