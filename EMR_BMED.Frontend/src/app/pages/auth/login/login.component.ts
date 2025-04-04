@@ -8,15 +8,15 @@ import { ApiService } from '@/services/api/api.service';
   selector: 'app-login',
   imports: [ReactiveFormsModule],
   template: `
-    <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
       <h2>Login Form</h2>
       <a href="auth/register">Don't have an account?</a><br />
 
       <label>
         Email
-        <input type="text" formControlName="email" />
+        <input required type="text" formControlName="email" />
 
-        @if (errors.email() !== null) {
+        @if (errors.email() !== '') {
           <span>{{ errors.email() }}</span>
         }
       </label>
@@ -24,9 +24,9 @@ import { ApiService } from '@/services/api/api.service';
 
       <label>
         Password
-        <input type="password" formControlName="password" />
+        <input required type="password" formControlName="password" />
 
-        @if (errors.password() !== null) {
+        @if (errors.password() !== '') {
           <span>{{ errors.password() }}</span>
         }
       </label>
@@ -38,27 +38,38 @@ import { ApiService } from '@/services/api/api.service';
   styles: ``,
 })
 export class LoginComponent {
-  readonly loginForm = new FormGroup({
-    email: new FormControl(''),
-    password: new FormControl(''),
+  readonly form = new FormGroup({
+    email: new FormControl(),
+    password: new FormControl(),
   });
   readonly errors = {
-    email: signal<string | null>(null),
-    password: signal<string | null>(null),
+    email: signal<string>(''),
+    password: signal<string>(''),
   };
 
-  handleLogin() {
-    this.api.login(this.loginForm.value).subscribe({
-      next: () => {
-        this.errors.email.set(null);
-        this.errors.password.set(null);
-        this.router.navigate(['/']);
-      },
-      error: (response) => {
-        this.errors.email.set(response?.error?.email ?? null);
-        this.errors.password.set(response?.error?.password ?? null);
-      },
-    });
+  handleSubmit() {
+    if (this.form.valid) {
+      this.api.login(this.form.value).subscribe({
+        next: () => {
+          this.errors.email.set('');
+          this.errors.password.set('');
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 5);
+        },
+        error: ({ error }) => {
+          this.errors.email.set(error?.email ?? '');
+          this.errors.password.set(error?.password ?? '');
+        },
+      });
+    } else {
+      this.errors.email.set(
+        !this.form.value.email ? 'Email cannot be empty' : '',
+      );
+      this.errors.password.set(
+        !this.form.value.password ? 'Passord cannot be empty' : '',
+      );
+    }
   }
 
   private api = inject(ApiService);

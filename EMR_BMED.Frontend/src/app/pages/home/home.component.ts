@@ -8,6 +8,7 @@ import { ApiService } from '@/services/api/api.service';
   template: `
     @if (isAuthenticated() && user() !== null) {
       <p>Logged in as: {{ user()!.name }} {{ user()!.surname }}</p>
+      <button (click)="handleLogout()">Logout</button>
     } @else {
       <a href="auth/login">Login</a> <br />
       <a href="auth/register">Register (Patient)</a> <br />
@@ -28,6 +29,10 @@ export class HomeComponent {
         },
       });
     }
+  }
+
+  handleLogout() {
+    this.api.logout();
   }
 
   private api = inject(ApiService);

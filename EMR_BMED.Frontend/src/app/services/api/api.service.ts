@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { computed, inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { tap } from 'rxjs';
 
@@ -12,10 +13,16 @@ export class ApiService {
   login(
     credentials: Partial<{ email: string | null; password: string | null }>,
   ) {
-    return this.post<{ token: string; error?: string }, any>(
-      'auth/login',
-      credentials,
-    ).pipe(
+    return this.post<
+      {
+        token: string;
+        error?: {
+          email?: string;
+          password?: string;
+        };
+      },
+      any
+    >('auth/login', credentials).pipe(
       tap((response) => {
         if (response.ok) {
           this.cookies.set('access_token', response.body!.token, {
@@ -26,6 +33,11 @@ export class ApiService {
         }
       }),
     );
+  }
+
+  logout() {
+    this.cookies.deleteAll();
+    this.router.navigate(['auth/login']);
   }
 
   get<Res>(endpoint: string, params: string = '') {
@@ -51,4 +63,5 @@ export class ApiService {
 
   private readonly cookies = inject(CookieService);
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
 }
