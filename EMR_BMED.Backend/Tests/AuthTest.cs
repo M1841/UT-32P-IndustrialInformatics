@@ -3,20 +3,26 @@ using Xunit;
 using EMR_BMED.Backend.Models;
 using EMR_BMED.Backend.Services;
 using EMR_BMED.Backend.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using EMR_BMED.Backend.Utils;
 
 namespace EMR_BMED.Backend.Tests
 {
   public class AuthTest
   {
     [Theory]
-    [InlineData("M1841", "1234")]
-    [InlineData("admin", "0000")]
-    public async void SuccessfulLogin(string username, string password)
+    [InlineData("jdoe@email.com", "1234")]
+    [InlineData("jane.smith@bmed.co", "5678")]
+    public async void SuccessfulLogin(string email, string password)
     {
-      LoginDto credentials = new(username, password);
-      string message = await authService.LoginAsync(credentials);
+      LoginDto credentials = new(email, password);
+      Guid expectedId = (await dbService.Users
+        .FirstOrDefaultAsync(u => u.Email == email))!.Id;
 
-      Assert.Equal($"Welcome {username}!", message);
+      string token = await authService.LoginAsync(credentials);
+      Guid actualId = TokenUtils.ExtractId(token);
+
+      Assert.Equal(expectedId, actualId);
     }
 
     [Fact]
@@ -30,9 +36,11 @@ namespace EMR_BMED.Backend.Tests
 
     public AuthTest()
     {
-      dbService = new();
+      Environment.SetEnvironmentVariable(
+        "JWT_SECRET", "12345678901234567890123456789012");
+      dbService = new(true);
       authService = new AuthService(dbService);
-      DbService.SeedTestData();
+      DbService.SeedTestData(true);
     }
 
     private readonly DbService dbService;

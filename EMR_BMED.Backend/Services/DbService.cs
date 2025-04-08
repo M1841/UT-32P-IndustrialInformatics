@@ -10,13 +10,10 @@ namespace EMR_BMED.Backend.Services
     public DbSet<PrescriptionModel> Prescriptions { get; set; }
     public DbSet<MedicationModel> Meds { get; set; }
 
-    public static void SeedTestData()
+    public static void SeedTestData(bool IsTestDb)
     {
-      using var dbService = new DbService();
-      if (!dbService.Database.EnsureCreated())
-      {
-        return;
-      }
+      using DbService dbService = new(IsTestDb);
+
       dbService.Add(new PatientModel
       {
         Name = "John",
@@ -31,6 +28,7 @@ namespace EMR_BMED.Backend.Services
         Conditions = "Asthma",
         Blood = "AB"
       });
+
       dbService.Add(new DoctorModel
       {
         Name = "Jane",
@@ -43,12 +41,21 @@ namespace EMR_BMED.Backend.Services
         Address = "22 Hilda Street",
         MedicalField = "Orthopedics"
       });
+
       dbService.SaveChanges();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-      // => optionsBuilder.UseInMemoryDatabase("EMR_BMED");
-      => optionsBuilder.UseSqlite("DataSource=EMR_BMED.sqlite");
+    {
+      if (_isTestDb)
+      {
+        optionsBuilder.UseInMemoryDatabase("EMR_BMED.test");
+      }
+      else
+      {
+        optionsBuilder.UseSqlite("DataSource=EMR_BMED.sqlite");
+      }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -61,6 +68,15 @@ namespace EMR_BMED.Backend.Services
         .HasMany(p => p.Meds)
         .WithMany(m => m.Prescriptions)
         .UsingEntity("PrescriptionRecords");
+
     }
+
+    public DbService() : base() { }
+    public DbService(bool IsTestDb) : base()
+    {
+      _isTestDb = IsTestDb;
+    }
+
+    private readonly bool _isTestDb = false;
   }
 }
