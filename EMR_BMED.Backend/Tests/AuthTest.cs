@@ -13,7 +13,7 @@ namespace EMR_BMED.Backend.Tests
     [InlineData("admin", "0000")]
     public async void SuccessfulLogin(string username, string password)
     {
-      LoginDTO credentials = new(username, password);
+      LoginDto credentials = new(username, password);
       string message = await authService.LoginAsync(credentials);
 
       Assert.Equal($"Welcome {username}!", message);
@@ -22,7 +22,7 @@ namespace EMR_BMED.Backend.Tests
     [Fact]
     public async void UserNotFound()
     {
-      LoginDTO credentials = new("unregistered_account", "");
+      LoginDto credentials = new("unregistered_account", "");
 
       await Assert.ThrowsAsync<UserNotFoundException>(
         () => authService.LoginAsync(credentials));

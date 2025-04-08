@@ -30,7 +30,6 @@ namespace EMR_BMED.Backend
         {
           policy.WithOrigins(Environment.GetEnvironmentVariable("FRONTEND_URL")!)
             .AllowAnyHeader()
-            .AllowAnyHeader()
             .AllowAnyMethod();
         });
       });

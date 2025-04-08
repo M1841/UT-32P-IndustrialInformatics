@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { ApiService } from '@/services/api/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -153,10 +154,19 @@ export class RegisterComponent {
         >('auth/register', this.form.value)
         .subscribe({
           next: () => {
-            this.api.login({
-              email: this.form.value.email,
-              password: this.form.value.password,
-            });
+            this.api
+              .login({
+                email: this.form.value.email,
+                password: this.form.value.password,
+              })
+              .subscribe({
+                next: () => {
+                  this.router.navigate(['/']);
+                },
+                error: ({ error }) => {
+                  console.error(error);
+                },
+              });
           },
           error: ({ error }) => {
             this.errors.email.set(error?.email ?? '');
@@ -186,4 +196,5 @@ export class RegisterComponent {
   }
 
   private api = inject(ApiService);
+  private router = inject(Router);
 }

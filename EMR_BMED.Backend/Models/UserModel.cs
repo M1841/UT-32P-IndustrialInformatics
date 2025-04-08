@@ -46,8 +46,7 @@ namespace EMR_BMED.Backend.Models
   {
     // identification
     [Key]
-    [Column("UID")]
-    public Guid ID { get; set; }
+    public Guid Id { get; set; }
 
     // authentication info
     public required string Password { get; set; }
@@ -66,7 +65,7 @@ namespace EMR_BMED.Backend.Models
     public required string Gender { get; set; }
 
     [Column(TypeName = "date")]
-    public required DateTime Birthday { get; set; }
+    public required DateOnly Birthday { get; set; }
 
     // optional fields
     [Column(TypeName = "nvarchar(25)")]

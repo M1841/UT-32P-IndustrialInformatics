@@ -52,14 +52,14 @@ export class ApiService {
   }
 
   private readonly url = 'http://localhost:8080';
-  private readonly options = computed(() => {
+  private options() {
     return {
-      headers: new HttpHeaders({
+      headers: {
         Authorization: `Bearer ${this.cookies.get('access_token')}`,
-      }),
+      },
       observe: 'response' as const,
     };
-  });
+  }
 
   private readonly cookies = inject(CookieService);
   private readonly http = inject(HttpClient);

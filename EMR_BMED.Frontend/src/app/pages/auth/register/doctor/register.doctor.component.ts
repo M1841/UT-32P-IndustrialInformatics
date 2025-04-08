@@ -1,6 +1,7 @@
 import { ApiService } from '@/services/api/api.service';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register.doctor',
@@ -76,6 +77,12 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
       <br />
 
       <label>
+        Medical Field
+        <input required type="text" formControlName="medicalField" />
+      </label>
+      <br />
+
+      <label>
         Phone Number (Optional)
         <input type="text" formControlName="phoneNumber" />
       </label>
@@ -84,12 +91,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
       <label>
         Address (Optional)
         <input type="text" formControlName="address" />
-      </label>
-      <br />
-
-      <label>
-        Medical Field (Optional)
-        <input type="text" formControlName="medicalField" />
       </label>
       <br />
 
@@ -106,9 +107,9 @@ export class RegisterDoctorComponent {
     password: new FormControl(),
     gender: new FormControl(),
     birthday: new FormControl(),
+    medicalField: new FormControl(),
     phoneNumber: new FormControl(),
     address: new FormControl(),
-    medicalField: new FormControl(),
   });
   readonly errors = {
     name: signal<string>(''),
@@ -117,6 +118,7 @@ export class RegisterDoctorComponent {
     password: signal<string>(''),
     gender: signal<string>(''),
     birthday: signal<string>(''),
+    medicalField: signal<string>(''),
   };
 
   handleSubmit() {
@@ -133,10 +135,19 @@ export class RegisterDoctorComponent {
         >('auth/register/doctor', this.form.value)
         .subscribe({
           next: () => {
-            this.api.login({
-              email: this.form.value.email,
-              password: this.form.value.password,
-            });
+            this.api
+              .login({
+                email: this.form.value.email,
+                password: this.form.value.password,
+              })
+              .subscribe({
+                next: () => {
+                  this.router.navigate(['/']);
+                },
+                error: ({ error }) => {
+                  console.error(error);
+                },
+              });
           },
           error: ({ error }) => {
             this.errors.email.set(error?.email ?? '');
@@ -162,8 +173,12 @@ export class RegisterDoctorComponent {
       this.errors.birthday.set(
         !this.form.value.birthday ? 'Birthday cannot be empty' : '',
       );
+      this.errors.medicalField.set(
+        !this.form.value.medicalField ? 'Medical field cannot be empty' : '',
+      );
     }
   }
 
   private api = inject(ApiService);
+  private router = inject(Router);
 }

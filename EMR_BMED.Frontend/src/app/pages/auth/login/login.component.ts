@@ -53,9 +53,7 @@ export class LoginComponent {
         next: () => {
           this.errors.email.set('');
           this.errors.password.set('');
-          setTimeout(() => {
-            this.router.navigate(['/']);
-          }, 5);
+          this.router.navigate(['/']);
         },
         error: ({ error }) => {
           this.errors.email.set(error?.email ?? '');
