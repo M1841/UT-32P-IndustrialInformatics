@@ -1,18 +1,26 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 
 using EMR_BMED.Backend.Services;
+using EMR_BMED.Backend.Data;
 using EMR_BMED.Backend.Utils;
 
 namespace EMR_BMED.Backend
 {
-  internal class Startup(IConfiguration configuration)
+  internal class Startup
   {
-    public IConfiguration Configuration { get; } = configuration;
+    public static IConfiguration Configuration { get; private set; }
+
+    public Startup(IConfiguration configuration)
+    {
+      Configuration = configuration;
+    }
 
     public static void ConfigureServices(IServiceCollection services)
     {
       // Add services here:
-      // services.AddScoped<SomeService>();
+      services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
       services.AddScoped<DbService>();
       services.AddScoped<AuthService>();

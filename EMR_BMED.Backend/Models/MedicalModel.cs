@@ -8,88 +8,113 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Tracing;
+using System.Runtime.CompilerServices;
 
 namespace EMR_BMED.Backend.Models
 {
-  [Index(nameof(Name)), Index(nameof(Method)), Index(nameof(Form)), ]
+  [Index(nameof(CommercialName)), Index(nameof(DCI))] // alternate keys
   public class MedicationModel
   {
     // identification
     [Key]
     [Column("MID")]
-    public Guid ID { get; set; }
+    public Guid ID { get; set; } // this will be CIM
 
-    // 
-    public required string Name { get; set; }
-    // Form refers to the way the medication comes is (pill, injection, etc.)
-    // TODO: find a better name for it lol
-    [Column(TypeName = "nvarchar(100)")]
-    [DisplayName("Dosage_Form")]
-    public required string Form { get; set; }
-    // Method refers to the way the medication is supposed to be taken (oral, intravenous, etc.)
-    [Column(TypeName = "nvarchar(100)")]
-    [DisplayName("Administration_Method")]
-    public required string Method { get; set; }
-    [Column("Requires_Prescription")]
-    public required Boolean IsPresRequired { get; set; }
+    // required fields
+    [Column(TypeName = "text")]
+    public required string CommercialName { get; set; }
+    [Column(TypeName = "text")]
+    public required string DCI { get; set; }
+    [Column(TypeName = "text")]
+    public required string PharmaForm { get; set; } // comprimat, injectie, etc.
+    [Column(TypeName = "text")]
+    public required string Concentration { get; set; }
+    [Column(TypeName = "text")]
+    public required string ATC { get; set; } // anatomical therapeutic cemical classification
+    [Column(TypeName = "text")]
+    public required string RequirePrescription {  get; set; }  // can only be PR, PRF, P6L, PS, OTC etc.
+    [Column(TypeName = "text")]
+    public required string Availability { get; set; }
+    [Column(TypeName = "text")]
+    public required string Packaging { get; set; } // because sometimes only the packaging differs
+    
 
-    // optional fields
-    [Column(TypeName = "nvarchar(50)")]
-    public string? Brand { get; set; }
-    [Column(TypeName = "text")]
-    public string? Indications { get; set; }
-    [Column(TypeName = "text")]
-    public string? Contraindications { get; set; }
-    [Column(TypeName = "text")]
-    public string? SideEffects { get; set; }
-    [Column(TypeName = "text")]
-    public string? Warnings { get; set; }
-    [Column(TypeName = "text")]
-    public string? Storing { get; set; }
+    // TODO: add the medical leaflet/prospectus of the medicine over here
+    
 
     // for foreign keys (the references to the other tables)
     public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
   }
 
 
-  //[PrimaryKey("PID", "DID", "UID")]
+  [PrimaryKey("GlobalID", "SeriesID", "NumberID")] // composite key
   [Index(nameof(Issued))]
   public class PrescriptionModel
   {
     // identification
-    // is it necessary to make this into a composite key?
     [Key]
     [Column("PID")]
-    public Guid ID { get; set; }
-    [ForeignKey("DoctorModel")]
-    public required int DID { get; set; }
-    [ForeignKey("UserModel")]
-    public required int UID { get; set; }
+    public Guid GlobalID { get; set; } // global id assigned by our EMR's system
+    [Key]
+    [Column("Series")]
+    public Guid SeriesID { get; set; } // Seria
+    [Key]
+    [Column("Number")]
+    public Guid NumberID { get; set; } // Numar
 
-    // required fields
-    [Column(TypeName = "text")]
-    public required string Dosage { get; set; }
-    // length for how long should this medication be taken / how long is the prescription valid
-    // TODO: decide on this or if it needs multiple fields
-    [Column(TypeName = "text")]
-    public required string Duration { get; set; }
-    [Column(TypeName = "date")]
-    public required DateTime Issued { get; set; } // should be automatically generated from frontend
-    [Column(TypeName = "bit")]
-    public required Boolean IsAfterMeal { get; set; }
+    // medical unit data
+    public required string MedUnit { get; set; }
+    public required string CUI { get; set; }
+    public required string CAS { get; set; }
+    public Boolean? IsApproved { get; set; }
+    public Boolean? IsMF { get; set; }
+    public Boolean? IsAmbulatory { get; set; }
+    public Boolean? IsHospital { get; set; }
+    public Boolean? IsOther { get; set; }
+    public Boolean? IsMFMM { get; set; }
 
-    // optional fields
-    [Column(TypeName = "text")]
-    public string? Instructions { get; set; }
-    [Column(TypeName = "date")]
-    public DateTime? Expires { get; set; } // calculated based on Duration or input by doctor or left empty (?)
-    [Column(TypeName = "text")]
-    public string? Notes { get; set; }
+    // pacient data
+    public required string Name { get; set; }
+    public required string Surname { get; set; }
+    public required string CNP { get; set; }
+    public required DateTime Birthday { get; set; }
+    public required Boolean Gender { get; set; }
+    public required string Citizenship { get; set; }
+    // user occupations here
+    public Boolean? IsSalariat { get; set; }
+    public Boolean? IsCoasigurat { get; set; }
+    public Boolean? IsLiberProfesionist { get; set; }
+    public Boolean? IsCopil { get; set; }  // <18 years old
+    public Boolean? IsStudent { get; set; } // 18-26 years old
+    public Boolean? IsGravida { get; set; }
+    public Boolean? IsPensionar { get; set; }
+    public Boolean? IsVeteran { get; set; }
+    public Boolean? IsLowIncome { get; set; }
+    public Boolean? IsRevolutionar { get; set; }
+    public Boolean? IsHandicap { get; set; }
+    public string? PNS { get; set; }
+    public Boolean? IsAjutorSocial { get; set; }
+    public Boolean? IsSomaj { get; set; }
+    public Boolean? IsPersonalContractual { get; set; }
+    public Boolean? IsCardEuropean { get; set; }
+    public Boolean? IsAcorduriInternationale { get; set; }
+    public string? IsOtherCategories { get; set; }
+
+    // diagnostic data
+    public required string Diagnostic { get; set; } // Diagnostic code
+
+    // prescription info
+    public required DateTime Issued { get; set; }
+    public required int DaysNumber { get; set; }
+    
+    // validation of prescription (aka doctor signature)
+    // TODO: electronic signature needed here - how to?
+    // TODO: electronic seal too
 
     // for foreign keys (the references to the other tables)
-    public virtual required DoctorModel Doctor { get; set; }
-    public virtual required UserModel User { get; set; }
     public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
+    // ^ for the connection between prescriptions and meds
   }
 
 
@@ -97,6 +122,7 @@ namespace EMR_BMED.Backend.Models
   /// <summary>
   /// Intermediary table between the Prescriptions and Meds, Users and Doctors
   /// </summary>
+  [Keyless]
   public class PrescriptionRecordModel
   {
     [ForeignKey("PrescriptionModel")]

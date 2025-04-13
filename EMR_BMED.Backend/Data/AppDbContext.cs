@@ -20,5 +20,12 @@ namespace EMR_BMED.Backend.Data
     public DbSet<DoctorModel>       Doctors { get; set; }
     public DbSet<MedicationModel>   Meds { get; set; }
     public DbSet<PrescriptionModel> Prescriptions { get; set; }
+    public DbSet<PrescriptionRecordModel> Records { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      base.OnModelCreating(modelBuilder);
+      
+    }
   }
 }

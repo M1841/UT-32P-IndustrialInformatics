@@ -75,17 +75,19 @@ namespace EMR_BMED.Backend.Models
     public required string Name { get; set; }
     [Column(TypeName = "nvarchar(10)")]
     public required string Gender { get; set; }
+    [Column(TypeName = "text")]
+    public required string MedicalField { get; set; }
     // TODO: should it be required or possibly nullable?
     [Column(TypeName = "date")]
     public required DateTime Birthday { get; set; }
 
     // optional fields
+    [Column("Verified")]
+    public Boolean? IsVerified { get; set; }
     [Column(TypeName = "nvarchar(25)")]
     public string? Phone { get; set; }
     [Column(TypeName = "text")]
     public string? Address { get; set; }
-    [Column(TypeName = "text")]
-    public required string MedicalField { get; set; }
 
     // to allow for foreign keys in other tables
     public ICollection<PrescriptionModel>? Prescriptions { get; set; }
