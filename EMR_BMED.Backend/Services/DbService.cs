@@ -53,7 +53,8 @@ namespace EMR_BMED.Backend.Services
       }
       else
       {
-        optionsBuilder.UseSqlite("DataSource=EMR_BMED.sqlite");
+        // optionsBuilder.UseSqlite("DataSource=EMR_BMED.sqlite");
+        optionsBuilder.UseSqlServer("Server=localhost;Database=EMR_BMED;Trusted_Connection=True;Encrypt=False");
       }
     }
 
@@ -69,6 +70,17 @@ namespace EMR_BMED.Backend.Services
         .WithMany(m => m.Prescriptions)
         .UsingEntity("PrescriptionRecords");
 
+      modelBuilder.Entity<PrescriptionModel>()
+          .HasOne(pr => pr.Patient)
+          .WithMany(pt => pt.Prescriptions)
+          .HasForeignKey(pr => pr.PatientId)
+          .OnDelete(DeleteBehavior.NoAction);
+
+      modelBuilder.Entity<PrescriptionModel>()
+          .HasOne(p => p.Doctor)
+          .WithMany(d => d.Prescriptions)
+          .HasForeignKey(p => p.DoctorId)
+          .OnDelete(DeleteBehavior.NoAction);
     }
 
     public DbService() : base() { }
