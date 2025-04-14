@@ -7,10 +7,10 @@ namespace EMR_BMED.Backend.Utils
 {
   public static class TokenUtils
   {
-    public static string GenerateToken(string username)
+    public static string GenerateToken(Guid id)
     {
       Claim[] claims = [
-        new (JwtRegisteredClaimNames.Sub, username),
+        new (JwtRegisteredClaimNames.Sub, id.ToString()),
         new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
       ];
 
@@ -25,7 +25,7 @@ namespace EMR_BMED.Backend.Utils
       return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public static string ExtractUsername(string token)
+    public static Guid ExtractId(string token)
     {
       JwtSecurityTokenHandler handler = new();
 
@@ -33,7 +33,7 @@ namespace EMR_BMED.Backend.Utils
         && jwtToken.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub) is Claim claim
       )
       {
-        return claim.Value;
+        return Guid.Parse(claim.Value);
       }
       else
       {

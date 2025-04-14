@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 using EMR_BMED.Backend.Services;
 using EMR_BMED.Backend.Models;
 using EMR_BMED.Backend.Exceptions;
-using EMR_BMED.Backend.Utils;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authorization;
 
 namespace EMR_BMED.Backend.Controllers
 {
@@ -14,37 +13,68 @@ namespace EMR_BMED.Backend.Controllers
   public class AuthController(AuthService authService) : ControllerBase
   {
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginDTO credentials)
+    public async Task<IActionResult> Login([FromBody] LoginDto credentials)
     {
       try
       {
         string token = await authService.LoginAsync(credentials);
         return Ok(new { token });
       }
-      catch (UserNotFoundException)
+      catch (UserNotFoundException ex)
       {
-        return NotFound(new { username = $"User doesn't exist" });
+        return NotFound(new { email = ex.Message });
       }
-      catch (IncorrectPasswordException)
+      catch (IncorrectPasswordException ex)
       {
-        return Unauthorized(new { password = "Password is incorrect" });
+        return Unauthorized(new { password = ex.Message });
+      }
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] PatientModel patientData)
+    {
+      try
+      {
+        await authService.RegisterAsync(patientData);
+        return Ok();
+      }
+      catch (EmailIsTakenException ex)
+      {
+        return Conflict(new { email = ex.Message });
+      }
+    }
+
+    [HttpPost("register/doctor")]
+    public async Task<IActionResult> RegisterDoctor([FromBody] DoctorModel doctorData)
+    {
+      try
+      {
+        await authService.RegisterAsync(doctorData);
+        return Ok();
+      }
+      catch (EmailIsTakenException ex)
+      {
+        return Conflict(new { email = ex.Message });
       }
     }
 
     // Temporary
     [Authorize]
     [HttpGet("whoami")]
-    public IActionResult WhoAmI([FromHeader(Name = "Authorization")] string authHeader)
+    public async Task<IActionResult> WhoAmI([FromHeader(Name = "Authorization")] string authHeader)
     {
       try
       {
-        string token = authHeader.Split(' ').LastOrDefault()!;
-        string username = TokenUtils.ExtractUsername(token);
-        return Ok(new { username });
+        var user = await authService.WhoAmI(authHeader);
+        return Ok(new { user.Name, user.Surname });
       }
-      catch (SecurityTokenMalformedException)
+      catch (UserNotFoundException)
       {
-        return BadRequest(new { message = "Access token is malformed" });
+        return NotFound(new { username = $"Access token doesn't belong to a user" });
+      }
+      catch (SecurityTokenMalformedException ex)
+      {
+        return BadRequest(new { message = ex.Message });
       }
     }
   }

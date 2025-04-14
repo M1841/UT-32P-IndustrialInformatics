@@ -1,22 +1,22 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
+
+import { ApiService } from '@/services/api/api.service';
 
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule],
   template: `
-    <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
       <h2>Login Form</h2>
       <a href="auth/register">Don't have an account?</a><br />
 
       <label>
         Email
-        <input type="text" formControlName="email" />
+        <input required type="text" formControlName="email" />
 
-        @if (errors.email() !== null) {
+        @if (errors.email() !== '') {
           <span>{{ errors.email() }}</span>
         }
       </label>
@@ -24,9 +24,9 @@ import { CookieService } from 'ngx-cookie-service';
 
       <label>
         Password
-        <input type="password" formControlName="password" />
+        <input required type="password" formControlName="password" />
 
-        @if (errors.password() !== null) {
+        @if (errors.password() !== '') {
           <span>{{ errors.password() }}</span>
         }
       </label>
@@ -38,39 +38,38 @@ import { CookieService } from 'ngx-cookie-service';
   styles: ``,
 })
 export class LoginComponent {
-  readonly loginForm = new FormGroup({
-    email: new FormControl(''),
-    password: new FormControl(''),
+  readonly form = new FormGroup({
+    email: new FormControl(),
+    password: new FormControl(),
   });
   readonly errors = {
-    email: signal<string | null>(null),
-    password: signal<string | null>(null),
+    email: signal<string>(''),
+    password: signal<string>(''),
   };
 
-  handleLogin() {
-    this.httpService
-      .post<{ token: string; error?: string }>(
-        'http://localhost:8080/auth/login',
-        this.loginForm.value,
-        {
-          observe: 'response',
+  handleSubmit() {
+    if (this.form.valid) {
+      this.api.login(this.form.value).subscribe({
+        next: () => {
+          this.errors.email.set('');
+          this.errors.password.set('');
+          this.router.navigate(['/']);
         },
-      )
-      .subscribe({
-        next: (response) => {
-          this.errors.email.set(null);
-          this.errors.password.set(null);
-          this.cookieService.set('access_token', response.body!.token);
-          this.routerService.navigate(['/']);
-        },
-        error: (response) => {
-          this.errors.email.set(response?.error?.email ?? null);
-          this.errors.password.set(response?.error?.password ?? null);
+        error: ({ error }) => {
+          this.errors.email.set(error?.email ?? '');
+          this.errors.password.set(error?.password ?? '');
         },
       });
+    } else {
+      this.errors.email.set(
+        !this.form.value.email ? 'Email cannot be empty' : '',
+      );
+      this.errors.password.set(
+        !this.form.value.password ? 'Passord cannot be empty' : '',
+      );
+    }
   }
 
-  private httpService = inject(HttpClient);
-  private cookieService = inject(CookieService);
-  private routerService = inject(Router);
+  private api = inject(ApiService);
+  private router = inject(Router);
 }

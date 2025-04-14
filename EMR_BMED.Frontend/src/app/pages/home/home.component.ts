@@ -1,13 +1,14 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
+import { Component, computed, inject, signal } from '@angular/core';
+
+import { ApiService } from '@/services/api/api.service';
 
 @Component({
   selector: 'app-home',
   imports: [],
   template: `
-    @if (username() !== null) {
-      <p>Welcome {{ username() }}!</p>
+    @if (isAuthenticated() && user() !== null) {
+      <p>Logged in as: {{ user()!.name }} {{ user()!.surname }}</p>
+      <button (click)="handleLogout()">Logout</button>
     } @else {
       <a href="auth/login">Login</a> <br />
       <a href="auth/register">Register (Patient)</a> <br />
@@ -17,26 +18,22 @@ import { CookieService } from 'ngx-cookie-service';
   styles: ``,
 })
 export class HomeComponent {
-  readonly username = signal<string | null>(null);
+  readonly user = signal<{ name: string; surname: string } | null>(null);
+  readonly isAuthenticated = computed(() => this.api.isAuthenticated());
 
   ngOnInit() {
-    const token = this.cookieService.get('access_token');
-    if (token) {
-      this.httpService
-        .get<{ username: string }>('http://localhost:8080/auth/whoami', {
-          headers: new HttpHeaders({
-            Authorization: `Bearer ${token}`,
-          }),
-          observe: 'response',
-        })
-        .subscribe({
-          next: (response) => {
-            this.username.set(response.body?.username ?? null);
-          },
-        });
+    if (this.api.isAuthenticated()) {
+      this.api.get<{ name: string; surname: string }>('auth/whoami').subscribe({
+        next: (response) => {
+          this.user.set(response.body ?? null);
+        },
+      });
     }
   }
 
-  private httpService = inject(HttpClient);
-  private cookieService = inject(CookieService);
+  handleLogout() {
+    this.api.logout();
+  }
+
+  private api = inject(ApiService);
 }
