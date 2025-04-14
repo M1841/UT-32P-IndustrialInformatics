@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
 using EMR_BMED.Backend.Services;
-using EMR_BMED.Backend.Data;
 using EMR_BMED.Backend.Utils;
 
 namespace EMR_BMED.Backend
@@ -19,7 +18,7 @@ namespace EMR_BMED.Backend
     public static void ConfigureServices(IServiceCollection services)
     {
       // Add services here:
-      services.AddDbContext<AppDbContext>(options =>
+      services.AddDbContext<DbService>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
 
       services.AddScoped<DbService>();

@@ -9,6 +9,7 @@ namespace EMR_BMED.Backend.Services
     public DbSet<UserModel> Users { get; set; }
     public DbSet<PrescriptionModel> Prescriptions { get; set; }
     public DbSet<MedicationModel> Meds { get; set; }
+    // here you can add more tables based on whatever models you want
 
     public static void SeedTestData(bool IsTestDb)
     {
@@ -21,6 +22,8 @@ namespace EMR_BMED.Backend.Services
         Email = "jdoe@email.com",
         Password = BCrypt.Net.BCrypt.HashPassword("1234"),
         Gender = "Male",
+        Citizenship = "Belgian",
+        SocialNumber = "72902960001",
         Birthday = new DateOnly(1996, 02, 29),
         Phone = "012346789",
         Allergies = "Nuts",
@@ -65,11 +68,12 @@ namespace EMR_BMED.Backend.Services
         .HasValue<DoctorModel>(true);
 
       modelBuilder.Entity<PrescriptionModel>()
-        .HasMany(p => p.Meds)
+        .HasMany(p => p.Records)
+        //.HasMany(p => p.Meds)
         .WithMany(m => m.Prescriptions)
         .UsingEntity("PrescriptionRecords");
 
-    }
+      }
 
     public DbService() : base() { }
     public DbService(bool IsTestDb) : base()

@@ -16,6 +16,12 @@ namespace EMR_BMED.Backend.Models
   public class PatientModel : UserModel
   {
     [Column(TypeName = "text")]
+    public required string SocialNumber { get; set; } // in Romania, CNP
+
+      [Column(TypeName = "text")]
+    public required string Citizenship { get; set; }
+
+    [Column(TypeName = "text")]
     public string? Allergies { get; set; }
 
     [Column(TypeName = "text")]
@@ -44,7 +50,7 @@ namespace EMR_BMED.Backend.Models
   [Index(nameof(Name))]
   public abstract class UserModel
   {
-    // identification
+    // global identification in our database
     [Key]
     public Guid Id { get; set; }
 
