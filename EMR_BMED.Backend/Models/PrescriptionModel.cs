@@ -31,6 +31,8 @@ namespace EMR_BMED.Backend.Models
     public Boolean? IsMFMM { get; set; }
 
     // patient data
+    [ForeignKey("PatientModel")]
+    public required Guid PatientId {  get; set; }
     public required PatientModel Patient { get; set; }
     // the above must have Name, Surname, CNP, Birthday, Gender, Citizenship
 

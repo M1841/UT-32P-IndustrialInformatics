@@ -7,6 +7,8 @@ namespace EMR_BMED.Backend.Services
   public class DbService : DbContext
   {
     public DbSet<UserModel> Users { get; set; }
+    public DbSet<PatientModel> Patients { get; set; }
+    public DbSet<DoctorModel> Doctors { get; set; }
     public DbSet<PrescriptionModel> Prescriptions { get; set; }
     public DbSet<MedicationModel> Meds { get; set; }
     // here you can add more tables based on whatever models you want
@@ -63,28 +65,30 @@ namespace EMR_BMED.Backend.Services
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
       modelBuilder.Entity<UserModel>()
         .HasDiscriminator<bool>("IsDoctor")
         .HasValue<PatientModel>(false)
         .HasValue<DoctorModel>(true);
+      
+      modelBuilder.Entity<PrescriptionRecordModel>()
+        .HasKey(pr => new { pr.PID, pr.PIDSeries, pr.PIDNumber, pr.MID });
+
+      modelBuilder.Entity<PrescriptionRecordModel>()
+        .HasOne(pr => pr.Prescriptions)
+        .WithMany(p => p.Records)
+        .HasForeignKey("PID", "PIDSeries", "PIDNumber");
+
+      modelBuilder.Entity<PrescriptionRecordModel>()
+        .HasOne(pr => pr.Meds)
+        .WithMany(m => m.Records)
+        .HasForeignKey(pr => pr.MID);
 
       modelBuilder.Entity<PrescriptionModel>()
-        .HasMany(p => p.Records)
-        //.HasMany(p => p.Meds)
-        .WithMany(m => m.Prescriptions)
-        .UsingEntity("PrescriptionRecords");
-
-      modelBuilder.Entity<PrescriptionModel>()
-          .HasOne(pr => pr.Patient)
-          .WithMany(pt => pt.Prescriptions)
-          .HasForeignKey(pr => pr.PatientId)
-          .OnDelete(DeleteBehavior.NoAction);
-
-      modelBuilder.Entity<PrescriptionModel>()
-          .HasOne(p => p.Doctor)
-          .WithMany(d => d.Prescriptions)
-          .HasForeignKey(p => p.DoctorId)
-          .OnDelete(DeleteBehavior.NoAction);
+        .HasOne(pr => pr.Patient)
+        .WithMany(pt => pt.Prescriptions)
+        .HasForeignKey(pr => pr.PatientId)
+        .OnDelete(DeleteBehavior.NoAction);
     }
 
     public DbService() : base() { }

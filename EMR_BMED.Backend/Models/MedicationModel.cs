@@ -41,6 +41,5 @@ namespace EMR_BMED.Backend.Models
 
     // for foreign keys (the references to the other tables)
      public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
-    //public virtual required ICollection<PrescriptionModel> Prescriptions { get; set; }
   }
 }

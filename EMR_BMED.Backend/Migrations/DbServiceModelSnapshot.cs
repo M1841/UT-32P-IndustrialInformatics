@@ -75,48 +75,151 @@ namespace EMR_BMED.Backend.Migrations
 
             modelBuilder.Entity("EMR_BMED.Backend.Models.PrescriptionModel", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("GlobalID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PID");
+
+                    b.Property<Guid>("SeriesID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Series");
+
+                    b.Property<Guid>("NumberID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Number");
+
+                    b.Property<string>("CAS")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CUI")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DaysNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Diagnostic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("DoctorModelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<bool?>("IsAcorduriInternationale")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Dosage")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool?>("IsAjutorSocial")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Duration")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<bool?>("IsAmbulatory")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTime?>("Expires")
-                        .HasColumnType("date");
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("Instructions")
-                        .HasColumnType("text");
+                    b.Property<bool?>("IsCardEuropean")
+                        .HasColumnType("bit");
 
-                    b.Property<bool>("IsAfterMeal")
+                    b.Property<bool?>("IsCoasigurat")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsCopil")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsGravida")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsHandicap")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsHospital")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsLiberProfesionist")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsLowIncome")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsMF")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsMFMM")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsOther")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IsOtherCategories")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsPensionar")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsPersonalContractual")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsRevolutionar")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsSalariat")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsSomaj")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsStudent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsVeteran")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("Issued")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Notes")
-                        .HasColumnType("text");
+                    b.Property<string>("MedUnit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PNS")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("GlobalID", "SeriesID", "NumberID");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorModelId");
 
                     b.HasIndex("Issued");
 
                     b.HasIndex("PatientId");
 
                     b.ToTable("Prescriptions");
+                });
+
+            modelBuilder.Entity("EMR_BMED.Backend.Models.PrescriptionRecordModel", b =>
+                {
+                    b.Property<Guid>("PID")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PID");
+
+                    b.Property<Guid>("PIDSeries")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PID Series");
+
+                    b.Property<Guid>("PIDNumber")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PID Number");
+
+                    b.Property<Guid>("MID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PID", "PIDSeries", "PIDNumber", "MID");
+
+                    b.HasIndex("MID");
+
+                    b.ToTable("PrescriptionRecordModel");
                 });
 
             modelBuilder.Entity("EMR_BMED.Backend.Models.UserModel", b =>
@@ -138,6 +241,10 @@ namespace EMR_BMED.Backend.Migrations
 
                     b.Property<bool>("IsDoctor")
                         .HasColumnType("bit");
+
+                    b.Property<bool?>("IsVerified")
+                        .HasColumnType("bit")
+                        .HasColumnName("Verified");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -170,21 +277,6 @@ namespace EMR_BMED.Backend.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("PrescriptionRecords", b =>
-                {
-                    b.Property<Guid>("MedsID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PrescriptionsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("MedsID", "PrescriptionsId");
-
-                    b.HasIndex("PrescriptionsId");
-
-                    b.ToTable("PrescriptionRecords");
-                });
-
             modelBuilder.Entity("EMR_BMED.Backend.Models.DoctorModel", b =>
                 {
                     b.HasBaseType("EMR_BMED.Backend.Models.UserModel");
@@ -209,10 +301,18 @@ namespace EMR_BMED.Backend.Migrations
                     b.Property<string>("Blood")
                         .HasColumnType("char(3)");
 
+                    b.Property<string>("Citizenship")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Conditions")
                         .HasColumnType("text");
 
                     b.Property<string>("Intolerances")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SocialNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasDiscriminator().HasValue(false);
@@ -220,11 +320,9 @@ namespace EMR_BMED.Backend.Migrations
 
             modelBuilder.Entity("EMR_BMED.Backend.Models.PrescriptionModel", b =>
                 {
-                    b.HasOne("EMR_BMED.Backend.Models.DoctorModel", "Doctor")
+                    b.HasOne("EMR_BMED.Backend.Models.DoctorModel", null)
                         .WithMany("Prescriptions")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("DoctorModelId");
 
                     b.HasOne("EMR_BMED.Backend.Models.PatientModel", "Patient")
                         .WithMany("Prescriptions")
@@ -232,24 +330,36 @@ namespace EMR_BMED.Backend.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Doctor");
-
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("PrescriptionRecords", b =>
+            modelBuilder.Entity("EMR_BMED.Backend.Models.PrescriptionRecordModel", b =>
                 {
-                    b.HasOne("EMR_BMED.Backend.Models.MedicationModel", null)
-                        .WithMany()
-                        .HasForeignKey("MedsID")
+                    b.HasOne("EMR_BMED.Backend.Models.MedicationModel", "Meds")
+                        .WithMany("Records")
+                        .HasForeignKey("MID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EMR_BMED.Backend.Models.PrescriptionModel", null)
-                        .WithMany()
-                        .HasForeignKey("PrescriptionsId")
+                    b.HasOne("EMR_BMED.Backend.Models.PrescriptionModel", "Prescriptions")
+                        .WithMany("Records")
+                        .HasForeignKey("PID", "PIDSeries", "PIDNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Meds");
+
+                    b.Navigation("Prescriptions");
+                });
+
+            modelBuilder.Entity("EMR_BMED.Backend.Models.MedicationModel", b =>
+                {
+                    b.Navigation("Records");
+                });
+
+            modelBuilder.Entity("EMR_BMED.Backend.Models.PrescriptionModel", b =>
+                {
+                    b.Navigation("Records");
                 });
 
             modelBuilder.Entity("EMR_BMED.Backend.Models.DoctorModel", b =>
