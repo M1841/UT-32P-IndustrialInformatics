@@ -58,7 +58,7 @@ namespace EMR_BMED.Backend.Tests
       var patientFromDb = await dbService.Users.FirstOrDefaultAsync(u => u.Id == userP.Id);
       Assert.NotNull(patientFromDb);
       Assert.NotEqual(password, patientFromDb.Password);
-      Assert.True(BCrypt.Net.BCrypt.Verify(password, patientFromDb.Password), "The hashed password doesn't match the original one!");
+      Assert.True(BCrypt.Net.BCrypt.Verify(hashedPass, patientFromDb.Password), "The hashed password doesn't match the original one!");
     }
 
     [Fact]
