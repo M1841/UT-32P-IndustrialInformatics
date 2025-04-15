@@ -18,7 +18,7 @@ namespace EMR_BMED.Backend.Models
     [Column(TypeName = "text")]
     public required string SocialNumber { get; set; } // in Romania, CNP
 
-      [Column(TypeName = "text")]
+    [Column(TypeName = "text")]
     public required string Citizenship { get; set; }
 
     [Column(TypeName = "text")]
@@ -81,5 +81,32 @@ namespace EMR_BMED.Backend.Models
 
     // to allow for foreign keys in other tables
     public ICollection<PrescriptionModel> Prescriptions { get; set; } = [];
+  }
+
+  public record UserUpdateDto
+  {
+    public string? Password;
+    public string? Email;
+    public string? Surname;
+    public string? Name;
+    public string? Gender;
+    public bool? IsVerified;
+    public string? Phone;
+  }
+
+  public record DoctorUpdateDto : UserUpdateDto
+  {
+    public string? Address;
+    public string? MedicalField;
+  }
+
+  public record PatientUpdateDto : UserUpdateDto
+  {
+    public string? SocialNumber;
+    public string? Citizenship;
+    public string? Allergies;
+    public string? Intolerances;
+    public string? Conditions;
+    public string? Blood;
   }
 }

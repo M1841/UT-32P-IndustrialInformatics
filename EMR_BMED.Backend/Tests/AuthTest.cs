@@ -33,20 +33,10 @@ namespace EMR_BMED.Backend.Tests
       await Assert.ThrowsAsync<UserNotFoundException>(
         () => authService.LoginAsync(credentials));
     }
-    private DbContext GetDbContext()
-    {
-      var options = new DbContextOptionsBuilder<DbContext>();
-      options.UseInMemoryDatabase("EMR_BMED");
-      
-      return new DbContext(options.Options);
-    }
+
     [Fact]
     public async Task RegisterAsyncTest()
     {
-      using var context = GetDbContext();
-      var authService = new AuthService((DbService)context);
-
-
       var email = "jdoe@gmail.com";
       var password = "12345";
       var userP = new PatientModel
@@ -57,17 +47,18 @@ namespace EMR_BMED.Backend.Tests
         Name = "Alex",
         Surname = "Alex",
         Gender = "M",
-        Birthday = DateOnly.ParseExact("18.02.2003","dd.MM.yyyy"),
+        Birthday = DateOnly.ParseExact("18.02.2003", "dd.MM.yyyy"),
         Citizenship = "Romanian",
         SocialNumber = "13223443"
       };
       await authService.RegisterAsync(userP);
 
-      var patientFromDb = await dbService.Users.FirstOrDefaultAsync(u=>u.Id == userP.Id);
+      var patientFromDb = await dbService.Users.FirstOrDefaultAsync(u => u.Id == userP.Id);
       Assert.NotNull(patientFromDb);
       Assert.NotEqual(password, patientFromDb.Password);
-      Assert.True(BCrypt.Net.BCrypt.Verify(password, patientFromDb.Password),"The hashed password doesn't match the original one!");
+      Assert.True(BCrypt.Net.BCrypt.Verify(password, patientFromDb.Password), "The hashed password doesn't match the original one!");
     }
+
     public AuthTest()
     {
       Environment.SetEnvironmentVariable(

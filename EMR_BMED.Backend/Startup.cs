@@ -8,7 +8,7 @@ namespace EMR_BMED.Backend
 {
   internal class Startup
   {
-    public static IConfiguration Configuration { get; private set; }
+    public static IConfiguration? Configuration { get; private set; }
 
     public Startup(IConfiguration configuration)
     {
@@ -19,7 +19,7 @@ namespace EMR_BMED.Backend
     {
       // Add services here:
       services.AddDbContext<DbService>(options =>
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
+        options.UseSqlServer(Configuration!.GetConnectionString("DefaultConnectionString")));
 
       services.AddScoped<DbService>();
       services.AddScoped<AuthService>();
