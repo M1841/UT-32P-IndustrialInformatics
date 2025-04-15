@@ -5,6 +5,7 @@ using EMR_BMED.Backend.Services;
 using EMR_BMED.Backend.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using EMR_BMED.Backend.Utils;
+using Microsoft.Extensions.Options;
 
 namespace EMR_BMED.Backend.Tests
 {
@@ -28,27 +29,17 @@ namespace EMR_BMED.Backend.Tests
     [Fact]
     public async void UserNotFound()
     {
-      LoginDto credentials = new("unregistered_account", "");
+      LoginDto credentials = new("unregistered_account", "123");
 
       await Assert.ThrowsAsync<UserNotFoundException>(
         () => authService.LoginAsync(credentials));
     }
-    private DbContext GetDbContext()
-    {
-      var options = new DbContextOptionsBuilder<DbContext>();
-      options.UseInMemoryDatabase("EMR_BMED");
-      
-      return new DbContext(options.Options);
-    }
+    
     [Fact]
     public async Task RegisterAsyncTest()
     {
-      using var context = GetDbContext();
-      var authService = new AuthService((DbService)context);
-
-
-      var email = "jdoe@gmail.com";
-      var password = "12345";
+      var email = "jdo1e@gmail.com";
+      var password = "123451";
       var userP = new PatientModel
       {
         Id = Guid.NewGuid(),
@@ -68,6 +59,46 @@ namespace EMR_BMED.Backend.Tests
       Assert.NotEqual(password, patientFromDb.Password);
       Assert.True(BCrypt.Net.BCrypt.Verify(password, patientFromDb.Password),"The hashed password doesn't match the original one!");
     }
+
+    [Fact]
+    public async Task WhoAmITest()
+    {
+      var userID= Guid.NewGuid();
+      var email = "jdoe@gmail.com";
+      var password = "123451";
+      var hashedPass = BCrypt.Net.BCrypt.HashPassword(password);
+      var resultedUser = new PatientModel
+      {
+        Id = Guid.NewGuid(),
+        Email = email,
+        Password = hashedPass,
+        Name = "Alex",
+        Surname = "Alex",
+        Gender = "M",
+        Birthday = DateOnly.ParseExact("18.02.2003", "dd.MM.yyyy"),
+        Citizenship = "Romanian",
+        SocialNumber = "13223443"
+      };
+
+      var exists = await dbService.Users.AnyAsync(u => u.Id == userID);
+      if (!exists)
+      {
+         await dbService.Users.AddAsync(resultedUser);
+         await dbService.SaveChangesAsync();
+      }
+
+      var token = await authService.LoginAsync(new LoginDto(email, password));
+      string authHeader = $"Bearer {token}";
+
+      var actualUser = await authService.WhoAmI(authHeader);
+
+      Assert.NotNull(actualUser);
+      Assert.Equal(resultedUser.Id, actualUser.Id);
+      Assert.Equal(resultedUser.Email, actualUser.Email);
+      Assert.Equal(resultedUser.Name, actualUser.Name);
+      Assert.Equal(resultedUser.Surname, actualUser.Surname);
+    }
+    
     public AuthTest()
     {
       Environment.SetEnvironmentVariable(
