@@ -151,7 +151,7 @@ export class RegisterComponent {
             };
           },
           typeof this.form.value
-        >('auth/register', this.form.value)
+        >('auth/register/patient', this.form.value)
         .subscribe({
           next: () => {
             this.api

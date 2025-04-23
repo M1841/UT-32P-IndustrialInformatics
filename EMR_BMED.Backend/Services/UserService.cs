@@ -1,6 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+
 using EMR_BMED.Backend.Exceptions;
 using EMR_BMED.Backend.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace EMR_BMED.Backend.Services
 {
@@ -35,34 +36,9 @@ namespace EMR_BMED.Backend.Services
       return patients;
     }
 
-    private async Task<UserModel> UpdateAsync(Guid id, UserUpdateDto dto)
+    public async Task UpdateAsync(Guid id, PatientUpdateDto dto)
     {
-      UserModel user = await GetOneAsync(id);
-
-      if (dto.Password != null) { user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password); }
-      if (dto.Email != null) { user.Email = dto.Email; }
-      if (dto.Surname != null) { user.Surname = dto.Surname; }
-      if (dto.Name != null) { user.Name = dto.Name; }
-      if (dto.Gender != null) { user.Gender = dto.Gender; }
-      if (dto.IsVerified != null) { user.IsVerified = dto.IsVerified; }
-      if (dto.Phone != null) { user.Phone = dto.Phone; }
-
-      return user;
-    }
-
-    public async Task UpdateDoctorAsync(Guid id, DoctorUpdateDto dto)
-    {
-      DoctorModel user = (DoctorModel)await UpdateAsync(id, dto);
-
-      if (dto.Address != null) { user.Address = dto.Address; }
-      if (dto.MedicalField != null) { user.MedicalField = dto.MedicalField; }
-
-      await dbService.SaveChangesAsync();
-    }
-
-    public async Task UpdatePatientAsync(Guid id, PatientUpdateDto dto)
-    {
-      PatientModel user = (PatientModel)await UpdateAsync(id, dto);
+      PatientModel user = (PatientModel)await UpdateAnyAsync(id, dto);
 
       if (dto.SocialNumber != null) { user.SocialNumber = dto.SocialNumber; }
       if (dto.Citizenship != null) { user.Citizenship = dto.Citizenship; }
@@ -74,6 +50,16 @@ namespace EMR_BMED.Backend.Services
       await dbService.SaveChangesAsync();
     }
 
+    public async Task UpdateAsync(Guid id, DoctorUpdateDto dto)
+    {
+      DoctorModel user = (DoctorModel)await UpdateAnyAsync(id, dto);
+
+      if (dto.Address != null) { user.Address = dto.Address; }
+      if (dto.MedicalField != null) { user.MedicalField = dto.MedicalField; }
+
+      await dbService.SaveChangesAsync();
+    }
+
     public async Task DeleteAsync(Guid id)
     {
       UserModel user = await GetOneAsync(id);
@@ -81,6 +67,28 @@ namespace EMR_BMED.Backend.Services
       dbService.Remove(user);
 
       await dbService.SaveChangesAsync();
+    }
+
+    private async Task<UserModel> UpdateAnyAsync(Guid id, UserUpdateDto dto)
+    {
+      UserModel user = await GetOneAsync(id);
+
+      if (dto.Password != null) { user.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password); }
+      if (dto.Email != null)
+      {
+        if (dbService.Users.Any(u => u.Email == dto.Email))
+        {
+          throw new EmailIsTakenException();
+        }
+        user.Email = dto.Email;
+      }
+      if (dto.Surname != null) { user.Surname = dto.Surname; }
+      if (dto.Name != null) { user.Name = dto.Name; }
+      if (dto.Gender != null) { user.Gender = dto.Gender; }
+      if (dto.IsVerified != null) { user.IsVerified = dto.IsVerified; }
+      if (dto.Phone != null) { user.Phone = dto.Phone; }
+
+      return user;
     }
   }
 }

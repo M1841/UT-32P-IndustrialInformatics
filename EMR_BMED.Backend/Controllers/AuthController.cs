@@ -30,7 +30,7 @@ namespace EMR_BMED.Backend.Controllers
       }
     }
 
-    [HttpPost("register")]
+    [HttpPost("register/patient")]
     public async Task<IActionResult> Register([FromBody] PatientModel patientData)
     {
       try
@@ -45,7 +45,7 @@ namespace EMR_BMED.Backend.Controllers
     }
 
     [HttpPost("register/doctor")]
-    public async Task<IActionResult> RegisterDoctor([FromBody] DoctorModel doctorData)
+    public async Task<IActionResult> Register([FromBody] DoctorModel doctorData)
     {
       try
       {
