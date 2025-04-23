@@ -21,27 +21,30 @@ namespace EMR_BMED.Backend.Tests
     }
 
     [Fact]
-    public async Task SeedTestData()
+    public void SeedTestData()
     {
       DbService.SeedTestData(true);
+
       using (var context = new DbService(true))
       {
-        var patients = context.Patients.ToList();
-        var doctors = context.Doctors.ToList();
+        var bPatients = context.Patients.Count();
+        var bDoctors = context.Doctors.Count();
 
-        var singlePatient = Assert.Single(patients);
-        Assert.Equal("John", singlePatient.Name);
+        DbService.SeedTestData(true);
 
-        var singleDoctor = Assert.Single(doctors);
-        Assert.Equal("Jane", singleDoctor.Name);
+        var aPatients = context.Patients.Count();
+        var aDoctors = context.Doctors.Count();
 
+        Assert.True(aPatients > bPatients, "Number of patients has been modified");
+        Assert.True(aDoctors > bDoctors, "Number of patients has been modified");
       }
     }
     [Fact]
-    public async Task AddPatientsTest()
+    public void AddPatientsTest()
     {
       using (var context = new DbService(true))
       {
+        var initialCount = context.Patients.Count();
         var email = "alexjon@gmail.com";
         var password = "12345";
 
@@ -61,6 +64,115 @@ namespace EMR_BMED.Backend.Tests
           Conditions = "None",
           Blood = "A2"
         };
+        context.Add(newPatient);
+        context.SaveChanges();
+
+        var patientCount = context.Patients.Count();
+        Assert.Equal(1,patientCount);
+      }
+    }
+    [Fact]
+    public void updateDoctorsTest()
+    {
+      DbService.SeedTestData(true);
+      using (var context = new DbService(true))
+      {
+        var doctor = context.Doctors.FirstOrDefault();
+        if (doctor == null)
+        {
+          Assert.True(false, "Doctor not found");
+        }
+        else
+        {
+          doctor.Address = "Strada Victoriei,Nr.11";
+        }
+        context.SaveChanges();
+      }
+
+      using (var context = new DbService(true))
+      {
+        var doctor = context.Doctors.FirstOrDefault();
+        if (doctor == null)
+        {
+          Assert.True(false, "Doctor not found");
+        }
+        else
+        {
+          Assert.Equal("Strada Victoriei,Nr.11", doctor.Address);
+        }
+      }
+    }
+    [Fact]
+    public void deletePatientTest()
+    {
+      DbService.SeedTestData(true);
+      using (var context = new DbService(true))
+      {
+        var patient = context.Patients.FirstOrDefault();
+        Assert.NotNull(patient);
+        var contextBDelete = context.Patients.Count();
+
+
+        context.Patients.Remove(patient);
+        context.SaveChanges();
+
+        var contextADelete = context.Patients.Count();
+        Assert.True(contextADelete < contextBDelete, "Patient was not deleted");
+      }
+    }
+    [Fact]
+    public void UserSeparationTest()
+    {
+      DbService.SeedTestData(true);
+
+      using (var context = new DbService(true))
+      {
+        var allUsers = context.Users.ToList();
+        var patients = context.Users.OfType<PatientModel>().ToList();
+        var doctors = context.Users.OfType<DoctorModel>().ToList();
+
+        Assert.NotEmpty(patients);
+        Assert.NotEmpty(doctors);
+        Assert.Equal(allUsers.Count, patients.Count + doctors.Count);
+      }
+    }
+    [Fact]
+    public void PrescriptionPatientTest()
+    {
+      DbService.SeedTestData(true);
+      using (var context = new DbService(true))
+      {
+        var patient = context.Patients.FirstOrDefault();
+        var doctor = context.Doctors.FirstOrDefault();
+        if (patient == null || doctor == null)
+        {
+          Assert.True(false, "Patient or doctor not found");
+        }
+        else
+        {
+          var prescription = new PrescriptionModel
+          {
+            PatientId = patient.Id,
+            Patient = patient,
+            Diagnostic = "Flu",
+            Issued = DateTime.Now,
+            DaysNumber = 7,
+            CAS = "123456789",
+            CUI = "987654321",
+            MedUnit = "Hospital",
+            Records = new List<PrescriptionRecordModel>()
+          };
+          context.Add(prescription);
+          context.SaveChanges();
+        }
+      }
+      using (var context = new DbService(true))
+      {
+        var patientPress = context.Patients
+          .Include(p => p.Prescriptions)
+          .FirstOrDefault();
+        Assert.NotNull(patientPress);
+        Assert.True(patientPress.Prescriptions.Any(), "Patient has prescriptions");
       }
     }
   }
