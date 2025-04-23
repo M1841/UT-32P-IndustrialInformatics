@@ -21,7 +21,7 @@ namespace EMR_BMED.Backend.Tests
     }
 
     [Fact]
-    public async Task SeedTestData()
+    public void SeedTestData()
     {
       DbService.SeedTestData(true);
       using (var context = new DbService(true))
@@ -38,7 +38,7 @@ namespace EMR_BMED.Backend.Tests
       }
     }
     [Fact]
-    public async Task AddPatientsTest()
+    public void AddPatientsTest()
     {
       using (var context = new DbService(true))
       {
