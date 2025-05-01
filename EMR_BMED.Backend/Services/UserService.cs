@@ -38,7 +38,7 @@ namespace EMR_BMED.Backend.Services
 
     public async Task UpdateAsync(Guid id, PatientUpdateDto dto)
     {
-      PatientModel user = (PatientModel)await UpdateAnyAsync(id, dto);
+      PatientModel user = (PatientModel)await UpdateGenericAsync(id, dto);
 
       if (dto.SocialNumber != null) { user.SocialNumber = dto.SocialNumber; }
       if (dto.Citizenship != null) { user.Citizenship = dto.Citizenship; }
@@ -52,7 +52,7 @@ namespace EMR_BMED.Backend.Services
 
     public async Task UpdateAsync(Guid id, DoctorUpdateDto dto)
     {
-      DoctorModel user = (DoctorModel)await UpdateAnyAsync(id, dto);
+      DoctorModel user = (DoctorModel)await UpdateGenericAsync(id, dto);
 
       if (dto.Address != null) { user.Address = dto.Address; }
       if (dto.MedicalField != null) { user.MedicalField = dto.MedicalField; }
@@ -65,11 +65,10 @@ namespace EMR_BMED.Backend.Services
       UserModel user = await GetOneAsync(id);
 
       dbService.Remove(user);
-
       await dbService.SaveChangesAsync();
     }
 
-    private async Task<UserModel> UpdateAnyAsync(Guid id, UserUpdateDto dto)
+    private async Task<UserModel> UpdateGenericAsync(Guid id, UserUpdateDto dto)
     {
       UserModel user = await GetOneAsync(id);
 
