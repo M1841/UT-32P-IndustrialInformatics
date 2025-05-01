@@ -7,97 +7,110 @@ import { Router } from '@angular/router';
   selector: 'app-register.doctor',
   imports: [ReactiveFormsModule],
   template: `
+    <div class="register-container">
+    <a href="/" class="home-icon">
+      <img src="logo.jpg" alt="Home" width="64" height="64" />
+    </a>
+
     <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-      <h2>Doctor Registration Form</h2>
-      <a href="auth/register">Are you a patient?</a> <br />
-      <a href="auth/login">Already have an account?</a> <br />
-
-      <label>
-        First Name
-        <input required type="text" formControlName="name" />
-
-        @if (errors.name() !== '') {
-          <span>{{ errors.name() }}</span>
-        }
-      </label>
+      <h2><b>Doctor Registration Form</b></h2>
+      <br />
+      <a href="auth/register" class="link">Are you a patient?</a> <br />
+      <br />
+      <a href="auth/login" class="link">Already have an account?</a> <br />
       <br />
 
-      <label>
-        Last Name
-        <input required type="text" formControlName="surname" />
-
-        @if (errors.surname() !== '') {
-          <span>{{ errors.surname() }}</span>
-        }
-      </label>
-      <br />
-
-      <label>
-        Email
-        <input required type="email" formControlName="email" />
-
-        @if (errors.email() !== '') {
-          <span>{{ errors.email() }}</span>
-        }
-      </label>
-      <br />
-
-      <label>
-        Password
-        <input required type="password" formControlName="password" />
-
-        @if (errors.password() !== '') {
-          <span>{{ errors.password() }}</span>
-        }
-      </label>
-      <br />
-
-      <label>
-        Gender
-        <select required formControlName="gender">
-          @for (gender of ['Female', 'Male', 'Other']; track $index) {
-            <option value="{{ gender }}">{{ gender }}</option>
+      <div class="form-group">
+        <label for="name">First Name</label>
+        <div class="input-wrapper">
+          <input required id="name" type="text" formControlName="name" />
+          @if (errors.name() !== '') {
+            <span>{{ errors.name() }}</span>
           }
-        </select>
+        </div>
+      </div>
 
-        @if (errors.gender() !== '') {
-          <span>{{ errors.gender() }}</span>
-        }
-      </label>
-      <br />
+      <div class="form-group">
+        <label for="surname">Last Name</label>
+        <div class="input-wrapper">
+          <input required id="surname" type="text" formControlName="surname" />
+          @if (errors.surname() !== '') {
+            <span>{{ errors.surname() }}</span>
+          }
+        </div>
+      </div>
 
-      <label>
-        Birthday
-        <input required type="date" formControlName="birthday" />
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input required id="email" type="text" formControlName="email" />
+          @if (errors.email() !== '') {
+            <span>{{ errors.email() }}</span>
+          }
+        </div>
+      </div>
 
-        @if (errors.birthday() !== '') {
-          <span>{{ errors.birthday() }}</span>
-        }
-      </label>
-      <br />
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input required id="password" type="password" formControlName="password" />
+          @if (errors.password() !== '') {
+            <span>{{ errors.password() }}</span>
+          }
+        </div>
+      </div>
 
-      <label>
-        Medical Field
-        <input required type="text" formControlName="medicalField" />
-      </label>
-      <br />
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <div class="input-wrapper">
+          <select required formControlName="gender">
+            @for (gender of ['Female', 'Male', 'Other']; track $index) {
+            <option value="{{ gender }}">{{ gender }}</option>
+            }
+          </select>
+          @if (errors.gender() !== '') {
+            <span>{{ errors.gender() }}</span>
+          }
+        </div>
+      </div>
 
-      <label>
-        Phone Number (Optional)
-        <input type="text" formControlName="phoneNumber" />
-      </label>
-      <br />
+      <div class="form-group">
+        <label for ="birthday">Birthday</label>
+        <div class="input-wrapper">
+          <input required id="birthday" type="date" formControlName="birthday" />
+          @if (errors.birthday() !== '') {
+            <span>{{ errors.birthday() }}</span>
+          }
+        </div>
+      </div>
 
-      <label>
-        Address (Optional)
-        <input type="text" formControlName="address" />
-      </label>
-      <br />
+      <div class="form-group">
+        <label for="medicalField">Medical Field</label>
+        <div class="input-wrapper">
+          <input required id="medicalField" type="text" formControlName="medicalField" />
+          @if (errors.medicalField() !== '') {
+            <span>{{ errors.medicalField() }}</span>
+          }
+        </div>
+      </div>
 
-      <button type="submit">Register</button>
+      <div class="form-group">
+        <label for="phone">Phone Number (Optional)</label>
+        <div class="input-wrapper">
+          <input id="phone" type="text" formControlName="phoneNumber" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address (Optional)</label>
+        <div class="input-wrapper">
+          <input id="address" type="text" formControlName="address" />
+        </div>
+      </div>
+
+      <button type="submit" class="nav-button">Register</button>
     </form>
   `,
-  styles: ``,
 })
 export class RegisterDoctorComponent {
   readonly form = new FormGroup({

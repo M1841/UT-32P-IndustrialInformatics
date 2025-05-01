@@ -8,114 +8,141 @@ import { Router } from '@angular/router';
   selector: 'app-register',
   imports: [ReactiveFormsModule],
   template: `
+  <div class="register-container">
+    <a href="/" class="home-icon">
+      <img src="logo.jpg" alt="Home" width="64" height="64" />
+    </a>
+
     <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-      <h2>Patient Registration Form</h2>
-      <a href="auth/register/doctor">Are you a doctor?</a> <br />
-      <a href="auth/login">Already have an account?</a> <br />
-
-      <label>
-        First Name
-        <input required type="text" formControlName="name" />
-
-        @if (errors.name() !== '') {
-          <span>{{ errors.name() }}</span>
-        }
-      </label>
+      <h2><b>Patient Registration Form</b></h2>
+      <br />
+      <a href="auth/register/doctor" class="link">Are you a doctor?</a> <br />
+      <br />
+      <a href="auth/login" class="link">Already have an account?</a> <br />
       <br />
 
-      <label>
-        Last Name
-        <input required type="text" formControlName="surname" />
+      <div class="form-group">
+        <label for="name">First Name</label>
+        <div class="input-wrapper">
+          <input required id="name" type="text" formControlName="name" />
+          @if (errors.name() !== '') {
+            <span>{{ errors.name() }}</span>
+          }
+        </div>
+      </div>
 
-        @if (errors.surname() !== '') {
-          <span>{{ errors.surname() }}</span>
-        }
-      </label>
-      <br />
+      <div class="form-group">
+        <label for="surname">Last Name</label>
+        <div class="input-wrapper">
+          <input required id="surname" type="text" formControlName="surname" />
+          @if (errors.surname() !== '') {
+            <span>{{ errors.surname() }}</span>
+          }
+        </div>
+      </div>
 
-      <label>
-        Email
-        <input required type="email" formControlName="email" />
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input required id="email" type="text" formControlName="email" />
+          @if (errors.email() !== '') {
+            <span>{{ errors.email() }}</span>
+          }
+        </div>
+      </div>
 
-        @if (errors.email() !== '') {
-          <span>{{ errors.email() }}</span>
-        }
-      </label>
-      <br />
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input required id="password" type="password" formControlName="password" />
+          @if (errors.password() !== '') {
+            <span>{{ errors.password() }}</span>
+          }
+        </div>
+      </div>
 
-      <label>
-        Password
-        <input required type="password" formControlName="password" />
-
-        @if (errors.password() !== '') {
-          <span>{{ errors.password() }}</span>
-        }
-      </label>
-      <br />
-
-      <label>
-        Gender
-        <select required formControlName="gender">
-          @for (gender of ['Female', 'Male', 'Other']; track $index) {
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <div class="input-wrapper">
+          <select required formControlName="gender">
+            @for (gender of ['Female', 'Male', 'Other']; track $index) {
             <option value="{{ gender }}">{{ gender }}</option>
+            }
+          </select>
+          @if (errors.gender() !== '') {
+            <span>{{ errors.gender() }}</span>
           }
-        </select>
+        </div>
+      </div>
 
-        @if (errors.gender() !== '') {
-          <span>{{ errors.gender() }}</span>
-        }
-      </label>
-      <br />
-
-      <label>
-        Birthday
-        <input required type="date" formControlName="birthday" />
-
-        @if (errors.birthday() !== '') {
-          <span>{{ errors.birthday() }}</span>
-        }
-      </label>
-      <br />
-
-      <label>
-        Phone Number (Optional)
-        <input type="text" formControlName="phoneNumber" />
-      </label>
-      <br />
-
-      <label>
-        Allergies (Optional)
-        <textarea formControlName="allergies"></textarea>
-      </label>
-      <br />
-
-      <label>
-        Intolerances (Optional)
-        <textarea formControlName="intolerances"></textarea>
-      </label>
-      <br />
-
-      <label>
-        Conditions (Optional)
-        <textarea formControlName="conditions"></textarea>
-      </label>
-      <br />
-
-      <label>
-        Blood Type (Optional)
-        <select formControlName="bloodType">
-          <option selected value>-</option>
-          @for (bloodType of ['A', 'B', 'AB', 'O']; track $index) {
-            <option value="{{ bloodType }}">{{ bloodType }}</option>
+      <div class="form-group">
+        <label for ="birthday">Birthday</label>
+        <div class="input-wrapper">
+          <input required id="birthday" type="date" formControlName="birthday" />
+          @if (errors.birthday() !== '') {
+            <span>{{ errors.birthday() }}</span>
           }
-        </select>
-      </label>
-      <br />
+        </div>
+      </div>
 
-      <button type="submit">Register</button>
+      <div class="form-group">
+        <label for="phone">Phone Number (Optional)</label>
+        <div class="input-wrapper">
+          <input id="phone" type="text" formControlName="phoneNumber" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="allergies">Allergies (Optional)</label>
+        <div class="input-wrapper">
+          <textarea id="allergies" formControlName="allergies"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="intolerances">Intolerances (Optional)</label>
+        <div class="input-wrapper">
+          <textarea id="intolerances" formControlName="intolerances"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="conditions">Conditions (Optional)</label>
+        <div class="input-wrapper">
+          <textarea id="conditions" formControlName="conditions"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="bloodType">Blood Type (Optional)</label>
+        <div class="input-wrapper">
+          <select id="bloodType" formControlName="bloodType">
+            <option selected value>-</option>
+            @for (bloodType of ['A', 'B', 'AB', 'O']; track $index) {
+              <option value="{{ bloodType }}">{{ bloodType }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="socialNumber">Social Number (Optional)</label>
+        <div class="input-wrapper">
+          <input id="socialNumber" type="text" formControlName="socialNumber" />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="citizenship">Citizenship (Optional)</label>
+        <div class="input-wrapper">
+          <input id="citizenship" type="text" formControlName="citizenship" />
+        </div>
+      </div>
+
+      <button type="submit" class="nav-button">Register</button>
     </form>
+  </div>
   `,
-  styles: ``,
 })
 export class RegisterComponent {
   readonly form = new FormGroup({
@@ -130,6 +157,8 @@ export class RegisterComponent {
     intolerances: new FormControl(),
     conditions: new FormControl(),
     bloodType: new FormControl(),
+    socialNumber: new FormControl(),
+    citizenship: new FormControl(),
   });
   readonly errors = {
     name: signal<string>(''),
