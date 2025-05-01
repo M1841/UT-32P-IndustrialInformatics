@@ -49,7 +49,7 @@ namespace EMR_BMED.Backend.Services
       if (dto.Name != null) { med.Name = dto.Name; }
       if (dto.Form != null) { med.Form = dto.Form; }
       if (dto.Method != null) { med.Method = dto.Method; }
-      if (dto.IsPresRequired != null) { med.IsPresRequired = (bool)dto.IsPresRequired; }
+      if (dto.IsPresRequired.HasValue) { med.IsPresRequired = dto.IsPresRequired.Value; }
       if (dto.Brand != null) { med.Brand = dto.Brand; }
       if (dto.Indications != null) { med.Indications = dto.Indications; }
       if (dto.Contraindications != null) { med.Contraindications = dto.Contraindications; }

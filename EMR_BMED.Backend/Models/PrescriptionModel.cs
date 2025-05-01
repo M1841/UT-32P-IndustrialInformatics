@@ -23,37 +23,37 @@ namespace EMR_BMED.Backend.Models
     public required string MedUnit { get; set; }
     public required string CUI { get; set; }
     public required string CAS { get; set; }
-    public Boolean? IsApproved { get; set; }
-    public Boolean? IsMF { get; set; }
-    public Boolean? IsAmbulatory { get; set; }
-    public Boolean? IsHospital { get; set; }
-    public Boolean? IsOther { get; set; }
-    public Boolean? IsMFMM { get; set; }
+    public bool? IsApproved { get; set; }
+    public bool? IsMF { get; set; }
+    public bool? IsAmbulatory { get; set; }
+    public bool? IsHospital { get; set; }
+    public bool? IsOther { get; set; }
+    public bool? IsMFMM { get; set; }
 
     // patient data
     [ForeignKey("PatientModel")]
-    public required Guid PatientId {  get; set; }
+    public required Guid PatientId { get; set; }
     public required PatientModel Patient { get; set; }
     // the above must have Name, Surname, CNP, Birthday, Gender, Citizenship
 
     // user occupations here
-    public Boolean? IsSalariat { get; set; }
-    public Boolean? IsCoasigurat { get; set; }
-    public Boolean? IsLiberProfesionist { get; set; }
-    public Boolean? IsCopil { get; set; }  // <18 years old
-    public Boolean? IsStudent { get; set; } // 18-26 years old
-    public Boolean? IsGravida { get; set; }
-    public Boolean? IsPensionar { get; set; }
-    public Boolean? IsVeteran { get; set; }
-    public Boolean? IsLowIncome { get; set; }
-    public Boolean? IsRevolutionar { get; set; }
-    public Boolean? IsHandicap { get; set; }
+    public bool? IsSalariat { get; set; }
+    public bool? IsCoasigurat { get; set; }
+    public bool? IsLiberProfesionist { get; set; }
+    public bool? IsCopil { get; set; }  // <18 years old
+    public bool? IsStudent { get; set; } // 18-26 years old
+    public bool? IsGravida { get; set; }
+    public bool? IsPensionar { get; set; }
+    public bool? IsVeteran { get; set; }
+    public bool? IsLowIncome { get; set; }
+    public bool? IsRevolutionar { get; set; }
+    public bool? IsHandicap { get; set; }
     public string? PNS { get; set; }
-    public Boolean? IsAjutorSocial { get; set; }
-    public Boolean? IsSomaj { get; set; }
-    public Boolean? IsPersonalContractual { get; set; }
-    public Boolean? IsCardEuropean { get; set; }
-    public Boolean? IsAcorduriInternationale { get; set; }
+    public bool? IsAjutorSocial { get; set; }
+    public bool? IsSomaj { get; set; }
+    public bool? IsPersonalContractual { get; set; }
+    public bool? IsCardEuropean { get; set; }
+    public bool? IsAcorduriInternationale { get; set; }
     public string? IsOtherCategories { get; set; }
 
     // diagnostic data
@@ -71,4 +71,74 @@ namespace EMR_BMED.Backend.Models
     public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
     // ^ for the connection between prescriptions and meds
   }
+
+  public record PrescriptionCreateDto(
+    string MedUnit,
+    string CUI,
+    string CAS,
+    bool? IsApproved,
+    bool? IsMF,
+    bool? IsAmbulatory,
+    bool? IsHospital,
+    bool? IsOther,
+    bool? IsMFMM,
+    Guid PatientId,
+    bool? IsSalariat,
+    bool? IsCoasigurat,
+    bool? IsLiberProfesionist,
+    bool? IsCopil,
+    bool? IsStudent,
+    bool? IsGravida,
+    bool? IsPensionar,
+    bool? IsVeteran,
+    bool? IsLowIncome,
+    bool? IsRevolutionar,
+    bool? IsHandicap,
+    string? PNS,
+    bool? IsAjutorSocial,
+    bool? IsSomaj,
+    bool? IsPersonalContractual,
+    bool? IsCardEuropean,
+    bool? IsAcorduriInternationale,
+    string? IsOtherCategories,
+    string Diagnostic,
+    int DaysNumber,
+    Guid[] MedIds
+  )
+  { }
+
+  public record PrescriptionUpdateDto(
+    string? MedUnit,
+    string? CUI,
+    string? CAS,
+    bool? IsApproved,
+    bool? IsMF,
+    bool? IsAmbulatory,
+    bool? IsHospital,
+    bool? IsOther,
+    bool? IsMFMM,
+    Guid? PatientId,
+    bool? IsSalariat,
+    bool? IsCoasigurat,
+    bool? IsLiberProfesionist,
+    bool? IsCopil,
+    bool? IsStudent,
+    bool? IsGravida,
+    bool? IsPensionar,
+    bool? IsVeteran,
+    bool? IsLowIncome,
+    bool? IsRevolutionar,
+    bool? IsHandicap,
+    string? PNS,
+    bool? IsAjutorSocial,
+    bool? IsSomaj,
+    bool? IsPersonalContractual,
+    bool? IsCardEuropean,
+    bool? IsAcorduriInternationale,
+    string? IsOtherCategories,
+    string? Diagnostic,
+    int? DaysNumber,
+    Guid[]? MedIds
+  )
+  { }
 }
