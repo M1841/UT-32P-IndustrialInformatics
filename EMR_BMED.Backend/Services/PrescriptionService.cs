@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 
-using EMR_BMED.Backend.Exceptions;
 using EMR_BMED.Backend.Models;
 
 namespace EMR_BMED.Backend.Services
@@ -11,7 +10,7 @@ namespace EMR_BMED.Backend.Services
     {
       PrescriptionModel prescription = await dbService.Prescriptions
         .FindAsync(id)
-        ?? throw new KeyNotFoundException();
+        ?? throw new KeyNotFoundException($"Can't find prescription with id={id}");
 
       return prescription;
     }
@@ -21,7 +20,7 @@ namespace EMR_BMED.Backend.Services
       PatientModel patient = await dbService.Users
         .OfType<PatientModel>()
         .FirstOrDefaultAsync(p => p.Id == id)
-        ?? throw new UserNotFoundException();
+        ?? throw new KeyNotFoundException($"Can't find patient with id={id}");
 
       return patient.Prescriptions.ToArray();
     }
@@ -31,7 +30,7 @@ namespace EMR_BMED.Backend.Services
       DoctorModel doctor = await dbService.Users
         .OfType<DoctorModel>()
         .FirstOrDefaultAsync(d => d.Id == id)
-        ?? throw new UserNotFoundException();
+        ?? throw new KeyNotFoundException($"Can't find doctor with id={id}");
 
       return doctor.Prescriptions.ToArray();
     }
@@ -41,7 +40,12 @@ namespace EMR_BMED.Backend.Services
       PatientModel patient = await dbService.Users
         .OfType<PatientModel>()
         .FirstOrDefaultAsync(p => p.Id == dto.PatientId)
-        ?? throw new UserNotFoundException();
+        ?? throw new KeyNotFoundException($"Can't find patient with id={dto.PatientId}");
+
+      DoctorModel doctor = await dbService.Users
+        .OfType<DoctorModel>()
+        .FirstOrDefaultAsync(d => d.Id == dto.DoctrorId)
+        ?? throw new KeyNotFoundException($"Can't find patient with id={dto.DoctrorId}");
 
       PrescriptionModel prescription = new()
       {
@@ -56,6 +60,8 @@ namespace EMR_BMED.Backend.Services
         IsMFMM = dto.IsMFMM,
         PatientId = dto.PatientId,
         Patient = patient,
+        DoctorId = dto.DoctrorId,
+        Doctor = doctor,
         IsSalariat = dto.IsSalariat,
         IsCoasigurat = dto.IsCoasigurat,
         IsLiberProfesionist = dto.IsLiberProfesionist,
@@ -84,7 +90,7 @@ namespace EMR_BMED.Backend.Services
       {
         MedicationModel med = await dbService.Meds
           .FindAsync(medId)
-          ?? throw new KeyNotFoundException();
+          ?? throw new KeyNotFoundException($"Can't find medication with id={medId}");
 
         prescription.Records.Add(new()
         {
@@ -116,7 +122,7 @@ namespace EMR_BMED.Backend.Services
         PatientModel patient = await dbService.Users
           .OfType<PatientModel>()
           .FirstOrDefaultAsync(p => p.Id == dto.PatientId.Value)
-          ?? throw new UserNotFoundException();
+          ?? throw new KeyNotFoundException($"Can't find patient with id={dto.PatientId}"); ;
         prescription.PatientId = dto.PatientId.Value;
         prescription.Patient = patient;
       }
@@ -147,7 +153,7 @@ namespace EMR_BMED.Backend.Services
         {
           MedicationModel med = await dbService.Meds
             .FindAsync(medId)
-            ?? throw new KeyNotFoundException();
+            ?? throw new KeyNotFoundException($"Can't find medication with id={medId}"); ;
 
           prescription.Records.Add(new()
           {

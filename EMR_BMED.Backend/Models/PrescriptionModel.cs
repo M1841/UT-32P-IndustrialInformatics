@@ -36,6 +36,10 @@ namespace EMR_BMED.Backend.Models
     public required PatientModel Patient { get; set; }
     // the above must have Name, Surname, CNP, Birthday, Gender, Citizenship
 
+    [ForeignKey("DoctorModel")]
+    public required Guid DoctorId { get; set; }
+    public required DoctorModel Doctor { get; set; }
+
     // user occupations here
     public bool? IsSalariat { get; set; }
     public bool? IsCoasigurat { get; set; }
@@ -83,6 +87,7 @@ namespace EMR_BMED.Backend.Models
     bool? IsOther,
     bool? IsMFMM,
     Guid PatientId,
+    Guid DoctrorId,
     bool? IsSalariat,
     bool? IsCoasigurat,
     bool? IsLiberProfesionist,
@@ -118,6 +123,7 @@ namespace EMR_BMED.Backend.Models
     bool? IsOther,
     bool? IsMFMM,
     Guid? PatientId,
+    Guid? DoctorId,
     bool? IsSalariat,
     bool? IsCoasigurat,
     bool? IsLiberProfesionist,
