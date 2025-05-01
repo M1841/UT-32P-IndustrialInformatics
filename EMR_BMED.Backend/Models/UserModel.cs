@@ -75,7 +75,7 @@ namespace EMR_BMED.Backend.Models
 
     // optional fields
     [Column("Verified")]
-    public Boolean? IsVerified { get; set; }
+    public bool? IsVerified { get; set; }
     [Column(TypeName = "nvarchar(25)")]
     public string? Phone { get; set; }
 

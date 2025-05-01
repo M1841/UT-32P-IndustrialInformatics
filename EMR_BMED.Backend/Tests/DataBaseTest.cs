@@ -68,7 +68,7 @@ namespace EMR_BMED.Backend.Tests
         context.SaveChanges();
 
         var patientCount = context.Patients.Count();
-        Assert.Equal(1,patientCount);
+        Assert.Equal(1, patientCount);
       }
     }
     [Fact]
@@ -154,6 +154,8 @@ namespace EMR_BMED.Backend.Tests
           {
             PatientId = patient.Id,
             Patient = patient,
+            DoctorId = doctor.Id,
+            Doctor = doctor,
             Diagnostic = "Flu",
             Issued = DateTime.Now,
             DaysNumber = 7,

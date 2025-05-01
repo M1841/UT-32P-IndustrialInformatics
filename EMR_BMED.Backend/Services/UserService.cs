@@ -12,7 +12,7 @@ namespace EMR_BMED.Backend.Services
       UserModel user = await dbService.Users
         .FirstOrDefaultAsync(
           user => user.Id == id)
-        ?? throw new UserNotFoundException();
+        ?? throw new KeyNotFoundException($"Can't find user with id={id}");
 
       return user;
     }
