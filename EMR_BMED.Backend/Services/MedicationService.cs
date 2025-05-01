@@ -7,7 +7,7 @@ namespace EMR_BMED.Backend.Services
     public async Task<MedicationModel> GetOneAsync(Guid id)
     {
       return await dbService.Meds.FindAsync(id)
-        ?? throw new KeyNotFoundException();
+        ?? throw new KeyNotFoundException($"Can't find medication with id={id}");
     }
 
     public MedicationModel[] Search(string query)
