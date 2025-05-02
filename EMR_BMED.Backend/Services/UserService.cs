@@ -23,10 +23,18 @@ namespace EMR_BMED.Backend.Services
         .OfType<PatientModel>()
         .Where(patient =>
           new string[] {
+            patient.Email,
             patient.Name,
             patient.Surname,
-            patient.Email,
-            patient.SocialNumber
+            patient.Gender,
+            patient.Birthday.ToString("yyyy-MM-dd"),
+            patient.Phone ?? string.Empty,
+            patient.Allergies ?? string.Empty,
+            patient.Intolerances ?? string.Empty,
+            patient.Conditions ?? string.Empty,
+            patient.Blood ?? string.Empty,
+            patient.Citizenship,
+            patient.SocialNumber,
           }.Any(s =>
             s.Contains(query, StringComparison.CurrentCultureIgnoreCase)
           )
