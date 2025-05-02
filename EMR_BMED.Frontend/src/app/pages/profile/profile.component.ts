@@ -17,19 +17,22 @@ import { ApiService } from '@/services/api/api.service';
     </div>
   `,
 })
-export class ProfileComponent implements OnInit {
-  user: { name: string; surname: string; email: string } | null = null;
+export class ProfileComponent{
+  
 
-  constructor(private api: ApiService) {}
+
+  readonly user = signal<{ name: string; surname: string } | null>(null);
+  readonly isAuthenticated = computed(() => this.api.isAuthenticated());
 
   ngOnInit() {
-    this.api.getUserDetails().subscribe({
-      next: (data) => {
-        this.user = data.body;
-      },
-      error: (err) => {
-        console.error('Failed to fetch user details:', err);
-      },
-    });
+    if (this.api.isAuthenticated()) {
+      this.api.get<{ name: string; surname: string }>('auth/whoami').subscribe({
+        next: (response) => {
+          this.user.set(response.body ?? null);
+        },
+      });
+    }
   }
+
+
 }

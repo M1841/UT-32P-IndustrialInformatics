@@ -27,7 +27,7 @@ import { ApiService } from '@/services/api/api.service';
     }
 
     <br />
-    <a href="test" class="nav-button">Test</a> <br />
+
   </div>
   `,
 })
