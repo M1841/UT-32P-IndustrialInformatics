@@ -8,7 +8,7 @@ namespace EMR_BMED.Backend.Controllers
 {
   [ApiController]
   [Route("[controller]")]
-  public class MedicationsController(MedicationService medicationService) : ControllerBase
+  public class MedicationController(MedicationService medicationService) : ControllerBase
   {
     [Authorize]
     [HttpGet("{id}")]
@@ -31,6 +31,12 @@ namespace EMR_BMED.Backend.Controllers
     {
       MedicationModel[] medications = medicationService.Search(query);
       return Ok(medications);
+    }
+
+    [HttpGet("all")]
+    public IActionResult GetAllMedications()
+    {
+      return Ok(medicationService.GetAllMedications());
     }
 
     [Authorize]

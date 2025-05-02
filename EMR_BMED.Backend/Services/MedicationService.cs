@@ -22,6 +22,11 @@ namespace EMR_BMED.Backend.Services
       ).ToArray();
     }
 
+    public IEnumerable<MedicationModel> GetAllMedications()
+    {
+      return dbService.Meds.ToList();
+    }
+
     public async Task CreateAsync(MedicationCreateDto dto)
     {
       await dbService.Meds.AddAsync(new()

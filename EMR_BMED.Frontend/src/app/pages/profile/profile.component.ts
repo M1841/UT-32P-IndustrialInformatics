@@ -8,6 +8,10 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="profile-container">
+      <a href="/" class="home-icon">
+        <img src="logo.jpg" alt="Home" width="64" height="64" >
+      </a>
+
       <h2>Patient Profile</h2>
       <div *ngIf="patient()">
         Name: {{ patient()?.name }} {{ patient()?.surname }}

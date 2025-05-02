@@ -9,7 +9,7 @@ namespace EMR_BMED.Backend.Controllers
 {
   [ApiController]
   [Route("[controller]")]
-  public class PrescriptionsController(PrescriptionService prescriptionService) : ControllerBase
+  public class PrescriptionController(PrescriptionService prescriptionService) : ControllerBase
   {
     [Authorize]
     [HttpGet("{id}")]
@@ -93,7 +93,7 @@ namespace EMR_BMED.Backend.Controllers
     {
       string token = authHeader.Split(' ').LastOrDefault()!;
       Guid myId = TokenUtils.ExtractId(token);
-      if (myId != dto.DoctrorId)
+      if (myId != dto.DoctorId)
       {
         return Forbid();
       }

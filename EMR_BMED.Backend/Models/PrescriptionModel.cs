@@ -87,7 +87,7 @@ namespace EMR_BMED.Backend.Models
     bool? IsOther,
     bool? IsMFMM,
     Guid PatientId,
-    Guid DoctrorId,
+    Guid DoctorId,
     bool? IsSalariat,
     bool? IsCoasigurat,
     bool? IsLiberProfesionist,

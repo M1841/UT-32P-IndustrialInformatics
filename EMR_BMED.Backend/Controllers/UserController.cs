@@ -31,6 +31,12 @@ namespace EMR_BMED.Backend.Controllers
       return Ok(userService.SearchPatients(query));
     }
 
+    [HttpGet("patient/all")]
+    public IActionResult GetAllPatients()
+    {
+        return Ok(userService.GetAllPatients());
+    }
+
     [Authorize]
     [HttpPut("patient/{id}")]
     public async Task<IActionResult> Update(

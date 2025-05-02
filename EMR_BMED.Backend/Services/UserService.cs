@@ -44,6 +44,11 @@ namespace EMR_BMED.Backend.Services
       return patients;
     }
 
+    public IEnumerable<PatientModel> GetAllPatients()
+    {
+      return dbService.Users.OfType<PatientModel>().ToList();
+    }
+
     public async Task UpdateAsync(Guid id, PatientUpdateDto dto)
     {
       PatientModel user = (PatientModel)await UpdateGenericAsync(id, dto);
