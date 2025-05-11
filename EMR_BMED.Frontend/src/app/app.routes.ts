@@ -6,7 +6,6 @@ import { LoginComponent } from '@/pages/auth/login/login.component';
 import { RegisterComponent } from '@/pages/auth/register/register.component';
 import { RegisterDoctorComponent } from '@/pages/auth/register/doctor/register.doctor.component';
 import { PrescribeComponent } from '@/pages/prescribe/prescribe.component';
-import { TestComponent } from '@/pages/test/test.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 
 export const routes: Routes = [
