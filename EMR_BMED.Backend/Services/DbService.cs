@@ -7,8 +7,6 @@ namespace EMR_BMED.Backend.Services
   public class DbService : DbContext
   {
     public DbSet<UserModel> Users { get; set; }
-    public DbSet<PatientModel> Patients { get; set; }
-    public DbSet<DoctorModel> Doctors { get; set; }
     public DbSet<PrescriptionModel> Prescriptions { get; set; }
     public DbSet<MedicationModel> Meds { get; set; }
     // here you can add more tables based on whatever models you want

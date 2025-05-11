@@ -102,7 +102,7 @@ namespace EMR_BMED.Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("DoctorModelId")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("IsAcorduriInternationale")
@@ -189,7 +189,7 @@ namespace EMR_BMED.Backend.Migrations
 
                     b.HasKey("GlobalID", "SeriesID", "NumberID");
 
-                    b.HasIndex("DoctorModelId");
+                    b.HasIndex("DoctorId");
 
                     b.HasIndex("Issued");
 
@@ -320,15 +320,19 @@ namespace EMR_BMED.Backend.Migrations
 
             modelBuilder.Entity("EMR_BMED.Backend.Models.PrescriptionModel", b =>
                 {
-                    b.HasOne("EMR_BMED.Backend.Models.DoctorModel", null)
+                    b.HasOne("EMR_BMED.Backend.Models.DoctorModel", "Doctor")
                         .WithMany("Prescriptions")
-                        .HasForeignKey("DoctorModelId");
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("EMR_BMED.Backend.Models.PatientModel", "Patient")
                         .WithMany("Prescriptions")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Doctor");
 
                     b.Navigation("Patient");
                 });

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace EMR_BMED.Backend.Tests
 {
-  public class DataBaseTest
+ public class DataBaseTest
   {
     public DataBaseTest()
     {
@@ -27,13 +27,13 @@ namespace EMR_BMED.Backend.Tests
 
       using (var context = new DbService(true))
       {
-        var bPatients = context.Patients.Count();
-        var bDoctors = context.Doctors.Count();
+        var bPatients = context.Users.OfType<PatientModel>().Count();
+        var bDoctors = context.Users.OfType<DoctorModel>().Count();
 
         DbService.SeedTestData(true);
 
-        var aPatients = context.Patients.Count();
-        var aDoctors = context.Doctors.Count();
+        var aPatients = context.Users.OfType<PatientModel>().Count();
+        var aDoctors = context.Users.OfType<DoctorModel>().Count();
 
         Assert.True(aPatients > bPatients, "Number of patients has been modified");
         Assert.True(aDoctors > bDoctors, "Number of patients has been modified");
@@ -44,9 +44,10 @@ namespace EMR_BMED.Backend.Tests
     {
       using (var context = new DbService(true))
       {
-        var initialCount = context.Patients.Count();
+        var initialCount = context.Users.OfType<PatientModel>().Count();
         var email = "alexjon@gmail.com";
         var password = "12345";
+
 
         var newPatient = new PatientModel
         {
@@ -67,17 +68,20 @@ namespace EMR_BMED.Backend.Tests
         context.Add(newPatient);
         context.SaveChanges();
 
-        var patientCount = context.Patients.Count();
-        Assert.Equal(1, patientCount);
+        var patientCount = context.Users.OfType<PatientModel>().Count();
+        Assert.Equal(initialCount+1, patientCount);
+
       }
     }
+
     [Fact]
     public void updateDoctorsTest()
     {
       DbService.SeedTestData(true);
       using (var context = new DbService(true))
       {
-        var doctor = context.Doctors.FirstOrDefault();
+        var doctor = context.Users.OfType<DoctorModel>()
+                                  .FirstOrDefault();
         if (doctor == null)
         {
           Assert.True(false, "Doctor not found");
@@ -91,7 +95,8 @@ namespace EMR_BMED.Backend.Tests
 
       using (var context = new DbService(true))
       {
-        var doctor = context.Doctors.FirstOrDefault();
+        var doctor = context.Users.OfType<DoctorModel>()
+                                  .FirstOrDefault();
         if (doctor == null)
         {
           Assert.True(false, "Doctor not found");
@@ -108,15 +113,16 @@ namespace EMR_BMED.Backend.Tests
       DbService.SeedTestData(true);
       using (var context = new DbService(true))
       {
-        var patient = context.Patients.FirstOrDefault();
+        var patient = context.Users.OfType<PatientModel>()
+                                   .FirstOrDefault();
         Assert.NotNull(patient);
-        var contextBDelete = context.Patients.Count();
+        var contextBDelete = context.Users.OfType<PatientModel>().Count();
 
 
-        context.Patients.Remove(patient);
+        context.Users.Remove(patient);
         context.SaveChanges();
 
-        var contextADelete = context.Patients.Count();
+        var contextADelete = context.Users.OfType<PatientModel>().Count();
         Assert.True(contextADelete < contextBDelete, "Patient was not deleted");
       }
     }
@@ -142,8 +148,10 @@ namespace EMR_BMED.Backend.Tests
       DbService.SeedTestData(true);
       using (var context = new DbService(true))
       {
-        var patient = context.Patients.FirstOrDefault();
-        var doctor = context.Doctors.FirstOrDefault();
+        var patient = context.Users.OfType<PatientModel>()
+                                   .FirstOrDefault();
+        var doctor = context.Users.OfType<DoctorModel>()
+                                  .FirstOrDefault();
         if (patient == null || doctor == null)
         {
           Assert.True(false, "Patient or doctor not found");
@@ -170,9 +178,9 @@ namespace EMR_BMED.Backend.Tests
       }
       using (var context = new DbService(true))
       {
-        var patientPress = context.Patients
-          .Include(p => p.Prescriptions)
-          .FirstOrDefault();
+        var patientPress = context.Users.OfType<PatientModel>()
+                                        .Include(p => p.Prescriptions)
+                                        .FirstOrDefault();
         Assert.NotNull(patientPress);
         Assert.True(patientPress.Prescriptions.Any(), "Patient has prescriptions");
       }

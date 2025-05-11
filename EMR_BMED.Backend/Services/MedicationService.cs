@@ -1,4 +1,5 @@
 using EMR_BMED.Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EMR_BMED.Backend.Services
 {
@@ -12,14 +13,14 @@ namespace EMR_BMED.Backend.Services
 
     public MedicationModel[] Search(string query)
     {
-      return dbService.Meds.Where(m =>
-        new string[] {
-          m.Name,
-          m.Brand ?? ""
-        }.Any(s =>
-          s.Contains(query, StringComparison.CurrentCultureIgnoreCase)
-        )
-      ).ToArray();
+      var pattern = $"%{query}%";
+
+      return dbService.Meds
+          .Where(m =>
+              EF.Functions.Like(m.Name, pattern) ||
+              EF.Functions.Like(m.Brand ?? "", pattern)
+          )
+          .ToArray();
     }
 
     public IEnumerable<MedicationModel> GetAllMedications()
