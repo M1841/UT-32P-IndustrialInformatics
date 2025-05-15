@@ -21,19 +21,12 @@ namespace EMR_BMED.Backend.Services
     {
       PatientModel[] patients = dbService.Users
         .OfType<PatientModel>()
+        .AsEnumerable()
         .Where(patient =>
           new string[] {
             patient.Email,
             patient.Name,
             patient.Surname,
-            patient.Gender,
-            patient.Birthday.ToString("yyyy-MM-dd"),
-            patient.Phone ?? string.Empty,
-            patient.Allergies ?? string.Empty,
-            patient.Intolerances ?? string.Empty,
-            patient.Conditions ?? string.Empty,
-            patient.Blood ?? string.Empty,
-            patient.Citizenship,
             patient.SocialNumber,
           }.Any(s =>
             s.Contains(query, StringComparison.CurrentCultureIgnoreCase)

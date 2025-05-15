@@ -3,7 +3,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from '@/services/api/api.service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-prescribe',
   imports: [ReactiveFormsModule],
@@ -19,26 +18,32 @@ import { Router } from '@angular/router';
         <input type="hidden" formControlName="doctorId" />
 
         <div class="form-group">
-          <label for="patientId">Patient Name</label>
+          <label for="patientId">Patient</label>
           <div class="input-wrapper">
+            <input placeholder="Search" (input)="loadPatients($event.target)" />
             <select formControlName="patientId" required>
-              <option value="" disabled selected>Select a medication</option>
-              <option *ngFor="let patient of patients()" [value]="patient.id">
-                {{ patient.name }} {{ patient.surname }}
-              </option>
+              <option value="" disabled selected>Select a patient</option>
+              @for (patient of patients(); track $index) {
+                <option [value]="patient.id">
+                  {{ patient.name }} {{ patient.surname }}
+                </option>
+              }
             </select>
           </div>
         </div>
         <br />
 
         <div class="form-group">
-          <label for="medicationId">Medication Name</label>
+          <label for="medicationId">Medication</label>
           <div class="input-wrapper">
+            <input placeholder="Search" />
             <select formControlName="medicationId" required>
               <option value="" disabled selected>Select a medication</option>
-              <option *ngFor="let medication of medications()" [value]="medication.id">
-                {{ medication.name }}
-              </option>
+              @for (medication of medications(); track $index) {
+                <option [value]="medication.id">
+                  {{ medication.name }}
+                </option>
+              }
             </select>
           </div>
         </div>
@@ -253,7 +258,9 @@ import { Router } from '@angular/router';
         <br />
 
         <div class="form-group">
-          <label for="isAcorduriInternationale">Is Acorduri Internationale</label>
+          <label for="isAcorduriInternationale"
+            >Is Acorduri Internationale</label
+          >
           <div class="input-wrapper">
             <input type="checkbox" formControlName="isAcorduriInternationale" />
           </div>
@@ -275,7 +282,9 @@ import { Router } from '@angular/router';
 })
 export class PrescribeComponent {
   readonly medications = signal<{ id: string; name: string }[]>([]);
-  readonly patients = signal<{ id: string; name: string; surname: string }[]>([]);
+  readonly patients = signal<{ id: string; name: string; surname: string }[]>(
+    [],
+  );
   readonly isAuthenticated = computed(() => this.api.isAuthenticated());
 
   form = new FormGroup({
@@ -322,9 +331,7 @@ export class PrescribeComponent {
 
   ngOnInit() {
     if (this.api.isAuthenticated()) {
-      this.setDoctorId(); 
-      this.loadPatients();
-      this.loadMedications();
+      this.setDoctorId();
     } else {
       this.router.navigate(['/auth/login']);
     }
@@ -343,82 +350,100 @@ export class PrescribeComponent {
     });
   }
 
-  loadPatients() {
-    this.api.get<{ id: string; name: string; surname: string }[]>('user/patient/all').subscribe({
-      next: (response) => {
-        if (response.body) {
-          this.patients.set(response.body);
-        } else {
-          this.patients.set([]);
-        }
-      },
-      error: (err) => {
-        console.error('Failed to fetch patients:', err);
-        this.patients.set([]);
-      },
-    });
+  loadPatients(input: EventTarget | null) {
+    const query = (input as HTMLInputElement)?.value ?? null;
+    if (!!query) {
+      this.api
+        .get<
+          { id: string; name: string; surname: string }[]
+        >(`user/search/${query}`)
+        .subscribe({
+          next: (response) => {
+            if (response.body) {
+              this.patients.set(response.body);
+            } else {
+              this.patients.set([]);
+            }
+          },
+          error: (err) => {
+            console.error('Failed to fetch patients:', err);
+            this.patients.set([]);
+          },
+        });
+    } else {
+      this.patients.set([]);
+    }
   }
 
-  loadMedications() {
-    this.api.get<{ id: string; name: string }[]>('medication/all').subscribe({
-      next: (response) => {
-        if (response.body) {
-          this.medications.set(response.body);
-        } else {
-          this.medications.set([]);
-        }
-      },
-      error: (err) => {
-        console.error('Failed to fetch medications:', err);
-        this.medications.set([]);
-      },
-    });
+  loadMedications(input: EventTarget | null) {
+    const query = (input as HTMLInputElement)?.value ?? null;
+    if (!!query) {
+      this.api
+        .get<{ id: string; name: string }[]>(`medication/search/${query}`)
+        .subscribe({
+          next: (response) => {
+            if (response.body) {
+              this.medications.set(response.body);
+            } else {
+              this.medications.set([]);
+            }
+          },
+          error: (err) => {
+            console.error('Failed to fetch medications:', err);
+            this.medications.set([]);
+          },
+        });
+    } else {
+      this.medications.set([]);
+    }
   }
 
   handleSubmit() {
     if (this.form.valid) {
-      this.api.post<
-        {
-          error?: {
-            CAS?: string;
-            CUI?: string;
-            daysNumber?: string;
-            diagnostic?: string;
-            medUnit?: string;
-          };
-        },
-        typeof this.form.value
-      >('prescriptions', this.form.value).subscribe({
-        next: () => {
-          alert('Prescription created successfully!');
-          this.form.reset();
-        },
-        error: ({ error }) => {
-          this.errors.CAS.set(error?.CAS ?? '');
-          this.errors.CUI.set(error?.CUI ?? '');
-          this.errors.daysNumber.set(error?.daysNumber ?? '');
-          this.errors.diagnostic.set(error?.diagnostic ?? '');
-          this.errors.medUnit.set(error?.medUnit ?? '');
-        },
-      });
+      this.api
+        .post<
+          {
+            error?: {
+              CAS?: string;
+              CUI?: string;
+              daysNumber?: string;
+              diagnostic?: string;
+              medUnit?: string;
+            };
+          },
+          typeof this.form.value
+        >('prescriptions', this.form.value)
+        .subscribe({
+          next: () => {
+            alert('Prescription created successfully!');
+            this.form.reset();
+          },
+          error: ({ error }) => {
+            this.errors.CAS.set(error?.CAS ?? '');
+            this.errors.CUI.set(error?.CUI ?? '');
+            this.errors.daysNumber.set(error?.daysNumber ?? '');
+            this.errors.diagnostic.set(error?.diagnostic ?? '');
+            this.errors.medUnit.set(error?.medUnit ?? '');
+          },
+        });
     } else {
-    this.errors.CAS.set(
-      !this.form.value.CAS ? 'CAS number cannot be empty' : '',
-    );
-    this.errors.CUI.set(
-      !this.form.value.CUI ? 'CUI number cannot be empty' : '',
-    );
-    this.errors.daysNumber.set(
-      !this.form.value.daysNumber ? 'Days number cannot be empty' : '',
-    );
-    this.errors.diagnostic.set(
-      !this.form.value.diagnostic ? 'Diagnostic cannot be empty' : '',
-    );
-    this.errors.medUnit.set(
-      !this.form.value.medUnit ? 'Medication unit cannot be empty' : '',
-    );
+      this.errors.CAS.set(
+        !this.form.value.CAS ? 'CAS number cannot be empty' : '',
+      );
+      this.errors.CUI.set(
+        !this.form.value.CUI ? 'CUI number cannot be empty' : '',
+      );
+      this.errors.daysNumber.set(
+        !this.form.value.daysNumber ? 'Days number cannot be empty' : '',
+      );
+      this.errors.diagnostic.set(
+        !this.form.value.diagnostic ? 'Diagnostic cannot be empty' : '',
+      );
+      this.errors.medUnit.set(
+        !this.form.value.medUnit ? 'Medication unit cannot be empty' : '',
+      );
+    }
   }
-}
 
   private api = inject(ApiService);
   private router = inject(Router);
