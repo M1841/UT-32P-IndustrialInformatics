@@ -16,11 +16,16 @@ namespace EMR_BMED.Backend.Services
       var pattern = $"%{query}%";
 
       return dbService.Meds
-          .Where(m =>
-              EF.Functions.Like(m.Name, pattern) ||
-              EF.Functions.Like(m.Brand ?? "", pattern)
+        .AsEnumerable()
+        .Where(m =>
+          new string[] {
+            m.Name,
+            m.Brand ?? ""
+          }.Any(s =>
+            s.Contains(query, StringComparison.CurrentCultureIgnoreCase)
           )
-          .ToArray();
+        ).Take(50)
+        .ToArray();
     }
 
     public IEnumerable<MedicationModel> GetAllMedications()

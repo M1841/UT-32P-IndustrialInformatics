@@ -20,9 +20,10 @@ import { Router } from '@angular/router';
         <div class="form-group">
           <label for="patientId">Patient</label>
           <div class="input-wrapper">
-            <input placeholder="Search" (input)="loadPatients($event.target)" />
+            <form [formGroup]="patientSearch" (ngSubmit)="loadPatients()">
+              <input required placeholder="Search" formControlName="query" />
+            </form>
             <select formControlName="patientId" required>
-              <option value="" disabled selected>Select a patient</option>
               @for (patient of patients(); track $index) {
                 <option [value]="patient.id">
                   {{ patient.name }} {{ patient.surname }}
@@ -36,9 +37,10 @@ import { Router } from '@angular/router';
         <div class="form-group">
           <label for="medicationId">Medication</label>
           <div class="input-wrapper">
-            <input placeholder="Search" />
+            <form [formGroup]="medicationSearch" (ngSubmit)="loadMedications()">
+              <input required placeholder="Search" formControlName="query" />
+            </form>
             <select formControlName="medicationId" required>
-              <option value="" disabled selected>Select a medication</option>
               @for (medication of medications(); track $index) {
                 <option [value]="medication.id">
                   {{ medication.name }}
@@ -350,9 +352,12 @@ export class PrescribeComponent {
     });
   }
 
-  loadPatients(input: EventTarget | null) {
-    const query = (input as HTMLInputElement)?.value ?? null;
-    if (!!query) {
+  readonly patientSearch = new FormGroup({
+    query: new FormControl(''),
+  });
+  loadPatients() {
+    const query = this.patientSearch.value.query;
+    if (this.patientSearch.valid) {
       this.api
         .get<
           { id: string; name: string; surname: string }[]
@@ -375,9 +380,12 @@ export class PrescribeComponent {
     }
   }
 
-  loadMedications(input: EventTarget | null) {
-    const query = (input as HTMLInputElement)?.value ?? null;
-    if (!!query) {
+  readonly medicationSearch = new FormGroup({
+    query: new FormControl(''),
+  });
+  loadMedications() {
+    const query = this.medicationSearch.value.query;
+    if (this.medicationSearch.valid) {
       this.api
         .get<{ id: string; name: string }[]>(`medication/search/${query}`)
         .subscribe({
@@ -412,7 +420,7 @@ export class PrescribeComponent {
             };
           },
           typeof this.form.value
-        >('prescriptions', this.form.value)
+        >('prescription', this.form.value)
         .subscribe({
           next: () => {
             alert('Prescription created successfully!');

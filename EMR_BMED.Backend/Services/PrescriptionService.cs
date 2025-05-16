@@ -86,19 +86,16 @@ namespace EMR_BMED.Backend.Services
         Records = []
       };
 
-      foreach (Guid medId in dto.MedIds)
+      MedicationModel med = await dbService.Meds
+        .FindAsync(dto.MedicationId)
+        ?? throw new KeyNotFoundException($"Can't find medication with id={dto.MedicationId}");
+        
+      prescription.Records.Add(new()
       {
-        MedicationModel med = await dbService.Meds
-          .FindAsync(medId)
-          ?? throw new KeyNotFoundException($"Can't find medication with id={medId}");
-
-        prescription.Records.Add(new()
-        {
-          MID = medId,
-          Meds = med,
-          Prescriptions = prescription
-        });
-      }
+        MID = dto.MedicationId,
+        Meds = med,
+        Prescriptions = prescription
+      });
 
       dbService.Prescriptions.Add(prescription);
       await dbService.SaveChangesAsync();
@@ -146,22 +143,20 @@ namespace EMR_BMED.Backend.Services
       if (dto.IsOtherCategories != null) { prescription.IsOtherCategories = dto.IsOtherCategories; }
       if (dto.Diagnostic != null) { prescription.Diagnostic = dto.Diagnostic; }
       if (dto.DaysNumber.HasValue) { prescription.DaysNumber = dto.DaysNumber.Value; }
-      if (dto.MedIds != null)
+      if (dto.MedicationId.HasValue)
       {
         prescription.Records.Clear();
-        foreach (Guid medId in dto.MedIds)
-        {
-          MedicationModel med = await dbService.Meds
-            .FindAsync(medId)
-            ?? throw new KeyNotFoundException($"Can't find medication with id={medId}"); ;
+        
+        MedicationModel med = await dbService.Meds
+          .FindAsync(dto.MedicationId.Value)
+          ?? throw new KeyNotFoundException($"Can't find medication with id={dto.MedicationId.Value}"); ;
 
-          prescription.Records.Add(new()
-          {
-            MID = medId,
-            Meds = med,
-            Prescriptions = prescription
-          });
-        }
+        prescription.Records.Add(new()
+        {
+          MID = dto.MedicationId.Value,
+          Meds = med,
+          Prescriptions = prescription
+        });
       }
     }
 

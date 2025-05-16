@@ -11,13 +11,13 @@ namespace EMR_BMED.Backend.Models
     // identification
     [Key]
     [Column("PID")]
-    public Guid GlobalID { get; set; } // global id assigned by our EMR's system
+    public Guid GlobalID { get; set; } = Guid.NewGuid(); // global id assigned by our EMR's system
     [Key]
     [Column("Series")]
-    public Guid SeriesID { get; set; } // Seria
+    public Guid SeriesID { get; set; } = Guid.NewGuid(); // Seria
     [Key]
     [Column("Number")]
-    public Guid NumberID { get; set; } // Numar
+    public Guid NumberID { get; set; } = Guid.NewGuid(); // Numar
 
     // medical unit data
     public required string MedUnit { get; set; }
@@ -108,7 +108,7 @@ namespace EMR_BMED.Backend.Models
     string? IsOtherCategories,
     string Diagnostic,
     int DaysNumber,
-    Guid[] MedIds
+    Guid MedicationId
   )
   { }
 
@@ -144,7 +144,7 @@ namespace EMR_BMED.Backend.Models
     string? IsOtherCategories,
     string? Diagnostic,
     int? DaysNumber,
-    Guid[]? MedIds
+    Guid? MedicationId
   )
   { }
 }

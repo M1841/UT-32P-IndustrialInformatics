@@ -31,7 +31,7 @@ namespace EMR_BMED.Backend.Services
           }.Any(s =>
             s.Contains(query, StringComparison.CurrentCultureIgnoreCase)
           )
-        )
+        ).Take(50)
         .ToArray();
 
       return patients;
