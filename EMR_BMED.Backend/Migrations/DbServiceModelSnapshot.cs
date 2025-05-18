@@ -29,7 +29,7 @@ namespace EMR_BMED.Backend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Brand")
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Contraindications")
                         .HasColumnType("text");

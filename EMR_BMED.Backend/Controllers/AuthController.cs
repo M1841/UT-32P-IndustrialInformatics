@@ -66,7 +66,7 @@ namespace EMR_BMED.Backend.Controllers
       try
       {
         var user = await authService.WhoAmI(authHeader);
-        return Ok(new { user.Name, user.Surname });
+        return Ok(user);
       }
       catch (UserNotFoundException)
       {

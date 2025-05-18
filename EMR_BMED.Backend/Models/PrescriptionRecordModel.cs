@@ -1,12 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EMR_BMED.Backend.Models {
+namespace EMR_BMED.Backend.Models
+{
   /// <summary>
   /// Intermediary table between the Prescriptions and Meds, Users and Doctors
   /// </summary>
-  public class PrescriptionRecordModel {
+  public class PrescriptionRecordModel
+  {
     [Key]
     [ForeignKey("PrescriptionModel")]
     [Column("PID")]

@@ -52,7 +52,7 @@ namespace EMR_BMED.Backend.Models
   {
     // global identification in our database
     [Key]
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     // authentication info
     public required string Password { get; set; }

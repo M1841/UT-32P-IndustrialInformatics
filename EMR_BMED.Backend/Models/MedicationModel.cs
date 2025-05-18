@@ -10,7 +10,7 @@ namespace EMR_BMED.Backend.Models
   {
     // identification
     [Key]
-    public Guid ID { get; set; }
+    public Guid ID { get; set; } = Guid.NewGuid();
 
     public required string Name { get; set; }
     // Form refers to the way the medication comes is (pill, injection, etc.)
@@ -26,7 +26,7 @@ namespace EMR_BMED.Backend.Models
     public required bool IsPresRequired { get; set; }
 
     // optional fields
-    [Column(TypeName = "nvarchar(50)")]
+    [Column(TypeName = "nvarchar(100)")]
     public string? Brand { get; set; }
     [Column(TypeName = "text")]
     public string? Indications { get; set; }

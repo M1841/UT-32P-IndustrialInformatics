@@ -23,6 +23,9 @@ namespace EMR_BMED.Backend
 
       services.AddScoped<DbService>();
       services.AddScoped<AuthService>();
+      services.AddScoped<UserService>();
+      services.AddScoped<MedicationService>();
+      services.AddScoped<PrescriptionService>();
 
       services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
@@ -62,7 +65,7 @@ namespace EMR_BMED.Backend
         endpoints.MapControllers();
       });
 
-      //DbService.SeedTestData(false);
+      // DbService.SeedTestData(false);
     }
   }
 }
