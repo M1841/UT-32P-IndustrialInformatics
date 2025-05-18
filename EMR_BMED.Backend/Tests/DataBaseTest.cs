@@ -44,12 +44,11 @@ namespace EMR_BMED.Backend.Tests
     {
       using (var context = new DbService(true))
       {
-        var initialCount = context.Users.OfType<PatientModel>().Count();
         var email = "alexjon@gmail.com";
         var password = "12345";
+        
 
-
-        var newPatient = new PatientModel
+        PatientModel newPatient = new PatientModel
         {
           Name = "Ale",
           Surname = "Jon",
@@ -69,7 +68,7 @@ namespace EMR_BMED.Backend.Tests
         context.SaveChanges();
 
         var patientCount = context.Users.OfType<PatientModel>().Count();
-        Assert.Equal(initialCount+1, patientCount);
+        Assert.Equal(1, patientCount);
 
       }
     }

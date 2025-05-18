@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using EMR_BMED.Backend.Models;
+using EMR_BMED.Backend.Utils;
 
 namespace EMR_BMED.Backend.Services
 {
@@ -45,6 +46,11 @@ namespace EMR_BMED.Backend.Services
         MedicalField = "Orthopedics"
       });
 
+      foreach (var med in CsvUtils.ImportMeds())
+      {
+        dbService.Add(med);
+      }
+
       dbService.SaveChanges();
     }
 
@@ -56,6 +62,7 @@ namespace EMR_BMED.Backend.Services
       }
       else
       {
+        // optionsBuilder.UseInMemoryDatabase("EMR_BMED");
         // optionsBuilder.UseSqlite("DataSource=EMR_BMED.sqlite");
         optionsBuilder.UseSqlServer("Server=localhost;Database=EMR_BMED;Trusted_Connection=True;Encrypt=False");
       }
@@ -68,7 +75,7 @@ namespace EMR_BMED.Backend.Services
         .HasDiscriminator<bool>("IsDoctor")
         .HasValue<PatientModel>(false)
         .HasValue<DoctorModel>(true);
-      
+
       modelBuilder.Entity<PrescriptionRecordModel>()
         .HasKey(pr => new { pr.PID, pr.PIDSeries, pr.PIDNumber, pr.MID });
 
