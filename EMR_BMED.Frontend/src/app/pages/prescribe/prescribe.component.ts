@@ -7,9 +7,21 @@ import { Router } from '@angular/router';
   selector: 'app-prescribe',
   imports: [ReactiveFormsModule],
   template: `
+    <div class="page-top">
+        <div class="header">
+          <img src="Header.png" alt="Header" id="header-pic" />
+          <div class="image-container"></div>
+        </div>
+        <div class="nav">
+          <a href="" class="nav-button">Home</a> <br/>
+          <a href="prescribe" class="nav-button">Prescribe</a> <br />
+          <a href="profile" class="nav-button">Profile</a> <br />
+        </div>
+      </div>
+
     <div class="register-container">
       <a href="/" class="home-icon">
-        <img src="logo.jpg" alt="Home" width="64" height="64" />
+        <img src="Logo.png" alt="Home" width="64" height="64" />
       </a>
 
       <form [formGroup]="form" (ngSubmit)="handleSubmit()">
@@ -280,6 +292,21 @@ import { Router } from '@angular/router';
         <button type="submit" [disabled]="form.invalid">Submit</button>
       </form>
     </div>
+
+    <span class="line"></span>
+  <div class="page-bottom">
+    <div class="footer">
+        <div class="icon">
+          <a href="/" class="home-icon" style="grid-area: box-1">
+              <img src="Logo.png" alt="Home" width="64" height="64" />
+          </a>
+          <p id="rights" style="grid-area: box-2">All rights reserved.</p>
+        </div>
+        <div class="info" style="grid-area: box-3">
+          <p>This section will contain links and what not</p>
+        <div>
+      </div>
+  </div>
   `,
 })
 export class PrescribeComponent {

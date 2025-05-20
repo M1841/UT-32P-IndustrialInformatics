@@ -1,6 +1,7 @@
   :root {
-    --background-color: #85ab7a;
+    --background-color: #FFFDF6;  /* #85ab7a; */
     --primary-color: #416f34;
+    --primary-light-color: #DDEB9D;
     --primary-dark-color: #183b17;
     --error-color: #f44336;
     --error-dark-color: #d32f2f;
@@ -30,7 +31,7 @@
     margin-bottom: 3rem;
   }
   
-  .auth-section {
+  .nav-section {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -54,10 +55,19 @@
   .auth-options {
     display: flex;
     flex-direction: column;
+    width: 500px;
+    height: 450px;
+    margin: auto;
     gap: 1rem;
+    padding: 10rem;
   }
 
-  .nav-button {
+  .auth-button {
+    max-width: 7vw;
+    margin: auto;
+  }
+
+  .auth-button, .nav-button {
     padding: 10px 20px;
     background-color: var(--primary-color);
     color: white;
@@ -70,7 +80,7 @@
     transition: background-color 0.3s;
   }
 
-  .nav-button:hover {
+  .auth-button:hover, .nav-button:hover {
     background-color: var(--primary-dark-color);
   }
 
@@ -123,6 +133,7 @@
   .profile-container {
     max-width: 600px;
     margin: 0 auto;
+    margin-bottom: 400px; /* delete after patient styles are done */
     padding: 2rem;
     background-color: #f9f9f9;
     border-radius: 8px;
