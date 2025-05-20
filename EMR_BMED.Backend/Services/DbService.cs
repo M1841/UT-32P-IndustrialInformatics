@@ -16,7 +16,8 @@ namespace EMR_BMED.Backend.Services
     {
       using DbService dbService = new(IsTestDb);
 
-      dbService.Add(new PatientModel
+
+      PatientModel patient = new PatientModel
       {
         Name = "John",
         Surname = "Doe",
@@ -31,9 +32,10 @@ namespace EMR_BMED.Backend.Services
         Intolerances = "Lactose",
         Conditions = "Asthma",
         Blood = "AB"
-      });
-
-      dbService.Add(new DoctorModel
+      };
+      dbService.Add(patient);
+      
+      DoctorModel doctor = new DoctorModel
       {
         Name = "Jane",
         Surname = "Smith",
@@ -44,12 +46,27 @@ namespace EMR_BMED.Backend.Services
         Phone = "0987654321",
         Address = "22 Hilda Street",
         MedicalField = "Orthopedics"
-      });
-
+      };
+      dbService.Add(doctor);
       foreach (var med in CsvUtils.ImportMeds())
       {
         dbService.Add(med);
       }
+      PrescriptionModel prescription = new PrescriptionModel
+      {
+        PatientId = patient.Id,
+        Patient = patient,
+        DoctorId = doctor.Id,
+        Doctor = doctor,
+        MedUnit = "Hospital",
+        CUI = "987654321",
+        CAS = "123456789",
+        Diagnostic = "Flu",
+        Issued = DateTime.Now,
+        DaysNumber = 7,
+        Records = new List<PrescriptionRecordModel>()
+      };
+      dbService.Add(prescription);
 
       dbService.SaveChanges();
     }
