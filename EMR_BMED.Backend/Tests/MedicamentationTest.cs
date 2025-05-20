@@ -4,26 +4,35 @@ using EMR_BMED.Backend.Services;
 using EMR_BMED.Backend.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using EMR_BMED.Backend.Utils;
-namespace EMR_BMED.Backend.Tests;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-public class MedicamentationTest
+
+namespace EMR_BMED.Backend.Tests
 {
-  public MedicamentationTest()
+  public class MedicamentationTest : IDisposable
   {
-    using (var context = new DbService(true))
+    public MedicamentationTest()
     {
-      context.Database.EnsureCreated();
+      using var context = new DbService(true);
       context.Database.EnsureDeleted();
-      MedicationService medicationService = new MedicationService(context);
+      context.Database.EnsureCreated();
     }
-  }
 
-  [Fact]
-  public void AddMedicationsTest()
-  {
-    using (var context = new DbService(true))
+    public void Dispose()
     {
-      var initialCount = context.Meds.Count();
+      using var context = new DbService(true);
+      context.Database.EnsureDeleted();
+    }
+
+    [Fact]
+    public async Task AddMedicationsTestAsync()
+    {
+      await using var context = new DbService(true);
+      var initialCount = await context.Meds.CountAsync();
+
       var newMedication = new MedicationModel
       {
         Name = "Aspirin",
@@ -33,36 +42,37 @@ public class MedicamentationTest
         Records = new List<PrescriptionRecordModel>()
       };
       context.Meds.Add(newMedication);
-      context.SaveChanges();
-      var finalCount = context.Meds.Count();
-      Assert.True(finalCount > initialCount, "Number of medications has been modified");
+      await context.SaveChangesAsync();
+
+      var finalCount = await context.Meds.CountAsync();
+      Assert.True(finalCount > initialCount, "Number of medications has not increased");
     }
-  }
-  [Fact]
-  public void GetMedicationsTest()
-  {
-    using (var context = new DbService(true))
+
+    [Fact]
+    public async Task GetMedicationsTestAsync()
     {
-      var initialCount = context.Meds.Count();
+      await using var context = new DbService(true);
+      var initialCount = await context.Meds.CountAsync();
+
       var newMedication = new MedicationModel
       {
-        Name = "Aspirin",
-        Form = "Tablet",
+        Name = "Ibuprofen",
+        Form = "Capsule",
         Method = "Oral",
         IsPresRequired = false,
         Records = new List<PrescriptionRecordModel>()
       };
       context.Meds.Add(newMedication);
-      context.SaveChanges();
-      var finalCount = context.Meds.Count();
-      Assert.True(finalCount > initialCount, "Number of medications has been modified");
+      await context.SaveChangesAsync();
+
+      var finalCount = await context.Meds.CountAsync();
+      Assert.True(finalCount > initialCount, "Number of medications has not increased");
     }
-  }
-  [Fact]
-  public void SearchMedicationsTest()
-  {
-    using (var context = new DbService(true))
+
+    [Fact]
+    public async Task SearchMedicationsTestAsync()
     {
+      await using var context = new DbService(true);
       var med1 = new MedicationModel
       {
         ID = Guid.NewGuid(),
@@ -73,76 +83,50 @@ public class MedicamentationTest
         IsPresRequired = false,
         Records = new List<PrescriptionRecordModel>()
       };
-
       var med2 = new MedicationModel
       {
         ID = Guid.NewGuid(),
-        Name = "Paracetabol",
+        Name = "Paracetamol",
         Form = "Tablet",
         Method = "Oral",
         Brand = "Mayer",
         IsPresRequired = true,
         Records = new List<PrescriptionRecordModel>()
       };
+      await context.Meds.AddRangeAsync(med1, med2);
+      await context.SaveChangesAsync();
 
-      context.Meds.AddRange(med1, med2);
-      context.SaveChanges();
-
-      MedicationService medicationService = new MedicationService(context);
-
+      var medicationService = new MedicationService(context);
       var searchResult = medicationService.Search("Asp");
-      
+
       Assert.Single(searchResult);
       Assert.Contains(searchResult, m => m.ID == med1.ID);
-
     }
-  }
-  [Fact]
-  public void UpdateMedicationsTest()
-  {
-    DbService.SeedTestData(true);   
-    using (var context = new DbService(true))
+
+    [Fact]
+    public async Task UpdateMedicationsTestAsync()
     {
-      // var med = context.Meds.FirstOrDefault();
-      var med = new MedicationModel
-      {
-        ID = Guid.NewGuid(),
-        Name = "Aspirin",
-        Form = "Tablet",
-        Method = "Oral",
-        Brand = "Mayer",
-        IsPresRequired = false,
-        Records = new List<PrescriptionRecordModel>()
-      };
+      DbService.SeedTestData(true);
+      await using var context = new DbService(true);
 
-      context.Meds.Add(med);
-      context.SaveChanges();
-
+      var med = await context.Meds.FirstOrDefaultAsync();
       if (med == null)
-      {
         throw new Exception("No medications found in the database.");
-      }
-      else
-      {
-        var initialName = med.Name;
-        var newName = "Asprin1";
-        med.Name = newName;
-        context.SaveChanges();
 
-        var updatedMed = context.Meds.FirstOrDefault(m => m.ID == med.ID);
-        
-        Assert.NotNull(updatedMed);
-        Assert.Equal(newName, updatedMed.Name);
-      }
+      var newName = "AspirinPlus";
+      med.Name = newName;
+      await context.SaveChangesAsync();
+
+      var updatedMed = await context.Meds.FirstOrDefaultAsync(m => m.ID == med.ID);
+      Assert.NotNull(updatedMed);
+      Assert.Equal(newName, updatedMed.Name);
     }
-  }
-  [Fact]
-  public void DeleteMedicationsTest()
-  {
-    using (var context = new DbService(true))
+
+    [Fact]
+    public async Task DeleteMedicationsTestAsync()
     {
-      //Ask Mihai why it doesn't have db service
-      //var med = context.Meds.OfType<MedicationModel>().FirstOrDefault();
+      await using var context = new DbService(true);
+
       var med = new MedicationModel
       {
         ID = Guid.NewGuid(),
@@ -154,22 +138,21 @@ public class MedicamentationTest
         Records = new List<PrescriptionRecordModel>()
       };
       context.Meds.Add(med);
-      context.SaveChanges();
-      var initialCount = context.Meds.Count();
+      await context.SaveChangesAsync();
+      var initialCount = await context.Meds.CountAsync();
 
       context.Meds.Remove(med);
-      context.SaveChanges();
-      var finalCount = context.Meds.Count();
+      await context.SaveChangesAsync();
+      var finalCount = await context.Meds.CountAsync();
 
       Assert.Equal(initialCount - 1, finalCount);
     }
-   }
 
-  [Fact]
-  public void GetOneMedicationsTest()
-  {
-    using (var context = new DbService(true))
+    [Fact]
+    public async Task GetOneMedicationsTestAsync()
     {
+      await using var context = new DbService(true);
+
       var med = new MedicationModel
       {
         ID = Guid.NewGuid(),
@@ -181,33 +164,36 @@ public class MedicamentationTest
         Records = new List<PrescriptionRecordModel>()
       };
       context.Meds.Add(med);
-      context.SaveChanges();
+      await context.SaveChangesAsync();
+
       var medicationService = new MedicationService(context);
-      var retrievedMed = medicationService.GetOneAsync(med.ID).Result;
+      var retrievedMed = await medicationService.GetOneAsync(med.ID);
+
       Assert.NotNull(retrievedMed);
       Assert.Equal(med.Name, retrievedMed.Name);
     }
-  }
-  [Fact]
-  public void GetOneMedicationsNotFoundTest()
-  {
-    using (var context = new DbService(true))
+
+    [Fact]
+    public async Task GetOneMedicationsNotFoundTestAsync()
     {
+      await using var context = new DbService(true);
       var medicationService = new MedicationService(context);
-      Assert.ThrowsAsync<KeyNotFoundException>(async () => await medicationService.GetOneAsync(Guid.NewGuid()));
+
+      await Assert.ThrowsAsync<KeyNotFoundException>(async () =>
+          await medicationService.GetOneAsync(Guid.NewGuid()));
     }
-  }
-  [Fact]
-  public void GetAllMedicationsTest()
-  {
-    using (var context = new DbService(true))
+
+    [Fact]
+    public async Task GetAllMedicationsTestAsync()
     {
+      await using var context = new DbService(true);
       var medicationService = new MedicationService(context);
+
+      // GetAllMedications is synchronous
       var medications = medicationService.GetAllMedications();
+
       Assert.NotNull(medications);
       Assert.IsType<List<MedicationModel>>(medications);
     }
   }
- 
 }
-

@@ -103,18 +103,18 @@ namespace EMR_BMED.Backend.Tests
 
       Assert.True(tokenUserID == user1.Id || tokenUserID == user2.Id, "Token needs to correspond to one of the accounts!");
     }
-
+  
     [Fact]
     public async Task WhoAmITest()
     {
-      var userID = Guid.NewGuid();
+      var userID = new Guid();
       var email = "jdoe@gmail.com";
       var password = "123451";
       var hashedPass = BCrypt.Net.BCrypt.HashPassword(password);
 
       var resultedUser = new PatientModel
       {
-        Id = Guid.NewGuid(),
+        Id = userID,
         Email = email,
         Password = hashedPass,
         Name = "Alex",
@@ -125,12 +125,14 @@ namespace EMR_BMED.Backend.Tests
         SocialNumber = "13223443"
       };
 
-      var exists = await dbService.Users.AnyAsync(u => u.Id == userID);
-      if (!exists)
+      var exists = await dbService.Users.AnyAsync(u => u.Id.CompareTo(userID)==0);
+     
+      if(!exists)
       {
         await dbService.Users.AddAsync(resultedUser);
         await dbService.SaveChangesAsync();
       }
+
 
       var token = await authService.LoginAsync(new LoginDto(email, password));
       string authHeader = $"Bearer {token}";
