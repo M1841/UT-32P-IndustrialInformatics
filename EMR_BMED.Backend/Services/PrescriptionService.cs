@@ -9,7 +9,7 @@ namespace EMR_BMED.Backend.Services
     public async Task<PrescriptionModel> GetOneAsync(Guid id)
     {
       PrescriptionModel prescription = await dbService.Prescriptions
-        .FindAsync(id)
+        .FirstOrDefaultAsync(p => p.GlobalID == id)
         ?? throw new KeyNotFoundException($"Can't find prescription with id={id}");
 
       return prescription;
@@ -22,7 +22,11 @@ namespace EMR_BMED.Backend.Services
         .FirstOrDefaultAsync(p => p.Id == id)
         ?? throw new KeyNotFoundException($"Can't find patient with id={id}");
 
-      return patient.Prescriptions.ToArray();
+      return dbService.Prescriptions
+        .Include(p => p.Doctor)
+        .Include(p => p.Patient)
+        .Where(p => p.PatientId == id)
+        .ToArray();
     }
 
     public async Task<PrescriptionModel[]> GetAllByDoctorAsync(Guid id)
@@ -32,7 +36,11 @@ namespace EMR_BMED.Backend.Services
         .FirstOrDefaultAsync(d => d.Id == id)
         ?? throw new KeyNotFoundException($"Can't find doctor with id={id}");
 
-      return doctor.Prescriptions.ToArray();
+      return dbService.Prescriptions
+        .Include(p => p.Doctor)
+        .Include(p => p.Patient)
+        .Where(p => p.DoctorId == id)
+        .ToArray();
     }
 
     public async Task CreateAsync(PrescriptionCreateDto dto)

@@ -6,6 +6,8 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace EMR_BMED.Backend.Models
 {
@@ -79,7 +81,10 @@ namespace EMR_BMED.Backend.Models
     [Column(TypeName = "nvarchar(25)")]
     public string? Phone { get; set; }
 
+    public bool IsDoctor { get; set; }
+
     // to allow for foreign keys in other tables
+    [JsonIgnore]
     public ICollection<PrescriptionModel> Prescriptions { get; set; } = [];
   }
 
