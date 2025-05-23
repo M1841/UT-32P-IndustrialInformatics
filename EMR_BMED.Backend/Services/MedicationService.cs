@@ -18,7 +18,6 @@ namespace EMR_BMED.Backend.Services
       var pattern = $"%{query}%";
 
       return dbService.Medication
-        .OrderBy(m => m.Name)
         .AsEnumerable()
         .Where(m =>
           new string[] {
@@ -30,6 +29,7 @@ namespace EMR_BMED.Backend.Services
               StringComparison.CurrentCultureIgnoreCase)
           )
         ).Take(50)
+        .OrderBy(m => m.Name)
         .ToArray();
     }
 
