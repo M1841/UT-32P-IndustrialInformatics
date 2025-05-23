@@ -30,16 +30,6 @@ namespace EMR_BMED.Backend.Models
     public bool? IsOther { get; set; }
     public bool? IsMFMM { get; set; }
 
-    // patient data
-    [ForeignKey("PatientModel")]
-    public required Guid PatientId { get; set; }
-    public required PatientModel Patient { get; set; }
-    // the above must have Name, Surname, CNP, Birthday, Gender, Citizenship
-
-    [ForeignKey("DoctorModel")]
-    public required Guid DoctorId { get; set; }
-    public required DoctorModel Doctor { get; set; }
-
     // user occupations here
     public bool? IsSalariat { get; set; }
     public bool? IsCoasigurat { get; set; }
@@ -72,7 +62,17 @@ namespace EMR_BMED.Backend.Models
     // TODO: electronic seal too
 
     // for foreign keys (the references to the other tables)
-    public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
+    // patient data
+    public required Guid PatientId { get; set; }
+    // the above must have Name, Surname, CNP, Birthday, Gender, Citizenship
+    public required Guid DoctorId { get; set; }
+
+    [ForeignKey(nameof(DoctorModel))]
+    public DoctorModel Doctor { get; set; } = null!;
+    [ForeignKey(nameof(PatientModel))]
+    public PatientModel Patient { get; set; } = null!;
+    public ICollection<MedicationModel> Medication { get; set; } = [];
+    // public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
     // ^ for the connection between prescriptions and meds
   }
 

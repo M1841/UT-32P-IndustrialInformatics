@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace EMR_BMED.Backend.Tests
 {
-  public class MedicamentationTest : IDisposable
+  public class MedicationTest : IDisposable
   {
-    public MedicamentationTest()
+    public MedicationTest()
     {
       using var context = new DbService(true);
       context.Database.EnsureDeleted();
@@ -31,7 +31,7 @@ namespace EMR_BMED.Backend.Tests
     public async Task AddMedicationsTestAsync()
     {
       await using var context = new DbService(true);
-      var initialCount = await context.Meds.CountAsync();
+      var initialCount = await context.Medication.CountAsync();
 
       var newMedication = new MedicationModel
       {
@@ -39,12 +39,11 @@ namespace EMR_BMED.Backend.Tests
         Form = "Tablet",
         Method = "Oral",
         IsPresRequired = false,
-        Records = new List<PrescriptionRecordModel>()
       };
-      context.Meds.Add(newMedication);
+      context.Medication.Add(newMedication);
       await context.SaveChangesAsync();
 
-      var finalCount = await context.Meds.CountAsync();
+      var finalCount = await context.Medication.CountAsync();
       Assert.True(finalCount > initialCount, "Number of medications has not increased");
     }
 
@@ -52,7 +51,7 @@ namespace EMR_BMED.Backend.Tests
     public async Task GetMedicationsTestAsync()
     {
       await using var context = new DbService(true);
-      var initialCount = await context.Meds.CountAsync();
+      var initialCount = await context.Medication.CountAsync();
 
       var newMedication = new MedicationModel
       {
@@ -60,12 +59,11 @@ namespace EMR_BMED.Backend.Tests
         Form = "Capsule",
         Method = "Oral",
         IsPresRequired = false,
-        Records = new List<PrescriptionRecordModel>()
       };
-      context.Meds.Add(newMedication);
+      context.Medication.Add(newMedication);
       await context.SaveChangesAsync();
 
-      var finalCount = await context.Meds.CountAsync();
+      var finalCount = await context.Medication.CountAsync();
       Assert.True(finalCount > initialCount, "Number of medications has not increased");
     }
 
@@ -81,7 +79,6 @@ namespace EMR_BMED.Backend.Tests
         Method = "Oral",
         Brand = "Mayer",
         IsPresRequired = false,
-        Records = new List<PrescriptionRecordModel>()
       };
       var med2 = new MedicationModel
       {
@@ -91,9 +88,8 @@ namespace EMR_BMED.Backend.Tests
         Method = "Oral",
         Brand = "Mayer",
         IsPresRequired = true,
-        Records = new List<PrescriptionRecordModel>()
       };
-      await context.Meds.AddRangeAsync(med1, med2);
+      await context.Medication.AddRangeAsync(med1, med2);
       await context.SaveChangesAsync();
 
       var medicationService = new MedicationService(context);
@@ -109,7 +105,7 @@ namespace EMR_BMED.Backend.Tests
       DbService.SeedTestData(true);
       await using var context = new DbService(true);
 
-      var med = await context.Meds.FirstOrDefaultAsync();
+      var med = await context.Medication.FirstOrDefaultAsync();
       if (med == null)
         throw new Exception("No medications found in the database.");
 
@@ -117,7 +113,7 @@ namespace EMR_BMED.Backend.Tests
       med.Name = newName;
       await context.SaveChangesAsync();
 
-      var updatedMed = await context.Meds.FirstOrDefaultAsync(m => m.ID == med.ID);
+      var updatedMed = await context.Medication.FirstOrDefaultAsync(m => m.ID == med.ID);
       Assert.NotNull(updatedMed);
       Assert.Equal(newName, updatedMed.Name);
     }
@@ -135,15 +131,14 @@ namespace EMR_BMED.Backend.Tests
         Method = "Oral",
         Brand = "Mayer",
         IsPresRequired = false,
-        Records = new List<PrescriptionRecordModel>()
       };
-      context.Meds.Add(med);
+      context.Medication.Add(med);
       await context.SaveChangesAsync();
-      var initialCount = await context.Meds.CountAsync();
+      var initialCount = await context.Medication.CountAsync();
 
-      context.Meds.Remove(med);
+      context.Medication.Remove(med);
       await context.SaveChangesAsync();
-      var finalCount = await context.Meds.CountAsync();
+      var finalCount = await context.Medication.CountAsync();
 
       Assert.Equal(initialCount - 1, finalCount);
     }
@@ -161,9 +156,8 @@ namespace EMR_BMED.Backend.Tests
         Method = "Oral",
         Brand = "Mayer",
         IsPresRequired = false,
-        Records = new List<PrescriptionRecordModel>()
       };
-      context.Meds.Add(med);
+      context.Medication.Add(med);
       await context.SaveChangesAsync();
 
       var medicationService = new MedicationService(context);

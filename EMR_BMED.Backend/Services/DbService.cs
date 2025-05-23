@@ -9,7 +9,7 @@ namespace EMR_BMED.Backend.Services
   {
     public DbSet<UserModel> Users { get; set; }
     public DbSet<PrescriptionModel> Prescriptions { get; set; }
-    public DbSet<MedicationModel> Meds { get; set; }
+    public DbSet<MedicationModel> Medication { get; set; }
     // here you can add more tables based on whatever models you want
 
     public static void SeedTestData(bool IsTestDb)
@@ -34,7 +34,7 @@ namespace EMR_BMED.Backend.Services
         Blood = "AB"
       };
       dbService.Add(patient);
-      
+
       DoctorModel doctor = new DoctorModel
       {
         Name = "Jane",
@@ -48,11 +48,14 @@ namespace EMR_BMED.Backend.Services
         MedicalField = "Orthopedics"
       };
       dbService.Add(doctor);
-      foreach (var med in CsvUtils.ImportMeds())
+
+      foreach (MedicationModel med in CsvUtils.ImportMeds())
       {
         dbService.Add(med);
       }
-      PrescriptionModel prescription = new PrescriptionModel
+      dbService.SaveChanges();
+
+      PrescriptionModel prescription = new()
       {
         PatientId = patient.Id,
         Patient = patient,
@@ -64,7 +67,7 @@ namespace EMR_BMED.Backend.Services
         Diagnostic = "Flu",
         Issued = DateTime.Now,
         DaysNumber = 7,
-        Records = new List<PrescriptionRecordModel>()
+        Medication = [dbService.Medication.First()]
       };
       dbService.Add(prescription);
 
@@ -89,27 +92,42 @@ namespace EMR_BMED.Backend.Services
     {
 
       modelBuilder.Entity<UserModel>()
-        .HasDiscriminator<bool>("IsDoctor")
+        .HasDiscriminator<bool>(nameof(UserModel.IsDoctor))
         .HasValue<PatientModel>(false)
         .HasValue<DoctorModel>(true);
 
-      modelBuilder.Entity<PrescriptionRecordModel>()
-        .HasKey(pr => new { pr.PID, pr.PIDSeries, pr.PIDNumber, pr.MID });
+      // modelBuilder.Entity<PrescriptionRecordModel>()
+      //   .HasKey(pr => new { pr.PID, pr.PIDSeries, pr.PIDNumber, pr.MID });
 
-      modelBuilder.Entity<PrescriptionRecordModel>()
-        .HasOne(pr => pr.Prescriptions)
-        .WithMany(p => p.Records)
-        .HasForeignKey("PID", "PIDSeries", "PIDNumber");
+      // modelBuilder.Entity<PrescriptionRecordModel>()
+      //   .HasOne(pr => pr.Prescriptions)
+      //   .WithMany(p => p.Records)
+      //   .HasForeignKey("PID", "PIDSeries", "PIDNumber");
 
-      modelBuilder.Entity<PrescriptionRecordModel>()
-        .HasOne(pr => pr.Meds)
-        .WithMany(m => m.Records)
-        .HasForeignKey(pr => pr.MID);
+      // modelBuilder.Entity<PrescriptionRecordModel>()
+      //   .HasOne(pr => pr.Meds)
+      //   .WithMany(m => m.Records)
+      //   .HasForeignKey(pr => pr.MID);
+
+      modelBuilder.Entity<PrescriptionModel>()
+        .HasMany(pr => pr.Medication)
+        .WithMany(m => m.Prescriptions)
+        .UsingEntity<Dictionary<string, object>>(
+          "PrescriptionRecord",
+          r => r.HasOne<MedicationModel>().WithMany().OnDelete(DeleteBehavior.NoAction),
+          r => r.HasOne<PrescriptionModel>().WithMany().OnDelete(DeleteBehavior.NoAction)
+        );
 
       modelBuilder.Entity<PrescriptionModel>()
         .HasOne(pr => pr.Patient)
         .WithMany(pt => pt.Prescriptions)
         .HasForeignKey(pr => pr.PatientId)
+        .OnDelete(DeleteBehavior.NoAction);
+
+      modelBuilder.Entity<PrescriptionModel>()
+        .HasOne(pr => pr.Doctor)
+        .WithMany(pt => pt.Prescriptions)
+        .HasForeignKey(pr => pr.DoctorId)
         .OnDelete(DeleteBehavior.NoAction);
     }
 

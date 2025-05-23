@@ -25,6 +25,14 @@ import { Router } from '@angular/router';
               <strong>Issued:</strong> {{ prescription.issued.toDateString()
               }}<br />
               <strong>Medical Unit:</strong> {{ prescription.medUnit }}<br />
+              <strong>Medication:</strong>
+              @for (medName of prescription.medicationNames; track $index) {
+                {{ medName }}
+                @if ($index + 1 < prescription.medicationNames.length) {
+                  ,
+                }
+              }
+              <br />
               <strong>Patient:</strong> {{ prescription.patient.name }}
               {{ prescription.patient.surname }}
             </li>
@@ -47,6 +55,7 @@ export class PrescriptionsComponent {
       doctor: { name: string; surname: string };
       issued: Date;
       medUnit: string;
+      medicationNames: string[];
       patient: { name: string; surname: string };
     }[]
   >([]);
@@ -76,6 +85,7 @@ export class PrescriptionsComponent {
                   doctor: { name: string; surname: string };
                   issued: Date;
                   medUnit: string;
+                  medication: { name: string }[];
                   patient: { name: string; surname: string };
                 }[]
               >(
@@ -83,13 +93,13 @@ export class PrescriptionsComponent {
               )
               .subscribe({
                 next: (response) => {
-                  console.log(response.body);
                   if (!!response.body) {
                     this.prescriptions.set(
-                      response.body.map((prescription) => {
+                      response.body.map((p) => {
                         return {
-                          ...prescription,
-                          issued: new Date(prescription.issued),
+                          ...p,
+                          issued: new Date(p.issued),
+                          medicationNames: p.medication.map((m) => m.name),
                         };
                       }),
                     );

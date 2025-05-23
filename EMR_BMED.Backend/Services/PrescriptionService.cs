@@ -25,6 +25,7 @@ namespace EMR_BMED.Backend.Services
       return dbService.Prescriptions
         .Include(p => p.Doctor)
         .Include(p => p.Patient)
+        .Include(p => p.Medication)
         .Where(p => p.PatientId == id)
         .ToArray();
     }
@@ -39,6 +40,7 @@ namespace EMR_BMED.Backend.Services
       return dbService.Prescriptions
         .Include(p => p.Doctor)
         .Include(p => p.Patient)
+        .Include(p => p.Medication)
         .Where(p => p.DoctorId == id)
         .ToArray();
     }
@@ -91,19 +93,13 @@ namespace EMR_BMED.Backend.Services
         Diagnostic = dto.Diagnostic,
         Issued = DateTime.Now,
         DaysNumber = dto.DaysNumber,
-        Records = []
       };
 
-      MedicationModel med = await dbService.Meds
+      MedicationModel med = await dbService.Medication
         .FindAsync(dto.MedicationId)
         ?? throw new KeyNotFoundException($"Can't find medication with id={dto.MedicationId}");
-        
-      prescription.Records.Add(new()
-      {
-        MID = dto.MedicationId,
-        Meds = med,
-        Prescriptions = prescription
-      });
+
+      prescription.Medication.Add(med);
 
       dbService.Prescriptions.Add(prescription);
       await dbService.SaveChangesAsync();
@@ -153,18 +149,13 @@ namespace EMR_BMED.Backend.Services
       if (dto.DaysNumber.HasValue) { prescription.DaysNumber = dto.DaysNumber.Value; }
       if (dto.MedicationId.HasValue)
       {
-        prescription.Records.Clear();
-        
-        MedicationModel med = await dbService.Meds
+        prescription.Medication.Clear();
+
+        MedicationModel med = await dbService.Medication
           .FindAsync(dto.MedicationId.Value)
           ?? throw new KeyNotFoundException($"Can't find medication with id={dto.MedicationId.Value}"); ;
 
-        prescription.Records.Add(new()
-        {
-          MID = dto.MedicationId.Value,
-          Meds = med,
-          Prescriptions = prescription
-        });
+        prescription.Medication.Add(med);
       }
     }
 

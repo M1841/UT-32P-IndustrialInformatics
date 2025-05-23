@@ -7,7 +7,7 @@ namespace EMR_BMED.Backend.Services
   {
     public async Task<MedicationModel> GetOneAsync(Guid id)
     {
-      return await dbService.Meds.FindAsync(id)
+      return await dbService.Medication.FindAsync(id)
         ?? throw new KeyNotFoundException($"Can't find medication with id={id}");
     }
 
@@ -15,7 +15,7 @@ namespace EMR_BMED.Backend.Services
     {
       var pattern = $"%{query}%";
 
-      return dbService.Meds
+      return dbService.Medication
         .AsEnumerable()
         .Where(m =>
           new string[] {
@@ -30,12 +30,12 @@ namespace EMR_BMED.Backend.Services
 
     public IEnumerable<MedicationModel> GetAllMedications()
     {
-      return dbService.Meds.ToList();
+      return dbService.Medication.ToList();
     }
 
     public async Task CreateAsync(MedicationCreateDto dto)
     {
-      await dbService.Meds.AddAsync(new()
+      await dbService.Medication.AddAsync(new()
       {
         Name = dto.Name,
         Form = dto.Form,
@@ -47,7 +47,6 @@ namespace EMR_BMED.Backend.Services
         SideEffects = dto.SideEffects,
         Warnings = dto.Warnings,
         Storing = dto.Storing,
-        Records = []
       });
 
       await dbService.SaveChangesAsync();

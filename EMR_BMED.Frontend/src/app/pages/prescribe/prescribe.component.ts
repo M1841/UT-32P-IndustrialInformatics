@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
         <div class="form-group">
           <label for="patientId">Patient</label>
           <div class="input-wrapper">
-            <form [formGroup]="patientSearch" (ngSubmit)="loadPatients()">
+            <form [formGroup]="patientSearch" (input)="loadPatients()">
               <input required placeholder="Search" formControlName="query" />
             </form>
             <select formControlName="patientId" required>
@@ -37,7 +37,7 @@ import { Router } from '@angular/router';
         <div class="form-group">
           <label for="medicationId">Medication</label>
           <div class="input-wrapper">
-            <form [formGroup]="medicationSearch" (ngSubmit)="loadMedications()">
+            <form [formGroup]="medicationSearch" (input)="loadMedications()">
               <input required placeholder="Search" formControlName="query" />
             </form>
             <select formControlName="medicationId" required>

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace EMR_BMED.Backend.Models
@@ -40,7 +41,9 @@ namespace EMR_BMED.Backend.Models
     public string? Storing { get; set; }
 
     // for foreign keys (the references to the other tables)
-    public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
+    // public virtual required ICollection<PrescriptionRecordModel> Records { get; set; }
+    [JsonIgnore]
+    public ICollection<PrescriptionModel> Prescriptions { get; set; } = [];
   }
 
   public record MedicationCreateDto(

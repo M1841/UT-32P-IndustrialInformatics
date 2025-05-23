@@ -23,7 +23,6 @@ namespace EMR_BMED.Backend.Utils
         IsPresRequired = med.IsPresRequired == "PR",
         Brand = med.Brand,
         Storing = med.Storing,
-        Records = []
       })
       .ToArray();
     }

@@ -59,7 +59,7 @@ namespace EMR_BMED.Backend.Tests
           CAS = "123456789",
           CUI = "987654321",
           MedUnit = "Hospital",
-          Records = new List<PrescriptionRecordModel>()
+          Medication = new List<MedicationModel>()
         };
         context.Add(prescription);
         await context.SaveChangesAsync();
@@ -98,7 +98,7 @@ namespace EMR_BMED.Backend.Tests
         var prescription = await context.Prescriptions.OfType<PrescriptionModel>().FirstOrDefaultAsync();
         var initialCount = await context.Prescriptions.CountAsync();
 
-        context.Remove(prescription);
+        context.Remove(prescription!);
         await context.SaveChangesAsync();
 
         var updatedCount = await context.Prescriptions.CountAsync();
@@ -207,14 +207,13 @@ namespace EMR_BMED.Backend.Tests
         var retrievedPrescription = await context.Prescriptions
                                                  .Include(p => p.Patient)
                                                  .Include(p => p.Doctor)
-                                                 .Include(p => p.Records)
-                                                 .ThenInclude(r => r.Meds)
+                                                 .Include(p => p.Medication)
             .FirstOrDefaultAsync(p => p.GlobalID == prescription.GlobalID);
 
         Assert.NotNull(retrievedPrescription);
         Assert.Equal(prescription.GlobalID, retrievedPrescription.GlobalID);
-        
-        Assert.All(retrievedPrescription.Records, r => Assert.NotNull(r.Meds));
+
+        Assert.All(retrievedPrescription.Medication, Assert.NotNull);
       }
     }
   }
