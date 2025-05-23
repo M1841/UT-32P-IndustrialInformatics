@@ -282,7 +282,7 @@ import { Router } from '@angular/router';
     </div>
   `,
 })
-export class PrescribeComponent {
+export class CreatePrescriptionComponent {
   readonly medications = signal<{ id: string; name: string }[]>([]);
   readonly patients = signal<{ id: string; name: string; surname: string }[]>(
     [],
@@ -335,7 +335,8 @@ export class PrescribeComponent {
     if (this.api.isAuthenticated()) {
       this.setDoctorId();
     } else {
-      this.router.navigate(['/auth/login']);
+      // this.router.navigate(['/auth/login']);
+      window.location.href = '/auth/login';
     }
   }
 

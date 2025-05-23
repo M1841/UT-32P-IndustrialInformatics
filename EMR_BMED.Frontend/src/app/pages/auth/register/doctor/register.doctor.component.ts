@@ -8,122 +8,144 @@ import { Router } from '@angular/router';
   imports: [ReactiveFormsModule],
   template: `
     <div class="register-container">
-    <a href="/" class="home-icon">
-      <img src="Logo.png" alt="Home" width="64" height="64" />
-    </a>
+      <a href="/" class="home-icon">
+        <img src="Logo.png" alt="Home" width="64" height="64" />
+      </a>
 
-    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-      <h2><b>Doctor Registration Form</b></h2>
-      <br />
-      <a href="auth/register" class="link">Are you a patient?</a> <br />
-      <br />
-      <a href="auth/login" class="link">Already have an account?</a> <br />
-      <br />
+      <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+        <h2><b>Doctor Registration Form</b></h2>
+        <br />
+        <a href="auth/register" class="link">Are you a patient?</a> <br />
+        <br />
+        <a href="auth/login" class="link">Already have an account?</a> <br />
+        <br />
 
-      <div class="form-group">
-        <label for="name">First Name</label>
-        <div class="input-wrapper">
-          <input required id="name" type="text" formControlName="name" />
-          @if (errors.name() !== '') {
-            <span>{{ errors.name() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="surname">Last Name</label>
-        <div class="input-wrapper">
-          <input required id="surname" type="text" formControlName="surname" />
-          @if (errors.surname() !== '') {
-            <span>{{ errors.surname() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email</label>
-        <div class="input-wrapper">
-          <input required id="email" type="text" formControlName="email" />
-          @if (errors.email() !== '') {
-            <span>{{ errors.email() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-wrapper">
-          <input required id="password" type="password" formControlName="password" />
-          @if (errors.password() !== '') {
-            <span>{{ errors.password() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="gender">Gender</label>
-        <div class="input-wrapper">
-          <select required formControlName="gender">
-            @for (gender of ['Female', 'Male', 'Other']; track $index) {
-            <option value="{{ gender }}">{{ gender }}</option>
+        <div class="form-group">
+          <label for="name">First Name</label>
+          <div class="input-wrapper">
+            <input required id="name" type="text" formControlName="name" />
+            @if (errors.name() !== '') {
+              <span>{{ errors.name() }}</span>
             }
-          </select>
-          @if (errors.gender() !== '') {
-            <span>{{ errors.gender() }}</span>
-          }
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for ="birthday">Birthday</label>
-        <div class="input-wrapper">
-          <input required id="birthday" type="date" formControlName="birthday" />
-          @if (errors.birthday() !== '') {
-            <span>{{ errors.birthday() }}</span>
-          }
+        <div class="form-group">
+          <label for="surname">Last Name</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="surname"
+              type="text"
+              formControlName="surname"
+            />
+            @if (errors.surname() !== '') {
+              <span>{{ errors.surname() }}</span>
+            }
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="medicalField">Medical Field</label>
-        <div class="input-wrapper">
-          <input required id="medicalField" type="text" formControlName="medicalField" />
-          @if (errors.medicalField() !== '') {
-            <span>{{ errors.medicalField() }}</span>
-          }
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div class="input-wrapper">
+            <input required id="email" type="text" formControlName="email" />
+            @if (errors.email() !== '') {
+              <span>{{ errors.email() }}</span>
+            }
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="phone">Phone Number (Optional)</label>
-        <div class="input-wrapper">
-          <input id="phone" type="text" formControlName="phoneNumber" />
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="password"
+              type="password"
+              formControlName="password"
+            />
+            @if (errors.password() !== '') {
+              <span>{{ errors.password() }}</span>
+            }
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="address">Address (Optional)</label>
-        <div class="input-wrapper">
-          <input id="address" type="text" formControlName="address" />
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <div class="input-wrapper">
+            <select required formControlName="gender">
+              @for (gender of ['Female', 'Male', 'Other']; track $index) {
+                <option value="{{ gender }}">{{ gender }}</option>
+              }
+            </select>
+            @if (errors.gender() !== '') {
+              <span>{{ errors.gender() }}</span>
+            }
+          </div>
         </div>
-      </div>
 
-      <button type="submit" class="nav-button">Register</button>
-    </form>
+        <div class="form-group">
+          <label for="birthday">Birthday</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="birthday"
+              type="date"
+              formControlName="birthday"
+            />
+            @if (errors.birthday() !== '') {
+              <span>{{ errors.birthday() }}</span>
+            }
+          </div>
+        </div>
 
-    <span class="line"></span>
-    <div class="page-bottom">
-      <div class="footer">
+        <div class="form-group">
+          <label for="medicalField">Medical Field</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="medicalField"
+              type="text"
+              formControlName="medicalField"
+            />
+            @if (errors.medicalField() !== '') {
+              <span>{{ errors.medicalField() }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number (Optional)</label>
+          <div class="input-wrapper">
+            <input id="phone" type="text" formControlName="phoneNumber" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address (Optional)</label>
+          <div class="input-wrapper">
+            <input id="address" type="text" formControlName="address" />
+          </div>
+        </div>
+
+        <button type="submit" class="nav-button">Register</button>
+      </form>
+
+      <span class="line"></span>
+      <div class="page-bottom">
+        <div class="footer">
           <div class="icon">
             <a href="/" class="home-icon" style="grid-area: box-1">
-                <img src="Logo.png" alt="Home" width="64" height="64" />
+              <img src="Logo.png" alt="Home" width="64" height="64" />
             </a>
             <p id="rights" style="grid-area: box-2">All rights reserved.</p>
           </div>
           <div class="info" style="grid-area: box-3">
             <p>This section will contain links and what not</p>
-          <div>
+            <div></div>
+          </div>
         </div>
+      </div>
     </div>
   `,
 })
@@ -170,7 +192,8 @@ export class RegisterDoctorComponent {
               })
               .subscribe({
                 next: () => {
-                  this.router.navigate(['/']);
+                  // this.router.navigate(['/']);
+                  window.location.href = '/';
                 },
                 error: ({ error }) => {
                   console.error(error);

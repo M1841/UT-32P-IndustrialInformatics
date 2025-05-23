@@ -36,7 +36,7 @@ export class HomeComponent {
   readonly isAuthenticated = computed(() => this.api.isAuthenticated());
 
   ngOnInit() {
-    if (this.api.isAuthenticated()) {
+    if (this.isAuthenticated()) {
       this.api
         .get<{
           name: string;

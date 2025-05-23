@@ -1,17 +1,18 @@
 import { Component, computed, inject, signal } from '@angular/core';
 
 import { ApiService } from '@/services/api/api.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-prescriptions',
-  imports: [],
+  imports: [RouterLink],
   template: `
     @if (user() != null) {
       <div style="padding-left: 3rem; padding-right: 3rem">
         <h2>Your prescriptions:</h2>
         @if (this.user()!.isDoctor) {
-          <a href="prescribe" class="nav-button">New Prescription</a> <br />
+          <a [routerLink]="['create']" class="nav-button">New Prescription</a>
+          <br />
         }
         <ul>
           @for (prescription of prescriptions(); track $index) {
@@ -35,6 +36,24 @@ import { Router } from '@angular/router';
               <br />
               <strong>Patient:</strong> {{ prescription.patient.name }}
               {{ prescription.patient.surname }}
+              @if (this.user()!.isDoctor) {
+                <br />
+                <a
+                  [routerLink]="['edit']"
+                  [queryParams]="{
+                    id: prescription.id,
+                  }"
+                  ><strong>Edit</strong></a
+                >
+                <br />
+                <a
+                  [routerLink]="['delete']"
+                  [queryParams]="{
+                    id: prescription.id,
+                  }"
+                  ><strong>Delete</strong></a
+                >
+              }
             </li>
             <hr />
           }
@@ -48,6 +67,7 @@ export class PrescriptionsComponent {
   readonly user = signal<{ id: string; isDoctor: boolean } | null>(null);
   readonly prescriptions = signal<
     {
+      id: string;
       cas: string;
       cui: string;
       daysNumber: string;
@@ -69,7 +89,8 @@ export class PrescriptionsComponent {
             response.body?.id === undefined ||
             !response.body?.isDoctor === undefined
           ) {
-            this.router.navigate(['/auth/login']);
+            // this.router.navigate(['/auth/login']);
+            window.location.href = '/auth/login';
           } else {
             this.user.set({
               id: response.body.id,
@@ -78,6 +99,7 @@ export class PrescriptionsComponent {
             this.api
               .get<
                 {
+                  globalID: string;
                   cas: string;
                   cui: string;
                   daysNumber: string;
@@ -94,10 +116,12 @@ export class PrescriptionsComponent {
               .subscribe({
                 next: (response) => {
                   if (!!response.body) {
+                    console.log(response.body);
                     this.prescriptions.set(
                       response.body.map((p) => {
                         return {
                           ...p,
+                          id: p.globalID,
                           issued: new Date(p.issued),
                           medicationNames: p.medication.map((m) => m.name),
                         };

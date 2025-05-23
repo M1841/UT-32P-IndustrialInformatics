@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
         <p>Name: {{ patient()!.name }} {{ patient()!.surname }}</p>
         <p>Email address: {{ patient()!.email }}</p>
         <p>Gender: {{ patient()!.gender }}</p>
-        <p>Birthday: {{ patient()?.birthday?.toDateString() }}</p>
+        <p>Birthday: {{ patient()?.birthday }}</p>
         @if (patient()!.phone) {
           <p>Phone number: {{ patient()!.phone }}</p>
         }
@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
     name: string;
     surname: string;
     gender: string;
-    birthday: Date;
+    birthday: string;
     phone: string;
     allergies: string;
     intolerances: string;
@@ -82,9 +82,11 @@ export class ProfileComponent implements OnInit {
         .subscribe({
           next: (response) => {
             if (response.body) {
+              const bday = new Date(response.body.birthday);
+              const bdayString = `${bday.getDate()}/${bday.getMonth()}/${bday.getFullYear()}`;
               this.patient.set({
                 ...response.body,
-                birthday: new Date(response.body.birthday),
+                birthday: bdayString,
               });
             } else {
               this.patient.set(null);
@@ -96,7 +98,8 @@ export class ProfileComponent implements OnInit {
           },
         });
     } else {
-      this.router.navigate(['/auth/login']);
+      // this.router.navigate(['/auth/login']);
+      window.location.href = '/auth/login';
     }
   }
   private api = inject(ApiService);

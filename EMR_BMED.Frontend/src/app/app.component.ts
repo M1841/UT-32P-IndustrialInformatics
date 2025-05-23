@@ -1,10 +1,10 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { ApiService } from './services/api/api.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink],
   template: `
     @if (isAuthenticated() && user() != null) {
       <div class="page-top">
@@ -13,11 +13,15 @@ import { ApiService } from './services/api/api.service';
           <div class="image-container"></div>
         </div>
         <div class="nav">
-          <a href="" class="nav-button">Home</a> <br />
-          <a href="prescriptions" class="nav-button">Prescriptions</a> <br />
-          <a href="medication" class="nav-button">Medication</a> <br />
+          <a [routerLink]="['']" class="nav-button">Home</a> <br />
+          <a [routerLink]="['prescriptions']" class="nav-button"
+            >Prescriptions</a
+          >
+          <br />
+          <a [routerLink]="['medication']" class="nav-button">Medication</a>
+          <br />
           <a
-            href="{{ user()!.isDoctor ? 'profile/doctor' : 'profile' }}"
+            [routerLink]="[user()!.isDoctor ? 'profile/doctor' : 'profile']"
             class="nav-button"
             >Profile</a
           >

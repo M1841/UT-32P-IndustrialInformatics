@@ -8,155 +8,178 @@ import { Router } from '@angular/router';
   selector: 'app-register',
   imports: [ReactiveFormsModule],
   template: `
-  <div class="register-container">
-    <a href="/" class="home-icon">
-      <img src="Logo.png" alt="Home" width="64" height="64" />
-    </a>
+    <div class="register-container">
+      <a href="/" class="home-icon">
+        <img src="Logo.png" alt="Home" width="64" height="64" />
+      </a>
 
-    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-      <h2><b>Patient Registration Form</b></h2>
-      <br />
-      <a href="auth/register/doctor" class="link">Are you a doctor?</a> <br />
-      <br />
-      <a href="auth/login" class="link">Already have an account?</a> <br />
-      <br />
+      <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+        <h2><b>Patient Registration Form</b></h2>
+        <br />
+        <a href="auth/register/doctor" class="link">Are you a doctor?</a> <br />
+        <br />
+        <a href="auth/login" class="link">Already have an account?</a> <br />
+        <br />
 
-      <div class="form-group">
-        <label for="name">First Name</label>
-        <div class="input-wrapper">
-          <input required id="name" type="text" formControlName="name" />
-          @if (errors.name() !== '') {
-            <span>{{ errors.name() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="surname">Last Name</label>
-        <div class="input-wrapper">
-          <input required id="surname" type="text" formControlName="surname" />
-          @if (errors.surname() !== '') {
-            <span>{{ errors.surname() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email</label>
-        <div class="input-wrapper">
-          <input required id="email" type="text" formControlName="email" />
-          @if (errors.email() !== '') {
-            <span>{{ errors.email() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-wrapper">
-          <input required id="password" type="password" formControlName="password" />
-          @if (errors.password() !== '') {
-            <span>{{ errors.password() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="gender">Gender</label>
-        <div class="input-wrapper">
-          <select required formControlName="gender">
-            @for (gender of ['Female', 'Male', 'Other']; track $index) {
-            <option value="{{ gender }}">{{ gender }}</option>
+        <div class="form-group">
+          <label for="name">First Name</label>
+          <div class="input-wrapper">
+            <input required id="name" type="text" formControlName="name" />
+            @if (errors.name() !== '') {
+              <span>{{ errors.name() }}</span>
             }
-          </select>
-          @if (errors.gender() !== '') {
-            <span>{{ errors.gender() }}</span>
-          }
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for ="birthday">Birthday</label>
-        <div class="input-wrapper">
-          <input required id="birthday" type="date" formControlName="birthday" />
-          @if (errors.birthday() !== '') {
-            <span>{{ errors.birthday() }}</span>
-          }
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="phone">Phone Number (Optional)</label>
-        <div class="input-wrapper">
-          <input id="phone" type="text" formControlName="phoneNumber" />
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="allergies">Allergies (Optional)</label>
-        <div class="input-wrapper">
-          <textarea id="allergies" formControlName="allergies"></textarea>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="intolerances">Intolerances (Optional)</label>
-        <div class="input-wrapper">
-          <textarea id="intolerances" formControlName="intolerances"></textarea>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="conditions">Conditions (Optional)</label>
-        <div class="input-wrapper">
-          <textarea id="conditions" formControlName="conditions"></textarea>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="bloodType">Blood Type (Optional)</label>
-        <div class="input-wrapper">
-          <select id="bloodType" formControlName="bloodType">
-            <option selected value>-</option>
-            @for (bloodType of ['A', 'B', 'AB', 'O']; track $index) {
-              <option value="{{ bloodType }}">{{ bloodType }}</option>
+        <div class="form-group">
+          <label for="surname">Last Name</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="surname"
+              type="text"
+              formControlName="surname"
+            />
+            @if (errors.surname() !== '') {
+              <span>{{ errors.surname() }}</span>
             }
-          </select>
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="socialNumber">Social Number (Optional)</label>
-        <div class="input-wrapper">
-          <input id="socialNumber" type="text" formControlName="socialNumber" />
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div class="input-wrapper">
+            <input required id="email" type="text" formControlName="email" />
+            @if (errors.email() !== '') {
+              <span>{{ errors.email() }}</span>
+            }
+          </div>
         </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="citizenship">Citizenship (Optional)</label>
-        <div class="input-wrapper">
-          <input id="citizenship" type="text" formControlName="citizenship" />
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="password"
+              type="password"
+              formControlName="password"
+            />
+            @if (errors.password() !== '') {
+              <span>{{ errors.password() }}</span>
+            }
+          </div>
         </div>
-      </div>
 
-      <button type="submit" class="nav-button">Register</button>
-    </form>
-  </div>
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <div class="input-wrapper">
+            <select required formControlName="gender">
+              @for (gender of ['Female', 'Male', 'Other']; track $index) {
+                <option value="{{ gender }}">{{ gender }}</option>
+              }
+            </select>
+            @if (errors.gender() !== '') {
+              <span>{{ errors.gender() }}</span>
+            }
+          </div>
+        </div>
 
-  <span class="line"></span>
-  <div class="page-bottom">
-    <div class="footer">
+        <div class="form-group">
+          <label for="birthday">Birthday</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="birthday"
+              type="date"
+              formControlName="birthday"
+            />
+            @if (errors.birthday() !== '') {
+              <span>{{ errors.birthday() }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone Number (Optional)</label>
+          <div class="input-wrapper">
+            <input id="phone" type="text" formControlName="phoneNumber" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="allergies">Allergies (Optional)</label>
+          <div class="input-wrapper">
+            <textarea id="allergies" formControlName="allergies"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="intolerances">Intolerances (Optional)</label>
+          <div class="input-wrapper">
+            <textarea
+              id="intolerances"
+              formControlName="intolerances"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="conditions">Conditions (Optional)</label>
+          <div class="input-wrapper">
+            <textarea id="conditions" formControlName="conditions"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="bloodType">Blood Type (Optional)</label>
+          <div class="input-wrapper">
+            <select id="bloodType" formControlName="bloodType">
+              <option selected value>-</option>
+              @for (bloodType of ['A', 'B', 'AB', 'O']; track $index) {
+                <option value="{{ bloodType }}">{{ bloodType }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="socialNumber">Social Number (Optional)</label>
+          <div class="input-wrapper">
+            <input
+              id="socialNumber"
+              type="text"
+              formControlName="socialNumber"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="citizenship">Citizenship (Optional)</label>
+          <div class="input-wrapper">
+            <input id="citizenship" type="text" formControlName="citizenship" />
+          </div>
+        </div>
+
+        <button type="submit" class="nav-button">Register</button>
+      </form>
+    </div>
+
+    <span class="line"></span>
+    <div class="page-bottom">
+      <div class="footer">
         <div class="icon">
           <a href="/" class="home-icon" style="grid-area: box-1">
-              <img src="Logo.png" alt="Home" width="64" height="64" />
+            <img src="Logo.png" alt="Home" width="64" height="64" />
           </a>
           <p id="rights" style="grid-area: box-2">All rights reserved.</p>
         </div>
         <div class="info" style="grid-area: box-3">
           <p>This section will contain links and what not</p>
-        <div>
+          <div></div>
+        </div>
       </div>
-  </div>
+    </div>
   `,
 })
 export class RegisterComponent {
@@ -205,7 +228,8 @@ export class RegisterComponent {
               })
               .subscribe({
                 next: () => {
-                  this.router.navigate(['/']);
+                  // this.router.navigate(['/']);
+                  window.location.href = '/';
                 },
                 error: ({ error }) => {
                   console.error(error);

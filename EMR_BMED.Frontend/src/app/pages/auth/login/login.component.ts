@@ -64,7 +64,8 @@ export class LoginComponent {
         next: () => {
           this.errors.email.set('');
           this.errors.password.set('');
-          this.router.navigate(['/']);
+          // this.router.navigate(['/']);
+          window.location.href = '/';
         },
         error: ({ error }) => {
           this.errors.email.set(error?.email ?? '');
