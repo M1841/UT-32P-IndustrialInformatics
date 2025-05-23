@@ -277,7 +277,9 @@ import { Router } from '@angular/router';
         </div>
         <br />
 
-        <button type="submit" [disabled]="form.invalid">Submit</button>
+        <button type="submit" [disabled]="form.invalid" class="nav-button">
+          Submit
+        </button>
       </form>
     </div>
   `,
@@ -335,7 +337,7 @@ export class CreatePrescriptionComponent {
     if (this.api.isAuthenticated()) {
       this.setDoctorId();
     } else {
-      // this.router.navigate(['/auth/login']);
+      this.router.navigate(['/auth/login']);
       window.location.href = '/auth/login';
     }
   }
@@ -409,32 +411,11 @@ export class CreatePrescriptionComponent {
 
   handleSubmit() {
     if (this.form.valid) {
-      this.api
-        .post<
-          {
-            error?: {
-              CAS?: string;
-              CUI?: string;
-              daysNumber?: string;
-              diagnostic?: string;
-              medUnit?: string;
-            };
-          },
-          typeof this.form.value
-        >('prescription', this.form.value)
-        .subscribe({
-          next: () => {
-            alert('Prescription created successfully!');
-            this.form.reset();
-          },
-          error: ({ error }) => {
-            this.errors.CAS.set(error?.CAS ?? '');
-            this.errors.CUI.set(error?.CUI ?? '');
-            this.errors.daysNumber.set(error?.daysNumber ?? '');
-            this.errors.diagnostic.set(error?.diagnostic ?? '');
-            this.errors.medUnit.set(error?.medUnit ?? '');
-          },
-        });
+      this.api.post('prescription', this.form.value).subscribe(() => {
+        alert('Prescription created successfully!');
+        this.form.reset();
+        this.router.navigate(['prescriptions']);
+      });
     } else {
       this.errors.CAS.set(
         !this.form.value.CAS ? 'CAS number cannot be empty' : '',

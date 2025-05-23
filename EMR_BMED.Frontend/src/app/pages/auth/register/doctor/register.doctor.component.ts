@@ -192,7 +192,7 @@ export class RegisterDoctorComponent {
               })
               .subscribe({
                 next: () => {
-                  // this.router.navigate(['/']);
+                  this.router.navigate(['/']);
                   window.location.href = '/';
                 },
                 error: ({ error }) => {

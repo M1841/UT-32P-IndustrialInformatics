@@ -9,11 +9,10 @@ import { ApiService } from '@/services/api/api.service';
     @if (isAuthenticated() && user() !== null) {
       <div class="basic-container">
         <div class="nav-section">
-          <p>Logged in as: {{ user()!.name }} {{ user()!.surname }}</p>
-          <button class="logout-btn" (click)="handleLogout()">Logout</button>
-
-          <br />
-          <br />
+          <h1>
+            Welcome <strong>{{ user()!.name }} {{ user()!.surname }}</strong
+            >!
+          </h1>
         </div>
         <br />
       </div>

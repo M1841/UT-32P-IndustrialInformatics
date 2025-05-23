@@ -1,5 +1,7 @@
-using EMR_BMED.Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
+
+using EMR_BMED.Backend.Models;
 
 namespace EMR_BMED.Backend.Services
 {
@@ -22,7 +24,9 @@ namespace EMR_BMED.Backend.Services
             m.Name,
             m.Brand ?? ""
           }.Any(s =>
-            s.Contains(query, StringComparison.CurrentCultureIgnoreCase)
+            s.Contains(
+              HttpUtility.UrlDecode(query), 
+              StringComparison.CurrentCultureIgnoreCase)
           )
         ).Take(50)
         .ToArray();

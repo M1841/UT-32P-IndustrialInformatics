@@ -9,6 +9,9 @@ namespace EMR_BMED.Backend.Services
     public async Task<PrescriptionModel> GetOneAsync(Guid id)
     {
       PrescriptionModel prescription = await dbService.Prescriptions
+        .Include(p => p.Doctor)
+        .Include(p => p.Patient)
+        .Include(p => p.Medication)
         .FirstOrDefaultAsync(p => p.GlobalID == id)
         ?? throw new KeyNotFoundException($"Can't find prescription with id={id}");
 
@@ -118,15 +121,6 @@ namespace EMR_BMED.Backend.Services
       if (dto.IsHospital.HasValue) { prescription.IsHospital = dto.IsHospital.Value; }
       if (dto.IsOther.HasValue) { prescription.IsOther = dto.IsOther.Value; }
       if (dto.IsMFMM.HasValue) { prescription.IsMFMM = dto.IsMFMM.Value; }
-      if (dto.PatientId.HasValue)
-      {
-        PatientModel patient = await dbService.Users
-          .OfType<PatientModel>()
-          .FirstOrDefaultAsync(p => p.Id == dto.PatientId.Value)
-          ?? throw new KeyNotFoundException($"Can't find patient with id={dto.PatientId}"); ;
-        prescription.PatientId = dto.PatientId.Value;
-        prescription.Patient = patient;
-      }
       if (dto.IsSalariat.HasValue) { prescription.IsSalariat = dto.IsSalariat.Value; }
       if (dto.IsCoasigurat.HasValue) { prescription.IsCoasigurat = dto.IsCoasigurat.Value; }
       if (dto.IsLiberProfesionist.HasValue) { prescription.IsLiberProfesionist = dto.IsLiberProfesionist.Value; }
@@ -138,7 +132,6 @@ namespace EMR_BMED.Backend.Services
       if (dto.IsLowIncome.HasValue) { prescription.IsLowIncome = dto.IsLowIncome.Value; }
       if (dto.IsRevolutionar.HasValue) { prescription.IsRevolutionar = dto.IsRevolutionar.Value; }
       if (dto.IsHandicap.HasValue) { prescription.IsHandicap = dto.IsHandicap.Value; }
-      if (dto.PNS != null) { prescription.PNS = dto.PNS; }
       if (dto.IsAjutorSocial.HasValue) { prescription.IsAjutorSocial = dto.IsAjutorSocial.Value; }
       if (dto.IsSomaj.HasValue) { prescription.IsSomaj = dto.IsSomaj.Value; }
       if (dto.IsPersonalContractual.HasValue) { prescription.IsPersonalContractual = dto.IsPersonalContractual.Value; }
@@ -146,17 +139,9 @@ namespace EMR_BMED.Backend.Services
       if (dto.IsAcorduriInternationale.HasValue) { prescription.IsAcorduriInternationale = dto.IsAcorduriInternationale.Value; }
       if (dto.IsOtherCategories != null) { prescription.IsOtherCategories = dto.IsOtherCategories; }
       if (dto.Diagnostic != null) { prescription.Diagnostic = dto.Diagnostic; }
-      if (dto.DaysNumber.HasValue) { prescription.DaysNumber = dto.DaysNumber.Value; }
-      if (dto.MedicationId.HasValue)
-      {
-        prescription.Medication.Clear();
+      if (dto.DaysNumber.HasValue) {prescription.DaysNumber = dto.DaysNumber.Value; }
 
-        MedicationModel med = await dbService.Medication
-          .FindAsync(dto.MedicationId.Value)
-          ?? throw new KeyNotFoundException($"Can't find medication with id={dto.MedicationId.Value}"); ;
-
-        prescription.Medication.Add(med);
-      }
+      await dbService.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)

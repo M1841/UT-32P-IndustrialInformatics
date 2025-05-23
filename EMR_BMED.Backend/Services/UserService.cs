@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 
 using EMR_BMED.Backend.Exceptions;
 using EMR_BMED.Backend.Models;
@@ -24,12 +25,13 @@ namespace EMR_BMED.Backend.Services
         .AsEnumerable()
         .Where(patient =>
           new string[] {
+            $"{patient.Name} {patient.Surname}",
             patient.Email,
-            patient.Name,
-            patient.Surname,
-            patient.SocialNumber,
+            patient.SocialNumber
           }.Any(s =>
-            s.Contains(query, StringComparison.CurrentCultureIgnoreCase)
+            s.Contains(
+              HttpUtility.UrlDecode(query), 
+              StringComparison.CurrentCultureIgnoreCase)
           )
         ).Take(50)
         .ToArray();

@@ -23,8 +23,7 @@ import { Router, RouterLink } from '@angular/router';
               <strong>Diagnostic:</strong> {{ prescription.diagnostic }}<br />
               <strong>Doctor:</strong> {{ prescription.doctor.name }}
               {{ prescription.doctor.surname }}<br />
-              <strong>Issued:</strong> {{ prescription.issued.toDateString()
-              }}<br />
+              <strong>Issued:</strong> {{ prescription.issued }}<br />
               <strong>Medical Unit:</strong> {{ prescription.medUnit }}<br />
               <strong>Medication:</strong>
               @for (medName of prescription.medicationNames; track $index) {
@@ -43,21 +42,50 @@ import { Router, RouterLink } from '@angular/router';
                   [queryParams]="{
                     id: prescription.id,
                   }"
-                  ><strong>Edit</strong></a
+                  class="nav-button"
                 >
-                <br />
-                <a
-                  [routerLink]="['delete']"
-                  [queryParams]="{
-                    id: prescription.id,
-                  }"
-                  ><strong>Delete</strong></a
+                  Edit
+                </a>
+                <button
+                  (click)="openDeleteDialog(prescription)"
+                  class="logout-btn"
                 >
+                  Delete
+                </button>
               }
             </li>
             <hr />
           }
         </ul>
+        <dialog #deleteDialog>
+          <form method="dialog">
+            @if (selectedPrescription() !== null) {
+              <p>Are you sure you want to delete the selected prescription?</p>
+              <strong>Medication:</strong>
+              @for (
+                medName of selectedPrescription()!.medicationNames;
+                track $index
+              ) {
+                {{ medName }}
+                @if (
+                  $index + 1 < selectedPrescription()!.medicationNames.length
+                ) {
+                  ,
+                }
+              }
+              <br />
+              <strong>Patient:</strong>
+              {{ selectedPrescription()!.patient.name }}
+              {{ selectedPrescription()!.patient.surname }}
+              <menu style="padding: 0">
+                <button class="nav-button">No, cancel</button>
+                <button (click)="handleDelete()" class="logout-btn">
+                  Yes, delete
+                </button>
+              </menu>
+            }
+          </form>
+        </dialog>
       </div>
     }
   `,
@@ -73,66 +101,95 @@ export class PrescriptionsComponent {
       daysNumber: string;
       diagnostic: string;
       doctor: { name: string; surname: string };
-      issued: Date;
+      issued: string;
       medUnit: string;
       medicationNames: string[];
       patient: { name: string; surname: string };
     }[]
   >([]);
   readonly isAuthenticated = computed(() => this.api.isAuthenticated());
+  readonly selectedPrescription = signal<{
+    id: string;
+    patient: { name: string; surname: string };
+    medicationNames: string[];
+  } | null>(null);
+
+  openDeleteDialog(prescription: {
+    id: string;
+    patient: { name: string; surname: string };
+    medicationNames: string[];
+  }) {
+    this.selectedPrescription.set(prescription);
+    const dialog = document.querySelector('dialog') as HTMLDialogElement;
+    dialog.showModal();
+  }
+  handleDelete() {
+    if (this.selectedPrescription() !== null) {
+      this.api
+        .delete(`prescription/${this.selectedPrescription()!.id}`)
+        .subscribe(() => {
+          this.loadPrescriptions();
+        });
+    }
+  }
+
+  loadPrescriptions() {
+    this.api.get<{ id: string; isDoctor: boolean }>('auth/whoami').subscribe({
+      next: (response) => {
+        if (
+          response.body?.id === undefined ||
+          !response.body?.isDoctor === undefined
+        ) {
+          this.router.navigate(['/auth/login']);
+          window.location.href = '/auth/login';
+        } else {
+          this.user.set({
+            id: response.body.id,
+            isDoctor: response.body.isDoctor,
+          });
+          this.api
+            .get<
+              {
+                globalID: string;
+                cas: string;
+                cui: string;
+                daysNumber: string;
+                diagnostic: string;
+                doctor: { name: string; surname: string };
+                issued: Date;
+                medUnit: string;
+                medication: { name: string }[];
+                patient: { name: string; surname: string };
+              }[]
+            >(
+              `prescription/${this.user()!.isDoctor ? 'doctor' : 'patient'}/${this.user()!.id}`,
+            )
+            .subscribe({
+              next: (response) => {
+                if (!!response.body) {
+                  this.prescriptions.set(
+                    response.body.map((p) => {
+                      const issued = new Date(p.issued);
+                      const issuedString = `${issued.getDate()}/${issued.getMonth()}/${issued.getFullYear()}`;
+                      return {
+                        ...p,
+                        id: p.globalID,
+                        issued: issuedString,
+                        medicationNames: p.medication.map((m) => m.name),
+                      };
+                    }),
+                  );
+                }
+              },
+            });
+        }
+      },
+    });
+  }
 
   ngOnInit() {
     if (this.api.isAuthenticated()) {
-      this.api.get<{ id: string; isDoctor: boolean }>('auth/whoami').subscribe({
-        next: (response) => {
-          if (
-            response.body?.id === undefined ||
-            !response.body?.isDoctor === undefined
-          ) {
-            // this.router.navigate(['/auth/login']);
-            window.location.href = '/auth/login';
-          } else {
-            this.user.set({
-              id: response.body.id,
-              isDoctor: response.body.isDoctor,
-            });
-            this.api
-              .get<
-                {
-                  globalID: string;
-                  cas: string;
-                  cui: string;
-                  daysNumber: string;
-                  diagnostic: string;
-                  doctor: { name: string; surname: string };
-                  issued: Date;
-                  medUnit: string;
-                  medication: { name: string }[];
-                  patient: { name: string; surname: string };
-                }[]
-              >(
-                `prescription/${this.user()!.isDoctor ? 'doctor' : 'patient'}/${this.user()!.id}`,
-              )
-              .subscribe({
-                next: (response) => {
-                  if (!!response.body) {
-                    console.log(response.body);
-                    this.prescriptions.set(
-                      response.body.map((p) => {
-                        return {
-                          ...p,
-                          id: p.globalID,
-                          issued: new Date(p.issued),
-                          medicationNames: p.medication.map((m) => m.name),
-                        };
-                      }),
-                    );
-                  }
-                },
-              });
-          }
-        },
-      });
+      this.loadPrescriptions();
     }
   }
   private api = inject(ApiService);

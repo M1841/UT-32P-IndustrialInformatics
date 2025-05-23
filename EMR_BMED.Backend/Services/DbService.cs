@@ -115,7 +115,7 @@ namespace EMR_BMED.Backend.Services
         .UsingEntity<Dictionary<string, object>>(
           "PrescriptionRecord",
           r => r.HasOne<MedicationModel>().WithMany().OnDelete(DeleteBehavior.NoAction),
-          r => r.HasOne<PrescriptionModel>().WithMany().OnDelete(DeleteBehavior.NoAction)
+          r => r.HasOne<PrescriptionModel>().WithMany().OnDelete(DeleteBehavior.Cascade)
         );
 
       modelBuilder.Entity<PrescriptionModel>()

@@ -37,7 +37,7 @@ export class ApiService {
 
   logout() {
     this.cookies.deleteAll();
-    // this.router.navigate(['auth/login']);
+    this.router.navigate(['auth/login']);
     window.location.href = '/auth/login';
   }
 
@@ -47,9 +47,14 @@ export class ApiService {
       this.options(),
     );
   }
-
   post<Res, Req>(endpoint: string, body: Req) {
     return this.http.post<Res>(`${this.url}/${endpoint}`, body, this.options());
+  }
+  put<Res, Req>(endpoint: string, body: Req) {
+    return this.http.put<Res>(`${this.url}/${endpoint}`, body, this.options());
+  }
+  delete<Res>(endpoint: string) {
+    return this.http.delete<Res>(`${this.url}/${endpoint}`, this.options());
   }
 
   private readonly url = 'http://localhost:8080';

@@ -26,6 +26,7 @@ import { ApiService } from './services/api/api.service';
             >Profile</a
           >
           <br />
+          <button class="logout-btn" (click)="handleLogout()">Logout</button>
         </div>
       </div>
     }
@@ -35,7 +36,7 @@ import { ApiService } from './services/api/api.service';
     <div class="page-bottom">
       <div class="footer">
         <div class="icon">
-          <a href="/" class="home-icon" style="grid-area: box-1">
+          <a [routerLink]="['/']" class="home-icon" style="grid-area: box-1">
             <img src="Logo.png" alt="Home" width="64" height="64" />
           </a>
           <p id="rights" style="grid-area: box-2">All rights reserved.</p>

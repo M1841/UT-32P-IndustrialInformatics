@@ -9,7 +9,6 @@ import { RegisterDoctorComponent } from '@/pages/auth/register/doctor/register.d
 import { PrescriptionsComponent } from '@/pages/prescriptions/prescriptions.component';
 import { CreatePrescriptionComponent } from '@/pages/prescriptions/create/create-prescription.component';
 import { EditPrescriptionComponent } from '@/pages/prescriptions/edit/edit-prescription.component';
-import { DeletePrescriptionComponent } from '@/pages/prescriptions/delete/delete-prescription.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,7 +23,6 @@ export const routes: Routes = [
   { path: 'prescriptions', component: PrescriptionsComponent },
   { path: 'prescriptions/create', component: CreatePrescriptionComponent },
   { path: 'prescriptions/edit', component: EditPrescriptionComponent },
-  { path: 'prescriptions/delete', component: DeletePrescriptionComponent },
 ];
 
 @NgModule({
