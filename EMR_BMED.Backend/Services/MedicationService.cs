@@ -18,6 +18,7 @@ namespace EMR_BMED.Backend.Services
       var pattern = $"%{query}%";
 
       return dbService.Medication
+        .OrderBy(m => m.Name)
         .AsEnumerable()
         .Where(m =>
           new string[] {
