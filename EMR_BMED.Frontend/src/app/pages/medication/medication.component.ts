@@ -1,15 +1,20 @@
 import { Component, computed, inject, signal } from '@angular/core';
 
 import { ApiService } from '@/services/api/api.service';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-medication',
-  imports: [],
+  imports: [ReactiveFormsModule],
   template: `
     @if (isLoading()) {
       loading...
     } @else {
       <div>
+        <form [formGroup]="searchForm" (input)="handleSearch()">
+          <input required placeholder="Search" formControlName="query" />
+        </form>
+
         <button (click)="setPage(1)" [disabled]="page() === 1">&lt;&lt;</button>
         <button (click)="setPage(page() - 1)" [disabled]="page() === 1">
           &lt;
@@ -69,12 +74,36 @@ import { ApiService } from '@/services/api/api.service';
 })
 export class MedicationComponent {
   readonly isLoading = signal<boolean>(true);
-  readonly medication = signal<any[]>([]);
+  readonly medication = signal<
+    {
+      name: string;
+      brand: string;
+      form: string;
+      isPresRequired: string;
+      storing: string;
+    }[]
+  >([]);
   readonly page = signal<number>(1);
-  readonly displayedMeds = computed(() => {
-    return this.medication().slice((this.page() - 1) * 10, this.page() * 10);
+  readonly query = signal<string>('');
+  readonly filteredMeds = computed(() =>
+    this.medication().filter(
+      (m) =>
+        m.name.toLowerCase().includes(this.query().toLowerCase()) ||
+        m.brand.toLowerCase().includes(this.query().toLowerCase()),
+    ),
+  );
+  readonly displayedMeds = computed(() =>
+    this.filteredMeds().slice((this.page() - 1) * 10, this.page() * 10),
+  );
+  readonly lastPage = computed(() =>
+    Math.ceil(this.filteredMeds().length / 10),
+  );
+  readonly searchForm = new FormGroup({
+    query: new FormControl(''),
   });
-  readonly lastPage = computed(() => Math.ceil(this.medication().length / 10));
+  handleSearch() {
+    this.query.set(this.searchForm.value.query ?? '');
+  }
 
   setPage(num: number) {
     if (num >= 1 && num <= this.lastPage()) {
@@ -83,12 +112,22 @@ export class MedicationComponent {
   }
 
   ngOnInit() {
-    this.api.get<any[]>(`medication/all`).subscribe((res) => {
-      if (res.body !== null) {
-        this.medication.set(res.body);
-        this.isLoading.set(false);
-      }
-    });
+    this.api
+      .get<
+        {
+          name: string;
+          brand: string;
+          form: string;
+          isPresRequired: string;
+          storing: string;
+        }[]
+      >(`medication/all`)
+      .subscribe((res) => {
+        if (res.body !== null) {
+          this.medication.set(res.body);
+          this.isLoading.set(false);
+        }
+      });
   }
 
   private api = inject(ApiService);
