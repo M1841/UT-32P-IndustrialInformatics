@@ -1,7 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from '@/services/api/api.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-prescribe',
@@ -336,6 +337,113 @@ export class CreatePrescriptionComponent {
   ngOnInit() {
     if (this.api.isAuthenticated()) {
       this.setDoctorId();
+      this.route.queryParams
+        .pipe(
+          map((params) => {
+            return { medId: params['medId'], patientId: params['patientId'] };
+          }),
+          tap(({ medId }) => {
+            if (!!medId) {
+              this.api
+                .get<{ id: string; name: string }>(`medication/${medId}`)
+                .subscribe((res) => {
+                  if (res.body?.id && res.body?.name) {
+                    this.medicationSearch.setValue({
+                      query: res.body.name,
+                    });
+                    this.loadMedications();
+                    this.form.setValue({
+                      patientId: '',
+                      doctorId: '',
+                      medicationId: res.body.id,
+                      issued: '',
+                      CAS: '',
+                      CUI: '',
+                      daysNumber: '',
+                      diagnostic: '',
+                      medUnit: '',
+                      isApproved: false,
+                      isMF: false,
+                      isAmbulatory: false,
+                      isHospital: false,
+                      isOther: false,
+                      isMFMM: false,
+                      isSalariat: false,
+                      isCoasigurat: false,
+                      isLiberProfesionist: false,
+                      isCopil: false,
+                      isStudent: false,
+                      isGravida: false,
+                      isPensionar: false,
+                      isVeteran: false,
+                      isLowIncome: false,
+                      isRevolutionar: false,
+                      isHandicap: false,
+                      isAjutorSocial: false,
+                      isSomaj: false,
+                      isPersonalContractual: false,
+                      isCardEuropean: false,
+                      isAcorduriInternationale: false,
+                      isOtherCategories: '',
+                    });
+                  }
+                });
+            }
+          }),
+          tap(({ patientId }) => {
+            if (!!patientId) {
+              this.api
+                .get<{
+                  id: string;
+                  name: string;
+                  surname: string;
+                }>(`user/${patientId}`)
+                .subscribe((res) => {
+                  if (res.body?.id && res.body?.name && res.body?.surname) {
+                    this.patientSearch.setValue({
+                      query: `${res.body.name} ${res.body.surname}`,
+                    });
+                    this.loadPatients();
+                    this.form.setValue({
+                      patientId: res.body.id,
+                      doctorId: '',
+                      medicationId: this.form.value.medicationId,
+                      issued: '',
+                      CAS: '',
+                      CUI: '',
+                      daysNumber: '',
+                      diagnostic: '',
+                      medUnit: '',
+                      isApproved: false,
+                      isMF: false,
+                      isAmbulatory: false,
+                      isHospital: false,
+                      isOther: false,
+                      isMFMM: false,
+                      isSalariat: false,
+                      isCoasigurat: false,
+                      isLiberProfesionist: false,
+                      isCopil: false,
+                      isStudent: false,
+                      isGravida: false,
+                      isPensionar: false,
+                      isVeteran: false,
+                      isLowIncome: false,
+                      isRevolutionar: false,
+                      isHandicap: false,
+                      isAjutorSocial: false,
+                      isSomaj: false,
+                      isPersonalContractual: false,
+                      isCardEuropean: false,
+                      isAcorduriInternationale: false,
+                      isOtherCategories: '',
+                    });
+                  }
+                });
+            }
+          }),
+        )
+        .subscribe();
     } else {
       this.router.navigate(['/auth/login']);
       window.location.href = '/auth/login';
@@ -436,5 +544,6 @@ export class CreatePrescriptionComponent {
   }
 
   private api = inject(ApiService);
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
 }
