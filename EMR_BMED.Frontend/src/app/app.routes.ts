@@ -10,10 +10,12 @@ import { PrescriptionsComponent } from '@/pages/prescriptions/prescriptions.comp
 import { CreatePrescriptionComponent } from '@/pages/prescriptions/create/create-prescription.component';
 import { EditPrescriptionComponent } from '@/pages/prescriptions/edit/edit-prescription.component';
 import { MedicationComponent } from '@/pages/medication/medication.component';
+import { DoctorProfileComponent } from './pages/profile/doctor/doctor-profile.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'profile/doctor', component: DoctorProfileComponent },
 
   // Authentication
   { path: 'auth/login', component: LoginComponent },

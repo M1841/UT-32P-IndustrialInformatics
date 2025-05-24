@@ -10,7 +10,10 @@ import { ApiService } from '@/services/api/api.service';
       <div class="basic-container">
         <div class="nav-section">
           <h1>
-            Welcome <strong>{{ user()!.name }} {{ user()!.surname }}</strong
+            Welcome
+            <strong>
+              {{ user()!.isDoctor ? 'Dr. ' : '' }}{{ user()!.name }}
+              {{ user()!.surname }}</strong
             >!
           </h1>
         </div>
