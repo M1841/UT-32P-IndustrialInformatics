@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from '@/services/api/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, switchMap, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-prescribe',
@@ -13,289 +13,347 @@ import { map, switchMap, tap } from 'rxjs';
         <img src="Logo.png" alt="Home" width="64" height="64" />
       </a>
 
-      <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-        <h2><b>Prescription Form</b></h2>
+      <h1>Prescription Form</h1>
+      <div style="width:100%; display: flex">
+        <form [formGroup]="form" (ngSubmit)="handleSubmit()" style="width: 66%">
+          <input required type="hidden" formControlName="doctorId" />
+          @if (page() === 1) {
+            <section>
+              <h1>Patient</h1>
+              <form [formGroup]="patientSearch" (input)="loadPatients()">
+                <input required placeholder="Search" formControlName="query" />
+              </form>
+              <ul>
+                @for (patient of patients(); track $index) {
+                  <li>
+                    <p>
+                      <strong>Full Name:</strong> {{ patient.name }}
+                      {{ patient.surname }}
+                    </p>
+                    <p><strong>Email:</strong> {{ patient.email }}</p>
+                    <p>
+                      <strong>Social Number:</strong> {{ patient.socialNumber }}
+                    </p>
+                    <button
+                      type="button"
+                      class="nav-button"
+                      (click)="selectPatient(patient)"
+                    >
+                      Select
+                    </button>
+                    <hr />
+                  </li>
+                }
+              </ul>
+            </section>
+          }
+          @if (page() === 2) {
+            <section>
+              <h1>Medication</h1>
+              <button
+                type="button"
+                (click)="setPage(3)"
+                class="nav-button"
+                [disabled]="selectedMeds().length <= 0"
+              >
+                Continue
+              </button>
+              <form [formGroup]="medicationSearch" (input)="loadMedications()">
+                <input required placeholder="Search" formControlName="query" />
+              </form>
+              <ul></ul>
+              <ul>
+                @for (med of medications(); track $index) {
+                  <li>
+                    <p><strong>Name:</strong> {{ med.name }}</p>
+                    <p><strong>Brand:</strong> {{ med.brand }}</p>
+                    <p><strong>Dosage Form:</strong> {{ med.form }}</p>
+                    <p><strong>Storing:</strong> {{ med.storing }}</p>
+                    <button
+                      type="button"
+                      class="nav-button"
+                      (click)="addMed(med)"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      class="logout-btn"
+                      (click)="removeMed(med)"
+                    >
+                      Remove
+                    </button>
+                    <hr />
+                  </li>
+                }
+              </ul>
+            </section>
+          }
+          @if (page() === 3) {
+            <div class="form-group">
+              <label for="CAS">CAS Number</label>
+              <div class="input-wrapper">
+                <input type="text" formControlName="CAS" required />
+              </div>
+            </div>
+            <br />
 
-        <input type="hidden" formControlName="doctorId" />
+            <div class="form-group">
+              <label for="CUI">CUI Number</label>
+              <div class="input-wrapper">
+                <input type="text" formControlName="CUI" required />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="patientId">Patient</label>
-          <div class="input-wrapper">
-            <form [formGroup]="patientSearch" (input)="loadPatients()">
-              <input required placeholder="Search" formControlName="query" />
-            </form>
-            <select formControlName="patientId" required>
-              @for (patient of patients(); track $index) {
-                <option [value]="patient.id">
-                  {{ patient.name }} {{ patient.surname }}
-                </option>
+            <div class="form-group">
+              <label for="daysNumber">Number of Days</label>
+              <div class="input-wrapper">
+                <input type="number" formControlName="daysNumber" required />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="diagnostic">Diagnostic</label>
+              <div class="input-wrapper">
+                <input type="text" formControlName="diagnostic" required />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="medUnit">Medication Unit</label>
+              <div class="input-wrapper">
+                <input type="text" formControlName="medUnit" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="isApproved">Is Approved</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isApproved" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isMF">Is MF</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isMF" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isAmbulatory">Is Ambulatory</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isAmbulatory" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isHospital">Is Hospital</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isHospital" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isOther">Is Other</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isOther" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isMFMM">Is MFMM</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isMFMM" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isSalariat">Is Salariat</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isSalariat" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isCoasigurat">Is Coasigurat</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isCoasigurat" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isLiberProfesionist">Is Liber Profesionist</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isLiberProfesionist" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isCopil">Is Copil</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isCopil" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isStudent">Is Student</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isStudent" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isGravida">Is Gravida</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isGravida" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isPensionar">Is Pensionar</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isPensionar" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isVeteran">Is Veteran</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isVeteran" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isLowIncome">Is Low Income</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isLowIncome" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isRevolutionar">Is Revolutionar</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isRevolutionar" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isHandicap">Is Handicap</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isHandicap" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isAjutorSocial">Is Ajutor Social</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isAjutorSocial" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isSomaj">Is Somaj</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isSomaj" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isPersonalContractual">Is Personal Contractual</label>
+              <div class="input-wrapper">
+                <input
+                  type="checkbox"
+                  formControlName="isPersonalContractual"
+                />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isCardEuropean">Is Card European</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isCardEuropean" />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isAcorduriInternationale"
+                >Is Acorduri Internationale</label
+              >
+              <div class="input-wrapper">
+                <input
+                  type="checkbox"
+                  formControlName="isAcorduriInternationale"
+                />
+              </div>
+            </div>
+            <br />
+
+            <div class="form-group">
+              <label for="isOtherCategories">Is Other Categories</label>
+              <div class="input-wrapper">
+                <input type="text" formControlName="isOtherCategories" />
+              </div>
+            </div>
+            <br />
+
+            <button type="submit" [disabled]="form.invalid" class="nav-button">
+              Submit
+            </button>
+          }
+        </form>
+        <aside style="width: 33%">
+          <p>
+            <strong>Patient:</strong> {{ selectedPatient().name }}
+            {{ selectedPatient().surname }}
+          </p>
+          <div>
+            <strong>Medication:</strong>
+            <ul>
+              @for (med of selectedMeds(); track $index) {
+                <li>{{ med.name }} - {{ med.brand }}</li>
               }
-            </select>
+            </ul>
           </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="medicationId">Medication</label>
-          <div class="input-wrapper">
-            <form [formGroup]="medicationSearch" (input)="loadMedications()">
-              <input required placeholder="Search" formControlName="query" />
-            </form>
-            <select formControlName="medicationId" required>
-              @for (medication of medications(); track $index) {
-                <option [value]="medication.id">
-                  {{ medication.name }}
-                </option>
-              }
-            </select>
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="CAS">CAS Number</label>
-          <div class="input-wrapper">
-            <input type="text" formControlName="CAS" required />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="CUI">CUI Number</label>
-          <div class="input-wrapper">
-            <input type="text" formControlName="CUI" required />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="daysNumber">Number of Days</label>
-          <div class="input-wrapper">
-            <input type="number" formControlName="daysNumber" required />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="diagnostic">Diagnostic</label>
-          <div class="input-wrapper">
-            <input type="text" formControlName="diagnostic" required />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="medUnit">Medication Unit</label>
-          <div class="input-wrapper">
-            <input type="text" formControlName="medUnit" required />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isApproved">Is Approved</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isApproved" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isMF">Is MF</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isMF" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isAmbulatory">Is Ambulatory</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isAmbulatory" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isHospital">Is Hospital</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isHospital" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isOther">Is Other</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isOther" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isMFMM">Is MFMM</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isMFMM" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isSalariat">Is Salariat</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isSalariat" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isCoasigurat">Is Coasigurat</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isCoasigurat" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isLiberProfesionist">Is Liber Profesionist</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isLiberProfesionist" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isCopil">Is Copil</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isCopil" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isStudent">Is Student</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isStudent" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isGravida">Is Gravida</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isGravida" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isPensionar">Is Pensionar</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isPensionar" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isVeteran">Is Veteran</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isVeteran" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isLowIncome">Is Low Income</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isLowIncome" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isRevolutionar">Is Revolutionar</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isRevolutionar" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isHandicap">Is Handicap</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isHandicap" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isAjutorSocial">Is Ajutor Social</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isAjutorSocial" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isSomaj">Is Somaj</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isSomaj" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isPersonalContractual">Is Personal Contractual</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isPersonalContractual" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isCardEuropean">Is Card European</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isCardEuropean" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isAcorduriInternationale"
-            >Is Acorduri Internationale</label
-          >
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isAcorduriInternationale" />
-          </div>
-        </div>
-        <br />
-
-        <div class="form-group">
-          <label for="isOtherCategories">Is Other Categories</label>
-          <div class="input-wrapper">
-            <input type="text" formControlName="isOtherCategories" />
-          </div>
-        </div>
-        <br />
-
-        <button type="submit" [disabled]="form.invalid" class="nav-button">
-          Submit
-        </button>
-      </form>
+        </aside>
+      </div>
     </div>
   `,
 })
 export class CreatePrescriptionComponent {
-  readonly medications = signal<{ id: string; name: string }[]>([]);
-  readonly patients = signal<{ id: string; name: string; surname: string }[]>(
-    [],
-  );
+  readonly page = signal<number>(1);
+  readonly medications = signal<any[]>([]);
+  readonly patients = signal<any[]>([]);
   readonly isAuthenticated = computed(() => this.api.isAuthenticated());
+  readonly prescription = signal<any>({});
+  readonly selectedPatient = signal<any>({});
+  readonly selectedMeds = signal<any[]>([]);
 
   form = new FormGroup({
-    patientId: new FormControl(),
     doctorId: new FormControl(),
-    medicationId: new FormControl(),
     issued: new FormControl(),
     CAS: new FormControl(),
     CUI: new FormControl(),
@@ -334,112 +392,56 @@ export class CreatePrescriptionComponent {
     medUnit: signal<string>(''),
   };
 
+  selectPatient(patient: any) {
+    this.selectedPatient.set(patient);
+    this.page.set(2);
+  }
+  addMed(med: any) {
+    if (!this.selectedMeds().includes(med)) {
+      this.selectedMeds.update((meds) => [...meds, med]);
+    }
+  }
+  removeMed(med: any) {
+    this.selectedMeds.update((meds) => meds.filter((m) => m.id !== med.id));
+  }
+  setPage(num: number) {
+    this.page.set(num);
+  }
+
   ngOnInit() {
     if (this.api.isAuthenticated()) {
       this.setDoctorId();
       this.route.queryParams
         .pipe(
           map((params) => {
-            return { medId: params['medId'], patientId: params['patientId'] };
-          }),
-          tap(({ medId }) => {
-            if (!!medId) {
-              this.api
-                .get<{ id: string; name: string }>(`medication/${medId}`)
-                .subscribe((res) => {
-                  if (res.body?.id && res.body?.name) {
-                    this.medicationSearch.setValue({
-                      query: res.body.name,
-                    });
-                    this.loadMedications();
-                    this.form.setValue({
-                      patientId: '',
-                      doctorId: '',
-                      medicationId: res.body.id,
-                      issued: '',
-                      CAS: '',
-                      CUI: '',
-                      daysNumber: '',
-                      diagnostic: '',
-                      medUnit: '',
-                      isApproved: false,
-                      isMF: false,
-                      isAmbulatory: false,
-                      isHospital: false,
-                      isOther: false,
-                      isMFMM: false,
-                      isSalariat: false,
-                      isCoasigurat: false,
-                      isLiberProfesionist: false,
-                      isCopil: false,
-                      isStudent: false,
-                      isGravida: false,
-                      isPensionar: false,
-                      isVeteran: false,
-                      isLowIncome: false,
-                      isRevolutionar: false,
-                      isHandicap: false,
-                      isAjutorSocial: false,
-                      isSomaj: false,
-                      isPersonalContractual: false,
-                      isCardEuropean: false,
-                      isAcorduriInternationale: false,
-                      isOtherCategories: '',
-                    });
-                  }
-                });
-            }
+            return {
+              medIds: params['medId']?.split(',') ?? [],
+              patientId: params['patientId'],
+            };
           }),
           tap(({ patientId }) => {
             if (!!patientId) {
               this.api
-                .get<{
-                  id: string;
-                  name: string;
-                  surname: string;
-                }>(`user/${patientId}`)
+                .get<{ id: string; name: string }>(`user/${patientId}`)
                 .subscribe((res) => {
-                  if (res.body?.id && res.body?.name && res.body?.surname) {
-                    this.patientSearch.setValue({
-                      query: `${res.body.name} ${res.body.surname}`,
-                    });
-                    this.loadPatients();
-                    this.form.setValue({
-                      patientId: res.body.id,
-                      doctorId: '',
-                      medicationId: this.form.value.medicationId,
-                      issued: '',
-                      CAS: '',
-                      CUI: '',
-                      daysNumber: '',
-                      diagnostic: '',
-                      medUnit: '',
-                      isApproved: false,
-                      isMF: false,
-                      isAmbulatory: false,
-                      isHospital: false,
-                      isOther: false,
-                      isMFMM: false,
-                      isSalariat: false,
-                      isCoasigurat: false,
-                      isLiberProfesionist: false,
-                      isCopil: false,
-                      isStudent: false,
-                      isGravida: false,
-                      isPensionar: false,
-                      isVeteran: false,
-                      isLowIncome: false,
-                      isRevolutionar: false,
-                      isHandicap: false,
-                      isAjutorSocial: false,
-                      isSomaj: false,
-                      isPersonalContractual: false,
-                      isCardEuropean: false,
-                      isAcorduriInternationale: false,
-                      isOtherCategories: '',
-                    });
+                  if (res.body) {
+                    this.selectedPatient.set(res.body);
                   }
                 });
+              this.page.set(2);
+            }
+          }),
+          tap(({ medIds }) => {
+            if (!!medIds) {
+              for (const medId of medIds) {
+                this.api
+                  .get<{ id: string; name: string }>(`medication/${medId}`)
+                  .subscribe((res) => {
+                    if (res.body) {
+                      this.selectedMeds.update((meds) => [...meds, res.body]);
+                    }
+                  });
+              }
             }
           }),
         )
@@ -519,11 +521,17 @@ export class CreatePrescriptionComponent {
 
   handleSubmit() {
     if (this.form.valid) {
-      this.api.post('prescription', this.form.value).subscribe(() => {
-        alert('Prescription created successfully!');
-        this.form.reset();
-        this.router.navigate(['prescriptions']);
-      });
+      this.api
+        .post('prescription', {
+          ...this.form.value,
+          patientId: this.selectedPatient().id,
+          medicationIds: this.selectedMeds().map((med) => med.id),
+        })
+        .subscribe(() => {
+          alert('Prescription created successfully!');
+          this.form.reset();
+          this.router.navigate(['prescriptions']);
+        });
     } else {
       this.errors.CAS.set(
         !this.form.value.CAS ? 'CAS number cannot be empty' : '',

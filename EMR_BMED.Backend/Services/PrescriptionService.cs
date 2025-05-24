@@ -98,11 +98,14 @@ namespace EMR_BMED.Backend.Services
         DaysNumber = dto.DaysNumber,
       };
 
-      MedicationModel med = await dbService.Medication
-        .FindAsync(dto.MedicationId)
-        ?? throw new KeyNotFoundException($"Can't find medication with id={dto.MedicationId}");
+      foreach (var medId in dto.MedicationIds)
+      {
+        MedicationModel med = await dbService.Medication
+          .FindAsync(medId)
+          ?? throw new KeyNotFoundException($"Can't find medication with id={medId}");
 
-      prescription.Medication.Add(med);
+        prescription.Medication.Add(med);
+      }
 
       dbService.Prescriptions.Add(prescription);
       await dbService.SaveChangesAsync();
@@ -139,7 +142,7 @@ namespace EMR_BMED.Backend.Services
       if (dto.IsAcorduriInternationale.HasValue) { prescription.IsAcorduriInternationale = dto.IsAcorduriInternationale.Value; }
       if (dto.IsOtherCategories != null) { prescription.IsOtherCategories = dto.IsOtherCategories; }
       if (dto.Diagnostic != null) { prescription.Diagnostic = dto.Diagnostic; }
-      if (dto.DaysNumber.HasValue) {prescription.DaysNumber = dto.DaysNumber.Value; }
+      if (dto.DaysNumber.HasValue) { prescription.DaysNumber = dto.DaysNumber.Value; }
 
       await dbService.SaveChangesAsync();
     }

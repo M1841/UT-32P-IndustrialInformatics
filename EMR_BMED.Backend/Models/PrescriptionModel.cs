@@ -108,7 +108,7 @@ namespace EMR_BMED.Backend.Models
     string? IsOtherCategories,
     string Diagnostic,
     int DaysNumber,
-    Guid MedicationId
+    Guid[] MedicationIds
   )
   { }
 
