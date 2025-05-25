@@ -396,7 +396,7 @@ export class EditPrescriptionComponent {
           }
         });
     } else {
-      this.router.navigate(['/auth/login']);
+      // this.router.navigate(['/auth/login']);
       window.location.href = '/auth/login';
     }
   }

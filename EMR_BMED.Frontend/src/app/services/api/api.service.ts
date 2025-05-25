@@ -36,8 +36,8 @@ export class ApiService {
   }
 
   logout() {
-    this.cookies.deleteAll();
-    this.router.navigate(['auth/login']);
+    this.cookies.set('access_token', '');
+    // this.router.navigate(['auth/login']);
     window.location.href = '/auth/login';
   }
 

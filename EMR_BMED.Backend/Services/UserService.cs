@@ -30,7 +30,7 @@ namespace EMR_BMED.Backend.Services
             patient.SocialNumber
           }.Any(s =>
             s.Contains(
-              HttpUtility.UrlDecode(query), 
+              HttpUtility.UrlDecode(query),
               StringComparison.CurrentCultureIgnoreCase)
           )
         ).Take(50)

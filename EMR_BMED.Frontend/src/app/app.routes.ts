@@ -11,11 +11,15 @@ import { CreatePrescriptionComponent } from '@/pages/prescriptions/create/create
 import { EditPrescriptionComponent } from '@/pages/prescriptions/edit/edit-prescription.component';
 import { MedicationComponent } from '@/pages/medication/medication.component';
 import { DoctorProfileComponent } from './pages/profile/doctor/doctor-profile.component';
+import { EditDoctorProfileComponent } from './pages/profile/doctor/edit/edit-doctor-profile.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+
+  // Profile
   { path: 'profile', component: ProfileComponent },
   { path: 'profile/doctor', component: DoctorProfileComponent },
+  { path: 'profile/doctor/edit', component: EditDoctorProfileComponent },
 
   // Authentication
   { path: 'auth/login', component: LoginComponent },

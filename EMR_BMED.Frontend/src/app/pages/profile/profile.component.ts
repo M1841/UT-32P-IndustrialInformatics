@@ -46,59 +46,26 @@ import { CommonModule } from '@angular/common';
   `,
 })
 export class ProfileComponent implements OnInit {
-  readonly patient = signal<{
-    email: string;
-    name: string;
-    surname: string;
-    gender: string;
-    birthday: string;
-    phone: string;
-    allergies: string;
-    intolerances: string;
-    conditions: string;
-    blood: string;
-    citizenship: string;
-    socialNumber: string;
-  } | null>(null);
+  readonly patient = signal<any>(null);
   readonly isAuthenticated = computed(() => this.api.isAuthenticated());
 
   ngOnInit() {
     if (this.api.isAuthenticated()) {
-      this.api
-        .get<{
-          email: string;
-          name: string;
-          surname: string;
-          gender: string;
-          birthday: Date;
-          phone: string;
-          allergies: string;
-          intolerances: string;
-          conditions: string;
-          blood: string;
-          citizenship: string;
-          socialNumber: string;
-        }>('auth/whoami')
-        .subscribe({
-          next: (response) => {
-            if (response.body) {
-              const bday = new Date(response.body.birthday);
-              const bdayString = `${bday.getDate()}/${bday.getMonth()}/${bday.getFullYear()}`;
-              this.patient.set({
-                ...response.body,
-                birthday: bdayString,
-              });
-            } else {
-              this.patient.set(null);
-            }
-          },
-          error: (err) => {
-            console.error('Failed to fetch user details:', err);
+      this.api.get<any>('auth/whoami').subscribe({
+        next: (response) => {
+          if (response.body) {
+            this.patient.set(response.body);
+          } else {
             this.patient.set(null);
-          },
-        });
+          }
+        },
+        error: (err) => {
+          console.error('Failed to fetch user details:', err);
+          this.patient.set(null);
+        },
+      });
     } else {
-      this.router.navigate(['/auth/login']);
+      // this.router.navigate(['/auth/login']);
       window.location.href = '/auth/login';
     }
   }

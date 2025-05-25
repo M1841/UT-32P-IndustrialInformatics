@@ -1,11 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { ApiService } from '@/services/api/api.service';
 
 @Component({
   selector: 'app-doctor-profile',
-  imports: [],
+  imports: [RouterLink],
   template: `
     <div class="profile-container">
       <a href="/" class="home-icon">
@@ -28,6 +28,8 @@ import { ApiService } from '@/services/api/api.service';
       } @else {
         <p>Loading user details...</p>
       }
+      <a [routerLink]="['edit']" class="nav-button">Edit</a>
+      <button class="logout-btn">Delete Account</button>
     </div>
   `,
   styles: ``,
@@ -38,10 +40,13 @@ export class DoctorProfileComponent {
   ngOnInit() {
     if (this.api.isAuthenticated()) {
       this.api.get<any>('auth/whoami').subscribe((res) => {
-        this.doctor.set(res.body);
+        if (res.body.isDoctor) {
+          this.doctor.set(res.body);
+        } else {
+          window.location.href = '/auth/login';
+        }
       });
     } else {
-      this.router.navigate(['/auth/login']);
       window.location.href = '/auth/login';
     }
   }

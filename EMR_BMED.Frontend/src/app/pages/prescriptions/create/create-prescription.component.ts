@@ -447,16 +447,18 @@ export class CreatePrescriptionComponent {
         )
         .subscribe();
     } else {
-      this.router.navigate(['/auth/login']);
+      // this.router.navigate(['/auth/login']);
       window.location.href = '/auth/login';
     }
   }
 
   setDoctorId() {
-    this.api.get<{ id: string }>('auth/whoami').subscribe({
+    this.api.get<{ id: string; isDoctor: boolean }>('auth/whoami').subscribe({
       next: (response) => {
-        if (response.body?.id) {
+        if (response.body?.id && response.body?.isDoctor) {
           this.form.patchValue({ doctorId: response.body.id });
+        } else {
+          window.location.href = '/auth/login';
         }
       },
       error: (err) => {

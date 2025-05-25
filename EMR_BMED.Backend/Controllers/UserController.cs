@@ -34,7 +34,7 @@ namespace EMR_BMED.Backend.Controllers
     [HttpGet("patient/all")]
     public IActionResult GetAllPatients()
     {
-        return Ok(userService.GetAllPatients());
+      return Ok(userService.GetAllPatients());
     }
 
     [Authorize]
@@ -71,6 +71,8 @@ namespace EMR_BMED.Backend.Controllers
       [FromHeader(Name = "Authorization")] string authHeader,
       [FromRoute] Guid id, [FromBody] DoctorUpdateDto dto)
     {
+      Console.WriteLine(dto);
+
       string token = authHeader.Split(' ').LastOrDefault()!;
       Guid myId = TokenUtils.ExtractId(token);
       if (myId != id)

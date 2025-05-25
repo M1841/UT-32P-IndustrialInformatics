@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 using EMR_BMED.Backend.Services;
 using EMR_BMED.Backend.Utils;
+using Microsoft.AspNetCore.HttpLogging;
 
 namespace EMR_BMED.Backend
 {
@@ -20,6 +21,11 @@ namespace EMR_BMED.Backend
       // Add services here:
       services.AddDbContext<DbService>(options =>
         options.UseSqlServer(Configuration!.GetConnectionString("DefaultConnectionString")));
+
+      services.AddHttpLogging(logging =>
+      {
+        logging.LoggingFields = HttpLoggingFields.RequestBody;
+      });
 
       services.AddScoped<DbService>();
       services.AddScoped<AuthService>();
@@ -52,6 +58,8 @@ namespace EMR_BMED.Backend
       {
         app.UseDeveloperExceptionPage();
       }
+
+      app.UseHttpLogging();
 
       app.UseHttpsRedirection();
       app.UseCors();

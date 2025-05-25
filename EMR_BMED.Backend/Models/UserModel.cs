@@ -90,28 +90,28 @@ namespace EMR_BMED.Backend.Models
 
   public record UserUpdateDto
   {
-    public string? Password;
-    public string? Email;
-    public string? Surname;
-    public string? Name;
-    public string? Gender;
-    public bool? IsVerified;
-    public string? Phone;
+    public string? Password { get; set; }
+    public string? Email { get; set; }
+    public string? Surname { get; set; }
+    public string? Name { get; set; }
+    public string? Gender { get; set; }
+    public bool? IsVerified { get; set; }
+    public string? Phone { get; set; }
   }
 
   public record DoctorUpdateDto : UserUpdateDto
   {
-    public string? Address;
-    public string? MedicalField;
+    public string? Address { get; set; }
+    public string? MedicalField { get; set; }
   }
 
   public record PatientUpdateDto : UserUpdateDto
   {
-    public string? SocialNumber;
-    public string? Citizenship;
-    public string? Allergies;
-    public string? Intolerances;
-    public string? Conditions;
-    public string? Blood;
+    public string? SocialNumber { get; set; }
+    public string? Citizenship { get; set; }
+    public string? Allergies { get; set; }
+    public string? Intolerances { get; set; }
+    public string? Conditions { get; set; }
+    public string? Blood { get; set; }
   }
 }

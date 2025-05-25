@@ -140,7 +140,7 @@ export class PrescriptionsComponent {
           response.body?.id === undefined ||
           !response.body?.isDoctor === undefined
         ) {
-          this.router.navigate(['/auth/login']);
+          // this.router.navigate(['/auth/login']);
           window.location.href = '/auth/login';
         } else {
           this.user.set({
