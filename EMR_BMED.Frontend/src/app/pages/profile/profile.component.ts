@@ -1,11 +1,10 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ApiService } from '@/services/api/api.service';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule],
+  imports: [RouterLink],
   template: `
     <div class="profile-container">
       <a href="/" class="home-icon">
@@ -39,6 +38,8 @@ import { CommonModule } from '@angular/common';
         @if (patient()!.socialNumber) {
           <p>Social number: {{ patient()!.socialNumber }}</p>
         }
+        <a [routerLink]="['edit']" class="nav-button">Edit</a>
+        <button class="logout-btn">Delete Account</button>
       } @else {
         <p>Loading user details...</p>
       }

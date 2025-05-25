@@ -25,11 +25,11 @@ import { ApiService } from '@/services/api/api.service';
         @if (doctor()!.address) {
           <p>Address: {{ doctor()!.address }}</p>
         }
+        <a [routerLink]="['edit']" class="nav-button">Edit</a>
+        <button class="logout-btn">Delete Account</button>
       } @else {
         <p>Loading user details...</p>
       }
-      <a [routerLink]="['edit']" class="nav-button">Edit</a>
-      <button class="logout-btn">Delete Account</button>
     </div>
   `,
   styles: ``,

@@ -1,10 +1,10 @@
 import { ApiService } from '@/services/api/api.service';
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { EMPTY, switchMap } from 'rxjs';
+import { switchMap, EMPTY } from 'rxjs';
 
 @Component({
-  selector: 'app-edit-doctor-profile',
+  selector: 'app-edit-patient-profile',
   imports: [ReactiveFormsModule],
   template: `
     <form [formGroup]="detailsForm" (submit)="updateDetails()">
@@ -37,8 +37,32 @@ import { EMPTY, switchMap } from 'rxjs';
       <br />
 
       <label>
-        Address
-        <input required formControlName="address" />
+        Citizenship
+        <input required formControlName="citizenship" />
+      </label>
+      <br />
+
+      <label>
+        Allergies
+        <input required formControlName="allergies" />
+      </label>
+      <br />
+
+      <label>
+        Intolerances
+        <input required formControlName="intolerances" />
+      </label>
+      <br />
+
+      <label>
+        Conditions
+        <input required formControlName="conditions" />
+      </label>
+      <br />
+
+      <label>
+        Blood Type
+        <input required formControlName="blood" />
       </label>
       <br />
 
@@ -79,14 +103,18 @@ import { EMPTY, switchMap } from 'rxjs';
   `,
   styles: ``,
 })
-export class EditDoctorProfileComponent {
-  readonly doctor = signal<any>({});
+export class EditPatientProfileComponent {
+  readonly patient = signal<any>({});
   readonly detailsForm = new FormGroup({
     name: new FormControl(),
     surname: new FormControl(),
     email: new FormControl(),
     phone: new FormControl(),
-    address: new FormControl(),
+    citizenship: new FormControl(),
+    allergies: new FormControl(),
+    intolerances: new FormControl(),
+    conditions: new FormControl(),
+    blood: new FormControl(),
   });
   readonly passwordForm = new FormGroup({
     oldPassword: new FormControl(''),
@@ -100,32 +128,48 @@ export class EditDoctorProfileComponent {
   updateDetails() {
     if (this.detailsForm.valid) {
       this.api
-        .put(`user/doctor/${this.doctor().id}`, {
+        .put(`user/patient/${this.patient().id}`, {
           name:
-            this.detailsForm.value.name !== this.doctor().name
+            this.detailsForm.value.name !== this.patient().name
               ? this.detailsForm.value.name
               : null,
           surname:
-            this.detailsForm.value.surname !== this.doctor().surname
+            this.detailsForm.value.surname !== this.patient().surname
               ? this.detailsForm.value.surname
               : null,
           email:
-            this.detailsForm.value.email !== this.doctor().email
+            this.detailsForm.value.email !== this.patient().email
               ? this.detailsForm.value.email
               : null,
           phone:
-            this.detailsForm.value.phone !== this.doctor().phone
+            this.detailsForm.value.phone !== this.patient().phone
               ? this.detailsForm.value.phone
               : null,
-          address:
-            this.detailsForm.value.address !== this.doctor().address
-              ? this.detailsForm.value.address
+          citizenship:
+            this.detailsForm.value.citizenship !== this.patient().citizenship
+              ? this.detailsForm.value.citizenship
+              : null,
+          allergies:
+            this.detailsForm.value.allergies !== this.patient().allergies
+              ? this.detailsForm.value.allergies
+              : null,
+          intolerances:
+            this.detailsForm.value.intolerances !== this.patient().intolerances
+              ? this.detailsForm.value.intolerances
+              : null,
+          conditions:
+            this.detailsForm.value.conditions !== this.patient().conditions
+              ? this.detailsForm.value.conditions
+              : null,
+          blood:
+            this.detailsForm.value.blood !== this.patient().blood
+              ? this.detailsForm.value.blood
               : null,
         })
         .subscribe({
           next: () => {
-            this.doctor.update((d) => {
-              return { ...d, ...this.detailsForm.value };
+            this.patient.update((p) => {
+              return { ...p, ...this.detailsForm.value };
             });
             this.errors.email.set('');
             alert('Details updated successfully');
@@ -141,13 +185,13 @@ export class EditDoctorProfileComponent {
     if (this.passwordForm.valid) {
       this.api
         .login({
-          email: this.doctor().email,
+          email: this.patient().email,
           password: this.passwordForm.value.oldPassword,
         })
         .pipe(
           switchMap((res) => {
             if (res.ok) {
-              return this.api.put(`user/doctor/${this.doctor().id}`, {
+              return this.api.put(`user/patient/${this.patient().id}`, {
                 password: this.passwordForm.value.newPassword,
               });
             } else {
@@ -172,13 +216,17 @@ export class EditDoctorProfileComponent {
     if (this.api.isAuthenticated()) {
       this.api.get<any>('auth/whoami').subscribe({
         next: (res) => {
-          this.doctor.set(res.body);
+          this.patient.set(res.body);
           this.detailsForm.setValue({
             name: res.body.name,
             surname: res.body.surname,
             email: res.body.email,
             phone: res.body.phone,
-            address: res.body.address,
+            citizenship: res.body.citizenship,
+            allergies: res.body.allergies,
+            intolerances: res.body.intolerances,
+            conditions: res.body.conditions,
+            blood: res.body.blood,
           });
         },
         error: () => {
