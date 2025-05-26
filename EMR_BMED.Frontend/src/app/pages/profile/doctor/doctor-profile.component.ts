@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { afterNextRender, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import { ApiService } from '@/services/api/api.service';
@@ -68,12 +68,14 @@ export class DoctorProfileComponent {
 
   ngOnInit() {
     if (this.api.isAuthenticated()) {
-      this.api.get<any>('auth/whoami').subscribe((res) => {
-        if (res.body.isDoctor) {
-          this.doctor.set(res.body);
-        } else {
-          window.location.href = '/auth/login';
-        }
+      this.api.get<any>('auth/whoami').subscribe({
+        next: (res) => {
+          if (res.body.isDoctor) {
+            this.doctor.set(res.body);
+          } else {
+            window.location.href = '/auth/login';
+          }
+        },
       });
     } else {
       window.location.href = '/auth/login';

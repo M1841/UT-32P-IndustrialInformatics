@@ -186,6 +186,8 @@ export class PrescriptionsComponent {
   ngOnInit() {
     if (this.api.isAuthenticated()) {
       this.loadPrescriptions();
+    } else {
+      window.location.href = '/auth/login';
     }
   }
   private api = inject(ApiService);

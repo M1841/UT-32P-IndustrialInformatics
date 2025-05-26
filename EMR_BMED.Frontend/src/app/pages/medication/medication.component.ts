@@ -158,15 +158,19 @@ export class MedicationComponent {
   );
 
   ngOnInit() {
-    this.api.get<any[]>(`medication/all`).subscribe((res) => {
-      if (res.body !== null) {
-        this.medication.set(res.body);
-        this.isLoading.set(false);
-      }
-    });
-    this.api.get<{ isDoctor: boolean }>('auth/whoami').subscribe((res) => {
-      this.isDoctor.set(res.body?.isDoctor ?? false);
-    });
+    if (this.api.isAuthenticated()) {
+      this.api.get<any[]>(`medication/all`).subscribe((res) => {
+        if (res.body !== null) {
+          this.medication.set(res.body);
+          this.isLoading.set(false);
+        }
+      });
+      this.api.get<{ isDoctor: boolean }>('auth/whoami').subscribe((res) => {
+        this.isDoctor.set(res.body?.isDoctor ?? false);
+      });
+    } else {
+      window.location.href = '/auth/login';
+    }
   }
 
   private api = inject(ApiService);

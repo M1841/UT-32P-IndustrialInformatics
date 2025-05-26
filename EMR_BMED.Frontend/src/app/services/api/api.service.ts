@@ -29,6 +29,7 @@ export class ApiService {
             secure: true,
             sameSite: 'Strict',
             path: '/',
+            domain: '',
           });
         }
       }),
@@ -36,7 +37,7 @@ export class ApiService {
   }
 
   logout() {
-    this.cookies.set('access_token', '');
+    this.cookies.delete('access_token', '/');
     // this.router.navigate(['auth/login']);
     window.location.href = '/auth/login';
   }

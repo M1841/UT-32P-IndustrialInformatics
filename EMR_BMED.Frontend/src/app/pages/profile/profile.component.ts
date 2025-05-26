@@ -95,7 +95,6 @@ export class ProfileComponent implements OnInit {
         },
       });
     } else {
-      // this.router.navigate(['/auth/login']);
       window.location.href = '/auth/login';
     }
   }
