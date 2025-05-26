@@ -38,8 +38,26 @@ import { Router, RouterLink } from '@angular/router';
         @if (patient()!.socialNumber) {
           <p>Social number: {{ patient()!.socialNumber }}</p>
         }
+
         <a [routerLink]="['edit']" class="nav-button">Edit</a>
-        <button class="logout-btn">Delete Account</button>
+
+        <button (click)="openDeleteDialog()" class="logout-btn">
+          Delete Account
+        </button>
+        <dialog>
+          <form method="dialog">
+            <p>
+              Are you sure you want to delete your account? This action is
+              permanent!
+            </p>
+            <menu style="padding:0">
+              <button class="nav-button">No, cancel</button>
+              <button (click)="handleDelete()" class="logout-btn">
+                Yes, delete
+              </button>
+            </menu>
+          </form>
+        </dialog>
       } @else {
         <p>Loading user details...</p>
       }
@@ -49,6 +67,17 @@ import { Router, RouterLink } from '@angular/router';
 export class ProfileComponent implements OnInit {
   readonly patient = signal<any>(null);
   readonly isAuthenticated = computed(() => this.api.isAuthenticated());
+
+  openDeleteDialog() {
+    const dialog = document.querySelector('dialog') as HTMLDialogElement;
+    dialog.showModal();
+  }
+  handleDelete() {
+    this.api.delete(`user/${this.patient()!.id}`).subscribe(() => {
+      alert('Your account has been deleted');
+      this.api.logout();
+    });
+  }
 
   ngOnInit() {
     if (this.api.isAuthenticated()) {
@@ -71,5 +100,4 @@ export class ProfileComponent implements OnInit {
     }
   }
   private api = inject(ApiService);
-  private router = inject(Router);
 }

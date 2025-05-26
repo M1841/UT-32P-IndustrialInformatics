@@ -101,6 +101,29 @@ import { Router } from '@angular/router';
         </div>
 
         <div class="form-group">
+          <label for="socialNumber">Social Number</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="socialNumber"
+              type="text"
+              formControlName="socialNumber"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="citizenship">Citizenship</label>
+          <div class="input-wrapper">
+            <input
+              required
+              id="citizenship"
+              type="text"
+              formControlName="citizenship"
+            />
+          </div>
+        </div>
+        <div class="form-group">
           <label for="phone">Phone Number (Optional)</label>
           <div class="input-wrapper">
             <input id="phone" type="text" formControlName="phoneNumber" />
@@ -143,42 +166,8 @@ import { Router } from '@angular/router';
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="socialNumber">Social Number (Optional)</label>
-          <div class="input-wrapper">
-            <input
-              id="socialNumber"
-              type="text"
-              formControlName="socialNumber"
-            />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="citizenship">Citizenship (Optional)</label>
-          <div class="input-wrapper">
-            <input id="citizenship" type="text" formControlName="citizenship" />
-          </div>
-        </div>
-
         <button type="submit" class="nav-button">Register</button>
       </form>
-    </div>
-
-    <span class="line"></span>
-    <div class="page-bottom">
-      <div class="footer">
-        <div class="icon">
-          <a href="/" class="home-icon" style="grid-area: box-1">
-            <img src="Logo.png" alt="Home" width="64" height="64" />
-          </a>
-          <p id="rights" style="grid-area: box-2">All rights reserved.</p>
-        </div>
-        <div class="info" style="grid-area: box-3">
-          <p>This section will contain links and what not</p>
-          <div></div>
-        </div>
-      </div>
     </div>
   `,
 })

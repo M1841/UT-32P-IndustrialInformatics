@@ -57,7 +57,7 @@ import { Router, RouterLink } from '@angular/router';
             <hr />
           }
         </ul>
-        <dialog #deleteDialog>
+        <dialog>
           <form method="dialog">
             @if (selectedPrescription() !== null) {
               <p>Are you sure you want to delete the selected prescription?</p>
@@ -114,11 +114,7 @@ export class PrescriptionsComponent {
     medicationNames: string[];
   } | null>(null);
 
-  openDeleteDialog(prescription: {
-    id: string;
-    patient: { name: string; surname: string };
-    medicationNames: string[];
-  }) {
+  openDeleteDialog(prescription: any) {
     this.selectedPrescription.set(prescription);
     const dialog = document.querySelector('dialog') as HTMLDialogElement;
     dialog.showModal();

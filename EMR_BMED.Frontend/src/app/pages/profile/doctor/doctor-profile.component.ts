@@ -25,8 +25,26 @@ import { ApiService } from '@/services/api/api.service';
         @if (doctor()!.address) {
           <p>Address: {{ doctor()!.address }}</p>
         }
+
         <a [routerLink]="['edit']" class="nav-button">Edit</a>
-        <button class="logout-btn">Delete Account</button>
+
+        <button (click)="openDeleteDialog()" class="logout-btn">
+          Delete Account
+        </button>
+        <dialog>
+          <form method="dialog">
+            <p>
+              Are you sure you want to delete your account? This action is
+              permanent!
+            </p>
+            <menu style="padding:0">
+              <button class="nav-button">No, cancel</button>
+              <button (click)="handleDelete()" class="logout-btn">
+                Yes, delete
+              </button>
+            </menu>
+          </form>
+        </dialog>
       } @else {
         <p>Loading user details...</p>
       }
@@ -36,6 +54,17 @@ import { ApiService } from '@/services/api/api.service';
 })
 export class DoctorProfileComponent {
   readonly doctor = signal<any>({});
+
+  openDeleteDialog() {
+    const dialog = document.querySelector('dialog') as HTMLDialogElement;
+    dialog.showModal();
+  }
+  handleDelete() {
+    this.api.delete(`user/${this.doctor()!.id}`).subscribe(() => {
+      alert('Your account has been deleted');
+      this.api.logout();
+    });
+  }
 
   ngOnInit() {
     if (this.api.isAuthenticated()) {
@@ -52,5 +81,4 @@ export class DoctorProfileComponent {
   }
 
   private api = inject(ApiService);
-  private router = inject(Router);
 }
