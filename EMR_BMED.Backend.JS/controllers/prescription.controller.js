@@ -5,21 +5,6 @@ import prescriptionService from "../services/prescription.service.js";
 import tokenUtils from "../utils/token.utils.js";
 
 router
-  .get("/:id", (req, res) => {
-    const id = req.params.id;
-    const token = req.headers.authorization.split(" ").at(-1);
-    const myId = tokenUtils.extractId(token);
-
-    try {
-      const prescription = prescriptionService.getOne(id);
-      if (myId !== prescription.patientId && myId !== prescription.doctorId) {
-        return res.status(403).send({});
-      }
-      return res.status(200).send(prescription);
-    } catch (err) {
-      return res.status(404).send({ message: err.message });
-    }
-  })
   .get("/patient/:id", (req, res) => {
     const id = req.params.id;
     const token = req.headers.authorization.split(" ").at(-1);
@@ -46,6 +31,21 @@ router
     try {
       const prescriptions = prescriptionService.getAllByUser(id, true);
       return res.status(200).send(prescriptions);
+    } catch (err) {
+      return res.status(404).send({ message: err.message });
+    }
+  })
+  .get("/:id", (req, res) => {
+    const id = req.params.id;
+    const token = req.headers.authorization.split(" ").at(-1);
+    const myId = tokenUtils.extractId(token);
+
+    try {
+      const prescription = prescriptionService.getOne(id);
+      if (myId !== prescription.patientId && myId !== prescription.doctorId) {
+        return res.status(403).send({});
+      }
+      return res.status(200).send(prescription);
     } catch (err) {
       return res.status(404).send({ message: err.message });
     }

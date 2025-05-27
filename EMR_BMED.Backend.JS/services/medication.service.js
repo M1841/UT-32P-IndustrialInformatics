@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 import db from "../data/EMR_BMED.json" with { type: "json" };
-import dbService from "./db.service";
+import dbService from "./db.service.js";
 
 const getOne = (id) => {
   const medication = db.medication.find((m) => m.id === id);
