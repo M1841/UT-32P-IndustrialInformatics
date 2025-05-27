@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
 
 import db from "../data/EMR_BMED.json" with { type: "json" };
-import dbService from "./db.service";
+import dbService from "./db.service.js";
 
 const getOne = (id) => {
-  const prescription = db.prescriptions.find((p) => p.id === id);
+  const prescription = db.prescriptions.find((p) => p.globalID === id);
 
   if (!!prescription) {
     throw new Error(`Can't find prescription with id=${id}`);
@@ -15,16 +15,14 @@ const getOne = (id) => {
 const getAllByUser = (id, isDoctor) => {
   const user = db.users.find((u) => u.isDoctor === isDoctor && u.id === id);
 
-  if (!!user) {
+  if (!user) {
     throw new Error(
       `Can't find ${isDoctor ? "doctor" : "patient"} with id=${id}`
     );
   }
 
   return db.prescriptions
-    .filter((p) => {
-      isDoctor ? p.doctorId === id : p.patientId === id;
-    })
+    .filter((p) => (isDoctor ? p.doctorId === id : p.patientId === id))
     .map((p) => includeForeignEntities(p));
 };
 
@@ -43,7 +41,7 @@ const createOne = (dto) => {
     throw new Error(`Can't find doctor with id=${dto.doctorId}`);
   }
 
-  const prescription = { ...dto, id: randomUUID(), medicationIds: [] };
+  const prescription = { ...dto, globalID: randomUUID(), medicationIds: [] };
 
   for (const medId of dto.medicationIds) {
     const medication = db.medication.find((m) => m.id === medId);
@@ -150,7 +148,7 @@ const updateOne = (id, dto) => {
   }
 
   db.prescriptions = db.prescriptions.map((p) => {
-    if (p.id !== id) {
+    if (p.globalID !== id) {
       return p;
     }
     return prescription;
@@ -160,7 +158,7 @@ const updateOne = (id, dto) => {
 
 const deleteOne = (id) => {
   getOne(id);
-  db.prescriptions = db.prescriptions.filter((p) => p.id !== id);
+  db.prescriptions = db.prescriptions.filter((p) => p.globalID !== id);
   dbService.saveChanges(db);
 };
 
