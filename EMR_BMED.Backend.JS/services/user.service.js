@@ -12,7 +12,7 @@ const getOne = (id) => {
   return user;
 };
 
-const searchPatients = (query) => {
+const search = (query) => {
   const patients = db.users
     .filter(
       (p) =>
@@ -26,7 +26,7 @@ const searchPatients = (query) => {
   return patients;
 };
 
-const getAllPatients = () => {
+const getAll = () => {
   return db.users.filter((p) => p.isDoctor === false);
 };
 
@@ -102,4 +102,4 @@ const deleteOne = (id) => {
   dbService.saveChanges(db);
 };
 
-export default { getOne, searchPatients, getAllPatients, updateOne, deleteOne };
+export default { getOne, search, getAll, updateOne, deleteOne };
