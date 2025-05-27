@@ -6,7 +6,7 @@ import dbService from "./db.service.js";
 const getOne = (id) => {
   const medication = db.medication.find((m) => m.id === id);
 
-  if (!!medication) {
+  if (!medication) {
     throw new Error(`Can't find medication with id=${id}`);
   }
   return medication;

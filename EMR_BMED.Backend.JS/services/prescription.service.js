@@ -6,7 +6,7 @@ import dbService from "./db.service.js";
 const getOne = (id) => {
   const prescription = db.prescriptions.find((p) => p.globalID === id);
 
-  if (!!prescription) {
+  if (!prescription) {
     throw new Error(`Can't find prescription with id=${id}`);
   }
   return includeForeignEntities(prescription);
@@ -30,23 +30,29 @@ const createOne = (dto) => {
   const patient = db.users.find(
     (u) => u.isDoctor === false && u.id === dto.patientId
   );
-  if (!!patient) {
+  if (!patient) {
     throw new Error(`Can't find patient with id=${dto.patientId}`);
   }
 
   const doctor = db.users.find(
     (u) => u.isDoctor === true && u.id === dto.doctorId
   );
-  if (!!doctor) {
+  if (!doctor) {
     throw new Error(`Can't find doctor with id=${dto.doctorId}`);
   }
 
-  const prescription = { ...dto, globalID: randomUUID(), medicationIds: [] };
+  const prescription = {
+    ...dto,
+    globalID: randomUUID(),
+    medicationIds: [],
+    cas: dto.CAS,
+    cui: dto.CUI,
+  };
 
   for (const medId of dto.medicationIds) {
     const medication = db.medication.find((m) => m.id === medId);
 
-    if (!!medication) {
+    if (!medication) {
       throw new Error(`Can't find medication with id=${medId}`);
     }
     prescription.medicationIds.push(medId);
@@ -62,11 +68,11 @@ const updateOne = (id, dto) => {
   if (!!dto.medUnit) {
     prescription.medUnit = dto.medUnit;
   }
-  if (!!dto.cui) {
-    prescription.cui = dto.cui;
+  if (!!dto.CUI) {
+    prescription.cui = dto.CUI;
   }
-  if (!!dto.cas) {
-    prescription.cas = dto.cas;
+  if (!!dto.CAS) {
+    prescription.cas = dto.CAS;
   }
   if (!!dto.isApproved || dto.isApproved === false) {
     prescription.isApproved = dto.isApproved;

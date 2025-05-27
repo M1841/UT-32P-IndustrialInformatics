@@ -1,18 +1,18 @@
 import bcrypt from "bcrypt";
 
 import db from "../data/EMR_BMED.json" with { type: "json" };
-import dbService from "./db.service";
+import dbService from "./db.service.js";
 
 const getOne = (id) => {
   const user = db.users.find((u) => u.id === id);
 
-  if (!!user) {
+  if (!user) {
     throw new Error(`Can't find user with id=${id}`);
   }
   return user;
 };
 
-const search = (query) => {
+const searchPatients = (query) => {
   const patients = db.users
     .filter(
       (p) =>
@@ -26,7 +26,7 @@ const search = (query) => {
   return patients;
 };
 
-const getAll = () => {
+const getAllPatients = () => {
   return db.users.filter((p) => p.isDoctor === false);
 };
 
@@ -102,4 +102,4 @@ const deleteOne = (id) => {
   dbService.saveChanges(db);
 };
 
-export default { getOne, search, getAll, updateOne, deleteOne };
+export default { getOne, searchPatients, getAllPatients, updateOne, deleteOne };
