@@ -1,30 +1,47 @@
 import bcrypt from "bcrypt";
+import { randomUUID } from "node:crypto";
 
 import db from "../data/EMR_BMED.json" with { type: "json" };
-import tokenUtils from "../utils/token.utils";
+import dbService from "./db.service.js";
+import tokenUtils from "../utils/token.utils.js";
 
 const login = (credentials) => {
   const user = db.users.find((u) => u.email === credentials.email);
 
-  if (!!user) {
-    throw new Error("Email not found");
+  if (!user) {
+    throw { name: "UserNotFoundError", message: "Email not found" };
   }
   if (!bcrypt.compareSync(credentials.password, user.password)) {
-    throw new Error("Password is incorrect");
+    throw { name: "IncorrectPasswordError", message: "Password is incorrect" };
   }
 
   return tokenUtils.generateToken(user.id);
 };
 
+const register = (user) => {
+  if (db.users.some((u) => u.email === user.email)) {
+    throw { name: "EmailIsTakenError", message: "Email is taken" };
+  }
+  db.users.push({
+    ...user,
+    password: bcrypt.hashSync(user.password, 1),
+    id: randomUUID(),
+  });
+  dbService.saveChanges(db);
+};
+
 const whoAmI = (authHeader) => {
-  const token = authHeader.split("").at(-1);
+  const token = authHeader.split(" ").at(-1);
   const id = tokenUtils.extractId(token);
   const user = db.users.find((u) => u.id === id);
 
-  if (!!user) {
-    throw new Error("User not found");
+  if (!user) {
+    throw {
+      name: "UserNotFoundError",
+      message: "Access token doesn't belong to a user",
+    };
   }
   return user;
 };
 
-export default { login, whoAmI };
+export default { login, register, whoAmI };
