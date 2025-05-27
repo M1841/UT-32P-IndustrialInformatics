@@ -2,6 +2,8 @@ import fs from "node:fs";
 import bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
 
+import csvUtils from "../utils/csv.utils.js";
+
 const seedTestData = () => {
   const db = {
     users: [],
@@ -43,22 +45,15 @@ const seedTestData = () => {
   };
   db.users.push(doctor);
 
-  const medication = {
-    id: randomUUID(),
-    name: "ALGOCALMIN  500 mg/ml",
-    form: "PIC. ORALE, SOL.",
-    isPresRequired: false,
-    brand: "SOFARIMEX - INDUSTRIA QUIMICA E FARMACEUTICA  S.A. - PORTUGALIA",
-    storing:
-      "Cutie cu flacon din sticla bruna, cu capacitate de 20 ml, prevazut cu picurator din PEJD si capac prevazut cu sistem de sigurana pentru copii din PE�D/PP, care contine 20 ml picaturi orale, solutie",
-  };
-  db.medication.push(medication);
+  csvUtils.importMeds().forEach((med) => {
+    db.medication.push({ ...med, id: randomUUID() });
+  });
 
   const prescription = {
-    id: randomUUID(),
+    globalID: randomUUID(),
     patientId: patient.id,
     doctorId: doctor.id,
-    medicationIds: [medication.id],
+    medicationIds: [db.medication[0].id],
     medUnit: "Hospital",
     cui: "987654321",
     cas: "123456789",

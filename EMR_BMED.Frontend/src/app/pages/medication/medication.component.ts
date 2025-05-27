@@ -145,6 +145,7 @@ export class MedicationComponent {
   });
   handleSearch() {
     this.query.set(this.searchForm.value.query ?? '');
+    this.setPage(1);
   }
   selectMed(med: any) {
     this.displayedMed.set(med);

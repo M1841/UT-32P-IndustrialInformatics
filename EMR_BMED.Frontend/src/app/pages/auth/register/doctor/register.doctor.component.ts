@@ -130,22 +130,6 @@ import { Router } from '@angular/router';
 
         <button type="submit" class="nav-button">Register</button>
       </form>
-
-      <span class="line"></span>
-      <div class="page-bottom">
-        <div class="footer">
-          <div class="icon">
-            <a href="/" class="home-icon" style="grid-area: box-1">
-              <img src="Logo.png" alt="Home" width="64" height="64" />
-            </a>
-            <p id="rights" style="grid-area: box-2">All rights reserved.</p>
-          </div>
-          <div class="info" style="grid-area: box-3">
-            <p>This section will contain links and what not</p>
-            <div></div>
-          </div>
-        </div>
-      </div>
     </div>
   `,
 })
