@@ -128,8 +128,9 @@ import { map, tap } from 'rxjs';
                 <input type="text" formControlName="medUnit" required />
               </div>
             </div>
+
             <div class="form-group">
-              <label for="isApproved">Is Approved</label>
+              <label for="isApproved">Is approved by a doctor</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isApproved" />
               </div>
@@ -137,7 +138,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isMF">Is MF</label>
+              <label for="isMF">Is prescribed by family doctor</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isMF" />
               </div>
@@ -145,7 +146,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isAmbulatory">Is Ambulatory</label>
+              <label for="isAmbulatory">Is ambulatory</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isAmbulatory" />
               </div>
@@ -153,7 +154,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isHospital">Is Hospital</label>
+              <label for="isHospital">Is hospital treatment</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isHospital" />
               </div>
@@ -161,7 +162,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isOther">Is Other</label>
+              <label for="isOther">Is other type of care</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isOther" />
               </div>
@@ -169,7 +170,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isMFMM">Is MFMM</label>
+              <label for="isMFMM">Is mixed-mode care</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isMFMM" />
               </div>
@@ -177,7 +178,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isSalariat">Is Salariat</label>
+              <label for="isSalariat">Is employed</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isSalariat" />
               </div>
@@ -185,7 +186,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isCoasigurat">Is Coasigurat</label>
+              <label for="isCoasigurat">Is co-insured</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isCoasigurat" />
               </div>
@@ -193,7 +194,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isLiberProfesionist">Is Liber Profesionist</label>
+              <label for="isLiberProfesionist">Is freelancer</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isLiberProfesionist" />
               </div>
@@ -201,7 +202,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isCopil">Is Copil</label>
+              <label for="isCopil">Is child</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isCopil" />
               </div>
@@ -209,7 +210,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isStudent">Is Student</label>
+              <label for="isStudent">Is student</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isStudent" />
               </div>
@@ -217,7 +218,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isGravida">Is Gravida</label>
+              <label for="isGravida">Is pregnant</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isGravida" />
               </div>
@@ -225,7 +226,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isPensionar">Is Pensionar</label>
+              <label for="isPensionar">Is pensioner</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isPensionar" />
               </div>
@@ -233,7 +234,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isVeteran">Is Veteran</label>
+              <label for="isVeteran">Is veteran</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isVeteran" />
               </div>
@@ -241,7 +242,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isLowIncome">Is Low Income</label>
+              <label for="isLowIncome">Is low-income</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isLowIncome" />
               </div>
@@ -249,7 +250,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isRevolutionar">Is Revolutionar</label>
+              <label for="isRevolutionar">Is revolutionary</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isRevolutionar" />
               </div>
@@ -257,7 +258,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isHandicap">Is Handicap</label>
+              <label for="isHandicap">Is handicapped</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isHandicap" />
               </div>
@@ -265,7 +266,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isAjutorSocial">Is Ajutor Social</label>
+              <label for="isAjutorSocial">Is social welfare recipient</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isAjutorSocial" />
               </div>
@@ -273,7 +274,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isSomaj">Is Somaj</label>
+              <label for="isSomaj">Is unemployed</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isSomaj" />
               </div>
@@ -281,7 +282,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isPersonalContractual">Is Personal Contractual</label>
+              <label for="isPersonalContractual">Is contracted personnel</label>
               <div class="input-wrapper">
                 <input
                   type="checkbox"
@@ -292,7 +293,7 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isCardEuropean">Is Card European</label>
+              <label for="isCardEuropean">Has European Health Insurance Card</label>
               <div class="input-wrapper">
                 <input type="checkbox" formControlName="isCardEuropean" />
               </div>
@@ -300,20 +301,15 @@ import { map, tap } from 'rxjs';
             <br />
 
             <div class="form-group">
-              <label for="isAcorduriInternationale"
-                >Is Acorduri Internationale</label
-              >
+              <label for="isAcorduriInternationale">Is covered under international health agreements</label>
               <div class="input-wrapper">
-                <input
-                  type="checkbox"
-                  formControlName="isAcorduriInternationale"
-                />
+                <input type="checkbox" formControlName="isAcorduriInternationale"/>
               </div>
             </div>
             <br />
 
             <div class="form-group">
-              <label for="isOtherCategories">Is Other Categories</label>
+              <label for="isOtherCategories">Other categories</label>
               <div class="input-wrapper">
                 <input type="text" formControlName="isOtherCategories" />
               </div>
