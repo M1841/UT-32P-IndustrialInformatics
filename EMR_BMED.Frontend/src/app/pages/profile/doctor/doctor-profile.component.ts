@@ -13,17 +13,18 @@ import { ApiService } from '@/services/api/api.service';
       </a>
 
       <h2>Doctor Profile</h2>
+      <div class="profile-details">
       @if (doctor()) {
-        <p>Name: Dr. {{ doctor()!.name }} {{ doctor()!.surname }}</p>
-        <p>Medical Field: {{ doctor()!.medicalField }}</p>
-        <p>Email address: {{ doctor()!.email }}</p>
-        <p>Gender: {{ doctor()!.gender }}</p>
-        <p>Birthday: {{ doctor()!.birthday }}</p>
+        <p><strong>Name:</strong> Dr. {{ doctor()!.name }} {{ doctor()!.surname }}</p>
+        <p><strong>Medical Field:</strong> {{ doctor()!.medicalField }}</p>
+        <p><strong>Email address:</strong> {{ doctor()!.email }}</p>
+        <p><strong>Gender:</strong> {{ doctor()!.gender }}</p>
+        <p><strong>Birthday:</strong> {{ doctor()!.birthday }}</p>
         @if (doctor()!.phone) {
-          <p>Phone number: {{ doctor()!.phone }}</p>
+          <p><strong>Phone number:</strong> {{ doctor()!.phone }}</p>
         }
         @if (doctor()!.address) {
-          <p>Address: {{ doctor()!.address }}</p>
+          <p><strong>Address:</strong> {{ doctor()!.address }}</p>
         }
 
         <a [routerLink]="['edit']" class="nav-button">Edit</a>
@@ -48,6 +49,7 @@ import { ApiService } from '@/services/api/api.service';
       } @else {
         <p>Loading user details...</p>
       }
+    </div>
     </div>
   `,
   styles: ``,

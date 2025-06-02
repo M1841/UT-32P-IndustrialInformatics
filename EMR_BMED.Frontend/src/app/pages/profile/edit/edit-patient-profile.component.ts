@@ -7,20 +7,30 @@ import { switchMap, EMPTY } from 'rxjs';
   selector: 'app-edit-patient-profile',
   imports: [ReactiveFormsModule],
   template: `
+
+    <div class="edit-profile-container">
+      <div class="form-group">
+
     <form [formGroup]="detailsForm" (submit)="updateDetails()">
       <h1>Update Details</h1>
+
+      <div class="form-group">
       <label>
         Name
         <input required formControlName="name" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Surname
         <input required formControlName="surname" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Email
         <input required formControlName="email" />
@@ -29,54 +39,72 @@ import { switchMap, EMPTY } from 'rxjs';
         }
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Phone Number
         <input required formControlName="phone" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Citizenship
         <input required formControlName="citizenship" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Allergies
         <input required formControlName="allergies" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Intolerances
         <input required formControlName="intolerances" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Conditions
         <input required formControlName="conditions" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Blood Type
         <input required formControlName="blood" />
       </label>
       <br />
+      </div>
 
       <button
         type="submit"
         class="nav-button"
-        [disabled]="!this.detailsForm.valid"
-      >
+        [disabled]="!this.detailsForm.valid">
         Submit
       </button>
-    </form>
 
+      </form>
+      </div>
+    </div>
+
+    <div class="edit-password-container">
     <form [formGroup]="passwordForm" (submit)="changePassword()">
       <h1>Change Password</h1>
+      
+      <div class="form-group">
       <label>
         Old Password
         <input required formControlName="oldPassword" type="password" />
@@ -85,21 +113,24 @@ import { switchMap, EMPTY } from 'rxjs';
         }
       </label>
       <br />
-
+      </div>
+     
+      <div class="form-group">
       <label>
         New Password
         <input required formControlName="newPassword" type="password" />
       </label>
       <br />
+      </div>
 
       <button
         type="submit"
         class="nav-button"
-        [disabled]="!this.passwordForm.valid"
-      >
+        [disabled]="!this.passwordForm.valid">
         Submit
       </button>
-    </form>
+
+
   `,
   styles: ``,
 })

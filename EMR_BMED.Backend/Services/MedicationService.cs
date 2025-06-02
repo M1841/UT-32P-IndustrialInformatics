@@ -18,6 +18,7 @@ namespace EMR_BMED.Backend.Services
       var pattern = $"%{query}%";
 
       return dbService.Medication
+        .Take(1000)
         .AsEnumerable()
         .Where(m =>
           new string[] {

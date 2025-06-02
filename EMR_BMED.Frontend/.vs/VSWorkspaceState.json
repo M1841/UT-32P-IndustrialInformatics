@@ -4,8 +4,14 @@
     "\\src",
     "\\src\\app",
     "\\src\\app\\pages",
-    "\\src\\app\\pages\\prescribe",
+    "\\src\\app\\pages\\auth",
+    "\\src\\app\\pages\\auth\\login",
+    "\\src\\app\\pages\\auth\\register",
+    "\\src\\app\\pages\\home",
+    "\\src\\app\\pages\\profile",
+    "\\src\\app\\pages\\profile\\edit",
     "\\src\\app\\services"
   ],
+  "SelectedNode": "\\src\\app\\pages\\auth\\register\\register.component.ts",
   "PreviewInSolutionExplorer": false
 }
