@@ -12,35 +12,38 @@ import { Router, RouterLink } from '@angular/router';
       </a>
 
       <h2>Patient Profile</h2>
+      <div class="profile-details">
       @if (patient()) {
-        <p>Name: {{ patient()!.name }} {{ patient()!.surname }}</p>
-        <p>Email address: {{ patient()!.email }}</p>
-        <p>Gender: {{ patient()!.gender }}</p>
-        <p>Birthday: {{ patient()?.birthday }}</p>
+        <p><strong>Name:</strong> {{ patient()!.name }} {{ patient()!.surname }}</p>
+        
+        <p><strong>Email address:</strong> {{ patient()!.email }}</p>
+        <p><strong>Gender:</strong> {{ patient()!.gender }}</p>
+        <p><strong>Birthday:</strong> {{ patient()?.birthday }}</p>
         @if (patient()!.phone) {
-          <p>Phone number: {{ patient()!.phone }}</p>
+          <p><strong>Phone number:</strong> {{ patient()!.phone }}</p>
         }
         @if (patient()!.allergies) {
-          <p>Allergies: {{ patient()!.allergies }}</p>
+          <p><strong>Allergies:</strong> {{ patient()!.allergies }}</p>
         }
         @if (patient()!.intolerances) {
-          <p>Intolerances: {{ patient()!.intolerances }}</p>
+          <p><strong>Intolerances:</strong> {{ patient()!.intolerances }}</p>
         }
         @if (patient()!.conditions) {
-          <p>Conditions: {{ patient()!.conditions }}</p>
+          <p><strong>Conditions:</strong> {{ patient()!.conditions }}</p>
         }
         @if (patient()!.blood) {
-          <p>Blood type: {{ patient()!.blood }}</p>
+          <p><strong>Blood type:</strong> {{ patient()!.blood }}</p>
         }
         @if (patient()!.citizenship) {
-          <p>Citizenship: {{ patient()!.citizenship }}</p>
+          <p><strong>Citizenship:</strong> {{ patient()!.citizenship }}</p>
         }
         @if (patient()!.socialNumber) {
-          <p>Social number: {{ patient()!.socialNumber }}</p>
+          <p><strong>Social number:</strong> {{ patient()!.socialNumber }}</p>
+        
         }
-
+      
         <a [routerLink]="['edit']" class="nav-button">Edit</a>
-
+      
         <button (click)="openDeleteDialog()" class="logout-btn">
           Delete Account
         </button>
@@ -61,6 +64,7 @@ import { Router, RouterLink } from '@angular/router';
       } @else {
         <p>Loading user details...</p>
       }
+      </div>
     </div>
   `,
 })

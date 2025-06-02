@@ -7,20 +7,27 @@ import { EMPTY, switchMap } from 'rxjs';
   selector: 'app-edit-doctor-profile',
   imports: [ReactiveFormsModule],
   template: `
+  <div class="edit-profile-container">
+      <div class="form-group">
     <form [formGroup]="detailsForm" (submit)="updateDetails()">
       <h1>Update Details</h1>
+      <div class="form-group">
       <label>
         Name
         <input required formControlName="name" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Surname
         <input required formControlName="surname" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Email
         <input required formControlName="email" />
@@ -29,18 +36,23 @@ import { EMPTY, switchMap } from 'rxjs';
         }
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Phone Number
         <input required formControlName="phone" />
       </label>
       <br />
+      </div>
 
+      <div class="form-group">
       <label>
         Address
         <input required formControlName="address" />
       </label>
       <br />
+      </div>
 
       <button
         type="submit"
@@ -76,6 +88,8 @@ import { EMPTY, switchMap } from 'rxjs';
         Submit
       </button>
     </form>
+      </div>
+  </div>
   `,
   styles: ``,
 })

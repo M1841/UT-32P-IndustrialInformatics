@@ -9,113 +9,92 @@ import { RouterLink } from '@angular/router';
   imports: [ReactiveFormsModule, RouterLink],
   template: `
     @if (isLoading()) {
-      loading...
-    } @else {
-      <div style="display: flex; width: 100%; gap: 1rem">
-        <main style="width: 50%">
-          <span>
-            <form [formGroup]="searchForm" (input)="handleSearch()">
-              <input required placeholder="Search" formControlName="query" />
-            </form>
+  <div class="loading-state">
+    loading...
+  </div>
+} @else {
+  <div class="med-search-container">
+    <main>
+      <!-- Search Form -->
+      <form class="search-form" [formGroup]="searchForm" (input)="handleSearch()">
+        <input
+          required
+          placeholder="Search"
+          formControlName="query"
+        />
+      </form>
 
-            <button (click)="setPage(1)" [disabled]="page() === 1">
-              &lt;&lt;
-            </button>
-            <button (click)="setPage(page() - 1)" [disabled]="page() === 1">
-              &lt;
-            </button>
-            <span>Page {{ page() }}</span>
-            <button
-              (click)="setPage(page() + 1)"
-              [disabled]="page() === lastPage()"
-            >
-              &gt;
-            </button>
-            <button
-              (click)="setPage(lastPage())"
-              [disabled]="page() === lastPage()"
-            >
-              &gt;&gt;
-            </button>
-          </span>
-          <ul>
-            @for (med of displayedMeds(); track $index) {
-              <li (click)="selectMed(med)" style="cursor: pointer">
-                <strong>Name:</strong> {{ med.name }} <br />
-                <strong>Brand:</strong> {{ med.brand }} <br />
-                <hr />
-              </li>
-            }
-          </ul>
-          <span>
-            <button (click)="setPage(1)" [disabled]="page() === 1">
-              &lt;&lt;
-            </button>
-            <button (click)="setPage(page() - 1)" [disabled]="page() === 1">
-              &lt;
-            </button>
-            <span>Page {{ page() }}</span>
-            <button
-              (click)="setPage(page() + 1)"
-              [disabled]="page() === lastPage()"
-            >
-              &gt;
-            </button>
-            <button
-              (click)="setPage(lastPage())"
-              [disabled]="page() === lastPage()"
-            >
-              &gt;&gt;
-            </button>
-          </span>
-        </main>
-        <aside style="width: 50%">
-          @if (displayedMed() !== null) {
-            <h2>{{ displayedMed().name }} - {{ displayedMed().brand }}</h2>
-            <p>
-              <strong>Dosage Form:</strong>
-              {{ displayedMed().form }}
-            </p>
-            <p>
-              <strong>Administration Method:</strong>
-              {{ displayedMed().method }}
-            </p>
-            <p>
-              <strong>Requires Prescription:</strong>
-              {{ displayedMed().isPresRequired ? 'Yes' : 'No' }}
-            </p>
-            <p>
-              <strong>Indications:</strong>
-              {{ displayedMed().indications }}
-            </p>
-            <p>
-              <strong>Contraindications:</strong>
-              {{ displayedMed().contraindications }}
-            </p>
-            <p>
-              <strong>Side Effects:</strong>
-              {{ displayedMed().sideEffects }}
-            </p>
-            <p>
-              <strong>Warnings:</strong>
-              {{ displayedMed().warnings }}
-            </p>
-            <p>
-              <strong>Storing:</strong>
-              {{ displayedMed().storing }}
-            </p>
-            @if (isDoctor()) {
-              <a
-                [routerLink]="['../prescriptions/create']"
-                [queryParams]="{ medId: displayedMed().id }"
-                class="nav-button"
-              >
-                Add to a prescription
-              </a>
-            }
-          }
-        </aside>
+      <!-- Top Pagination Controls -->
+      <div class="pagination-controls">
+        <button (click)="setPage(1)" [disabled]="page() === 1">
+          &lt;&lt;
+        </button>
+        <button (click)="setPage(page() - 1)" [disabled]="page() === 1">
+          &lt;
+        </button>
+        <span>Page {{ page() }}</span>
+        <button (click)="setPage(page() + 1)" [disabled]="page() === lastPage()">
+          &gt;
+        </button>
+        <button (click)="setPage(lastPage())" [disabled]="page() === lastPage()">
+          &gt;&gt;
+        </button>
       </div>
+
+      <!-- Medication List -->
+      <ul class="med-list">
+        @for (med of displayedMeds(); track $index) {
+          <li (click)="selectMed(med)">
+            <strong>Name:</strong> {{ med.name }}<br />
+            <strong>Brand:</strong> {{ med.brand }}<br />
+          </li>
+        }
+      </ul>
+
+      <!-- Bottom Pagination Controls -->
+      <div class="pagination-controls">
+        <button (click)="setPage(1)" [disabled]="page() === 1">
+          &lt;&lt;
+        </button>
+        <button (click)="setPage(page() - 1)" [disabled]="page() === 1">
+          &lt;
+        </button>
+        <span>Page {{ page() }}</span>
+        <button (click)="setPage(page() + 1)" [disabled]="page() === lastPage()">
+          &gt;
+        </button>
+        <button (click)="setPage(lastPage())" [disabled]="page() === lastPage()">
+          &gt;&gt;
+        </button>
+      </div>
+    </main>
+
+    <aside class="med-details">
+      @if (displayedMed() !== null) {
+        <h2>{{ displayedMed().name }} – {{ displayedMed().brand }}</h2>
+        <p><strong>Dosage Form:</strong> {{ displayedMed().form }}</p>
+        <p><strong>Administration Method:</strong> {{ displayedMed().method }}</p>
+        <p>
+          <strong>Requires Prescription:</strong>
+          {{ displayedMed().isPresRequired ? 'Yes' : 'No' }}
+        </p>
+        <p><strong>Indications:</strong> {{ displayedMed().indications }}</p>
+        <p><strong>Contraindications:</strong> {{ displayedMed().contraindications }}</p>
+        <p><strong>Side Effects:</strong> {{ displayedMed().sideEffects }}</p>
+        <p><strong>Warnings:</strong> {{ displayedMed().warnings }}</p>
+        <p><strong>Storing:</strong> {{ displayedMed().storing }}</p>
+        @if (isDoctor()) {
+          <a
+            [routerLink]="['../prescriptions/create']"
+            [queryParams]="{ medId: displayedMed().id }"
+            class="nav-button"
+          >
+            Add to a prescription
+          </a>
+        }
+      }
+    </aside>
+  </div>
     }
   `,
   styles: ``,
