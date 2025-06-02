@@ -5,29 +5,32 @@ import { ApiService } from '@/services/api/api.service';
 @Component({
   selector: 'app-home',
   imports: [],
-  template: `
-    @if (isAuthenticated() && user() !== null) {
-      <div class="basic-container">
-        <div class="nav-section">
-          <h1>
-            Welcome
-            <strong>
-              {{ user()!.isDoctor ? 'Dr. ' : '' }}{{ user()!.name }}
-              {{ user()!.surname }}</strong
-            >!
-          </h1>
-        </div>
-        <br />
-      </div>
-    } @else {
-      <div class="auth-options">
-        <a href="auth/login" class="auth-button">Login</a> <br />
-        <a href="auth/register" class="auth-button">Register (Patient)</a>
-        <br />
-        <a href="auth/register/doctor" class="auth-button">Register (Doctor)</a>
-      </div>
-    }
-  `,
+  styleUrls: ['./auth.css'],
+  templateUrl: './home.html',
+  // template: `
+  //   @if (isAuthenticated() && user() !== null) {
+  //     <div class="basic-container">
+  //       <div class="nav-section">
+  //         <h1>
+  //           Welcome
+  //           <strong>
+  //             {{ user()!.isDoctor ? 'Dr. ' : '' }}{{ user()!.name }}
+  //             {{ user()!.surname }}</strong
+  //           >!
+  //         </h1>
+  //       </div>
+  //       <br />
+  //     </div>
+  //   } @else {
+  //     <div class="test">test</div>
+  //     <div class="auth-options">
+  //       <a href="auth/login" class="auth-button">Login</a> <br />
+  //       <a href="auth/register" class="auth-button">Register (Patient)</a>
+  //       <br />
+  //       <a href="auth/register/doctor" class="auth-button">Register (Doctor)</a>
+  //     </div>
+  //   }
+  // `,
 })
 export class HomeComponent {
   readonly user = signal<{

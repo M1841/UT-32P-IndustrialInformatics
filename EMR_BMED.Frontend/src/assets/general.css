@@ -1,5 +1,22 @@
+.page-bottom, .page-top {
+    position: absolute;
+    right: 0;
+    left: 0;
+}
+
+.wrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+}
+
 /* HEADER */
 .page-top {
+    top: 0;
     margin: 0 4vh;
     padding: 2px;
     background: linear-gradient(360deg, var(--primary-light-color), 30%, var(--background-color)); 
@@ -56,52 +73,57 @@
 
 /* FOOTER */
 .page-bottom {
-    position: relative;
-    margin: 0 4vh;
-    padding: 2px;
-}
-
-.line {
-    height: 3px;
-    background-color: var(--primary-light-color);
-    border-radius: 99px;
-    margin: 0 20px;
-    margin-bottom: 20px;
+    bottom: 0;
+    /* padding-top: 1em; */
+    padding-bottom: 1vh;
+    background-color: var(--primary-dark-color);
 }
 
 .footer {
-    margin: -2px;
-    padding-right: 4px;
-    padding-top: 3vh;
-    background-color: var(--background-color);
+    padding-top: 2em;
+    color: var(--background-color);
     display: grid;
     grid-template-columns: 20% 80%;
-    grid-template-rows: 50% 50%; 
+    /* grid-template-rows: 50% 50%;  */
     grid-template-areas:
     "box-1 box-3"
     "box-2 box-3";
-    place-items: center;
+    /* place-items: center; */
 }
 
 .icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-area: box-1 / box-2;
     /* background-color: green; */
-    padding: 0 20px;
+    padding: 10px;
 }
 
-.home-icon {
-    width: 100px;
-    padding-left: 50px;
-    /* background-color: red; */
+.home-icon img {
+    display: block;
+    margin-top: 10px;
 }
 
 #rights {
-    /* background-color: blue; */
-    padding: 0 20px;
+    margin-top: -5px;
 }
 
 .info {
-    /* background-color: yellow; */
-    margin-left: 15px;
-    padding: 0 20px;
-    place-self: stretch;
+    grid-area: box-3;
+    display: flex;
+    justify-content: space-around;
+    /* background-color: purple; */
+    align-items: flex-start;
+    width: 100%;
+    padding: 1rem;
+}
+
+.info > div {
+    /* background-color: cadetblue; */
+    padding: 1rem;
+    width: 25%;
+    height: 80%;
+    text-align: center;
+    align-content: center;
 }

@@ -7,46 +7,48 @@ import { ApiService } from '@/services/api/api.service';
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule],
-  template: `
-    <div class="login-container">
-      <a href="/" class="home-icon">
-        <img src="Logo.png" alt="Home" width="64" height="64" />
-      </a>
+  styleUrl: '../auth.css',
+  templateUrl: './login.html',
+  // template: `
+  //   <div class="login-container">
+  //     <a href="/" class="home-icon">
+  //       <img src="Logo.png" alt="Home" width="64" height="64" />
+  //     </a>
 
-      <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-        <h2><b>Login Form</b></h2>
-        <a href="auth/register" class="link">Don't have an account?</a><br />
-        <br />
+  //     <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+  //       <h2><b>Login Form</b></h2>
+  //       <a href="auth/register" class="link">Don't have an account?</a><br />
+  //       <br />
 
-        <div class="form-group">
-          <label for="email">Email</label>
-          <div class="input-wrapper">
-            <input required id="email" type="text" formControlName="email" />
-            @if (errors.email() !== '') {
-              <span>{{ errors.email() }}</span>
-            }
-          </div>
-        </div>
-        <br />
+  //       <div class="form-group">
+  //         <label for="email">Email</label>
+  //         <div class="input-wrapper">
+  //           <input required id="email" type="text" formControlName="email" />
+  //           @if (errors.email() !== '') {
+  //             <span>{{ errors.email() }}</span>
+  //           }
+  //         </div>
+  //       </div>
+  //       <br />
 
-        <div class="form-group">
-          <label for="password">Password</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="password"
-              type="password"
-              formControlName="password"
-            />
-            @if (errors.password() !== '') {
-              <span>{{ errors.password() }}</span>
-            }
-          </div>
-        </div>
-        <button type="submit" class="nav-button">Login</button>
-      </form>
-    </div>
-  `,
+  //       <div class="form-group">
+  //         <label for="password">Password</label>
+  //         <div class="input-wrapper">
+  //           <input
+  //             required
+  //             id="password"
+  //             type="password"
+  //             formControlName="password"
+  //           />
+  //           @if (errors.password() !== '') {
+  //             <span>{{ errors.password() }}</span>
+  //           }
+  //         </div>
+  //       </div>
+  //       <button type="submit" class="nav-button">Login</button>
+  //     </form>
+  //   </div>
+  // `,
 })
 export class LoginComponent {
   readonly form = new FormGroup({

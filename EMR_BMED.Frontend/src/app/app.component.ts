@@ -32,18 +32,18 @@ import { ApiService } from './services/api/api.service';
     }
     <router-outlet />
 
-    <span class="line"></span>
     <div class="page-bottom">
       <div class="footer">
         <div class="icon">
           <a [routerLink]="['/']" class="home-icon" style="grid-area: box-1">
-            <img src="Logo.png" alt="Home" width="64" height="64" />
+            <img src="Logo.png" alt="Home" width="96" height="96" />
           </a>
           <p id="rights" style="grid-area: box-2">All rights reserved.</p>
         </div>
         <div class="info" style="grid-area: box-3">
-          <p>This section will contain links and what not</p>
-          <div></div>
+          <div>Outer links</div>
+          <div>Inner links</div>
+          <div>Contact info</div>
         </div>
       </div>
     </div>
