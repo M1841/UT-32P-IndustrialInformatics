@@ -1,0 +1,212 @@
+
+/*=========================================
+  MEDICATION SEARCH & DETAILS STYLING
+==========================================*/
+
+/* Container wrapping both main list and aside details */
+.med-search-container {
+  display: flex;
+  width: 100%;
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) auto;
+  max-width: var(--max-content-width);
+  padding: var(--spacing-md);
+  background-color: var(--background-color);
+  border-radius: var(--corner-radius);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.med-search-container main,
+.med-search-container aside {
+  background-color: var(--secondary-color);
+  border-radius: var(--corner-radius);
+  padding: var(--spacing-md);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Make columns equal width */
+.med-search-container main {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.med-search-container aside {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+/* SEARCH FORM */
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.search-form input[formControlName="query"] {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--corner-radius);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.search-form input:focus {
+  outline: none;
+  border-color: var(--input-focus-color);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+/* PAGINATION CONTROLS */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.pagination-controls button {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--corner-radius);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.pagination-controls button:disabled {
+  background-color: #a5b4fc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pagination-controls button:not(:disabled):hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.pagination-controls button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.pagination-controls span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+/* MEDICATION LIST */
+.med-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.med-list li {
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.med-list li:hover {
+  background-color: var(--surface-color);
+}
+
+.med-list li:last-child {
+  border-bottom: none;
+}
+
+.med-list strong {
+  color: var(--label-color);
+}
+
+/* MEDICATION DETAILS (aside) */
+.med-details h2 {
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--primary-color);
+}
+
+.med-details p {
+  margin-bottom: var(--spacing-sm);
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.med-details p strong {
+  color: var(--label-color);
+}
+
+.med-details .nav-button {
+  margin-top: var(--spacing-md);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* LOADING STATE */
+.loading-state {
+  font-size: 1rem;
+  color: var(--label-color);
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+/*=========================================
+           RESPONSIVE BREAKPOINTS
+==========================================*/
+@media (max-width: 768px) {
+  .med-search-container {
+    flex-direction: column;
+    padding: var(--spacing-md);
+    gap: var(--spacing-lg);
+  }
+
+  .med-search-container main,
+  .med-search-container aside {
+    width: 100%;
+  }
+
+  .pagination-controls {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .med-search-container {
+    padding: var(--spacing-sm);
+  }
+
+  .search-form input {
+    font-size: 0.95rem;
+  }
+
+  .pagination-controls button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .med-details h2 {
+    font-size: 1.5rem;
+  }
+
+  .med-details p {
+    font-size: 0.95rem;
+  }
+}

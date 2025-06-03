@@ -8,12 +8,15 @@ import { Router, RouterLink } from '@angular/router';
   imports: [RouterLink],
   template: `
     @if (user() != null) {
+      <div class="prescription-component">
       <div style="padding-left: 3rem; padding-right: 3rem">
         <h2>Your prescriptions:</h2>
         @if (this.user()!.isDoctor) {
           <a [routerLink]="['create']" class="nav-button">New Prescription</a>
           <br />
         }
+
+        <div class="info-prescription-component">
         <ul>
           @for (prescription of prescriptions(); track $index) {
             <li>
@@ -57,6 +60,7 @@ import { Router, RouterLink } from '@angular/router';
             <hr />
           }
         </ul>
+        </div>
         <dialog>
           <form method="dialog">
             @if (selectedPrescription() !== null) {
@@ -86,6 +90,7 @@ import { Router, RouterLink } from '@angular/router';
             }
           </form>
         </dialog>
+      </div>
       </div>
     }
   `,

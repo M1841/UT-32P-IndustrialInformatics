@@ -73,7 +73,7 @@ namespace EMR_BMED.Backend
         endpoints.MapControllers();
       });
 
-      // DbService.SeedTestData(false);
+      //DbService.SeedTestData(false);
     }
   }
 }

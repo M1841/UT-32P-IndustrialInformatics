@@ -71,7 +71,7 @@ import { EMPTY, map, switchMap } from 'rxjs';
         <br />
 
         <div class="form-group">
-          <label for="isApproved">Is Approved</label>
+          <label for="isApproved">Is approved by a doctor</label>
           <div class="input-wrapper">
             <input type="checkbox" formControlName="isApproved" />
           </div>
@@ -79,7 +79,7 @@ import { EMPTY, map, switchMap } from 'rxjs';
         <br />
 
         <div class="form-group">
-          <label for="isMF">Is MF</label>
+          <label for="isMF">Is prescribed by family doctor</label>
           <div class="input-wrapper">
             <input type="checkbox" formControlName="isMF" />
           </div>
@@ -87,7 +87,7 @@ import { EMPTY, map, switchMap } from 'rxjs';
         <br />
 
         <div class="form-group">
-          <label for="isAmbulatory">Is Ambulatory</label>
+          <label for="isAmbulatory">Is ambulatory</label>
           <div class="input-wrapper">
             <input type="checkbox" formControlName="isAmbulatory" />
           </div>
@@ -95,166 +95,167 @@ import { EMPTY, map, switchMap } from 'rxjs';
         <br />
 
         <div class="form-group">
-          <label for="isHospital">Is Hospital</label>
+          <label for="isHospital">Is hospital treatment</label>
           <div class="input-wrapper">
             <input type="checkbox" formControlName="isHospital" />
           </div>
         </div>
         <br />
 
-        <div class="form-group">
-          <label for="isOther">Is Other</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isOther" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isOther">Is other type of care</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isOther" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isMFMM">Is MFMM</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isMFMM" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isMFMM">Is mixed-mode care</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isMFMM" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isSalariat">Is Salariat</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isSalariat" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isSalariat">Is employed</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isSalariat" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isCoasigurat">Is Coasigurat</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isCoasigurat" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isCoasigurat">Is co-insured</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isCoasigurat" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isLiberProfesionist">Is Liber Profesionist</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isLiberProfesionist" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isLiberProfesionist">Is freelancer</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isLiberProfesionist" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isCopil">Is Copil</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isCopil" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isCopil">Is child</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isCopil" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isStudent">Is Student</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isStudent" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isStudent">Is student</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isStudent" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isGravida">Is Gravida</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isGravida" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isGravida">Is pregnant</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isGravida" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isPensionar">Is Pensionar</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isPensionar" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isPensionar">Is pensioner</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isPensionar" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isVeteran">Is Veteran</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isVeteran" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isVeteran">Is veteran</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isVeteran" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isLowIncome">Is Low Income</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isLowIncome" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isLowIncome">Is low-income</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isLowIncome" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isRevolutionar">Is Revolutionar</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isRevolutionar" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isRevolutionar">Is revolutionary</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isRevolutionar" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isHandicap">Is Handicap</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isHandicap" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isHandicap">Is handicapped</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isHandicap" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isAjutorSocial">Is Ajutor Social</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isAjutorSocial" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isAjutorSocial">Is social welfare recipient</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isAjutorSocial" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isSomaj">Is Somaj</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isSomaj" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isSomaj">Is unemployed</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isSomaj" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isPersonalContractual">Is Personal Contractual</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isPersonalContractual" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isPersonalContractual">Is contracted personnel</label>
+              <div class="input-wrapper">
+                <input
+                  type="checkbox"
+                  formControlName="isPersonalContractual"
+                />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isCardEuropean">Is Card European</label>
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isCardEuropean" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isCardEuropean">Has European Health Insurance Card</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isCardEuropean" />
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isAcorduriInternationale"
-            >Is Acorduri Internationale</label
-          >
-          <div class="input-wrapper">
-            <input type="checkbox" formControlName="isAcorduriInternationale" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isAcorduriInternationale">Is covered under international health agreements</label>
+              <div class="input-wrapper">
+                <input type="checkbox" formControlName="isAcorduriInternationale"/>
+              </div>
+            </div>
+            <br />
 
-        <div class="form-group">
-          <label for="isOtherCategories">Is Other Categories</label>
-          <div class="input-wrapper">
-            <input type="text" formControlName="isOtherCategories" />
-          </div>
-        </div>
-        <br />
+            <div class="form-group">
+              <label for="isOtherCategories">Other categories</label>
+              <div class="input-wrapper">
+                <input type="text" formControlName="isOtherCategories" />
+              </div>
+            </div>
+            <br />
 
         <button type="submit" [disabled]="form.invalid" class="nav-button">
           Submit

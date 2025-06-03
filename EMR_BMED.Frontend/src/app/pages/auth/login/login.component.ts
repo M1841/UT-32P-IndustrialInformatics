@@ -7,7 +7,6 @@ import { ApiService } from '@/services/api/api.service';
 @Component({
   selector: 'app-login',
   imports: [ReactiveFormsModule],
-  styleUrl: '../auth.css',
   templateUrl: './login.html',
   // template: `
   //   <div class="login-container">

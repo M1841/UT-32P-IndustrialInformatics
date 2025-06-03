@@ -7,341 +7,338 @@ import { map, tap } from 'rxjs';
 @Component({
   selector: 'app-prescribe',
   imports: [ReactiveFormsModule],
-  template: `
-    <div class="register-container">
-      <a href="/" class="home-icon">
-        <img src="Logo.png" alt="Home" width="64" height="64" />
-      </a>
+  templateUrl: './create-prescription.html',
+  // template: `
+  //   <div class="register-container">
+  //     <a href="/" class="home-icon">
+  //       <img src="Logo.png" alt="Home" width="64" height="64" />
+  //     </a>
 
-      <h1>Prescription Form</h1>
-      <div style="width:100%; display: flex">
-        <form [formGroup]="form" (ngSubmit)="handleSubmit()" style="width: 66%">
-          <input required type="hidden" formControlName="doctorId" />
-          @if (page() === 1) {
-            <section>
-              <h1>Patient</h1>
-              <form [formGroup]="patientSearch" (input)="loadPatients()">
-                <input required placeholder="Search" formControlName="query" />
-              </form>
-              <ul>
-                @for (patient of patients(); track $index) {
-                  <li>
-                    <p>
-                      <strong>Full Name:</strong> {{ patient.name }}
-                      {{ patient.surname }}
-                    </p>
-                    <p><strong>Email:</strong> {{ patient.email }}</p>
-                    <p>
-                      <strong>Social Number:</strong> {{ patient.socialNumber }}
-                    </p>
-                    <button
-                      type="button"
-                      class="nav-button"
-                      (click)="selectPatient(patient)"
-                    >
-                      Select
-                    </button>
-                    <hr />
-                  </li>
-                }
-              </ul>
-            </section>
-          }
-          @if (page() === 2) {
-            <section>
-              <h1>Medication</h1>
-              <button
-                type="button"
-                (click)="setPage(3)"
-                class="nav-button"
-                [disabled]="selectedMeds().length <= 0"
-              >
-                Continue
-              </button>
-              <form [formGroup]="medicationSearch" (input)="loadMedications()">
-                <input required placeholder="Search" formControlName="query" />
-              </form>
-              <ul></ul>
-              <ul>
-                @for (med of medications(); track $index) {
-                  <li>
-                    <p><strong>Name:</strong> {{ med.name }}</p>
-                    <p><strong>Brand:</strong> {{ med.brand }}</p>
-                    <p><strong>Dosage Form:</strong> {{ med.form }}</p>
-                    <p><strong>Storing:</strong> {{ med.storing }}</p>
-                    <button
-                      type="button"
-                      class="nav-button"
-                      (click)="addMed(med)"
-                    >
-                      Add
-                    </button>
-                    <button
-                      type="button"
-                      class="logout-btn"
-                      (click)="removeMed(med)"
-                    >
-                      Remove
-                    </button>
-                    <hr />
-                  </li>
-                }
-              </ul>
-            </section>
-          }
-          @if (page() === 3) {
-            <div class="form-group">
-              <label for="CAS">CAS Number</label>
-              <div class="input-wrapper">
-                <input type="text" formControlName="CAS" required />
-              </div>
-            </div>
-            <br />
+  //     <h1>Prescription Form</h1>
+  //     <div style="width:100%; display: flex">
+  //       <form [formGroup]="form" (ngSubmit)="handleSubmit()" style="width: 66%">
+  //         <input required type="hidden" formControlName="doctorId" />
+  //         @if (page() === 1) {
+  //           <section>
+  //             <h1>Patient</h1>
+  //             <form [formGroup]="patientSearch" (input)="loadPatients()">
+  //               <input required placeholder="Search" formControlName="query" />
+  //             </form>
+  //             <ul>
+  //               @for (patient of patients(); track $index) {
+  //                 <li>
+  //                   <p>
+  //                     <strong>Full Name:</strong> {{ patient.name }}
+  //                     {{ patient.surname }}
+  //                   </p>
+  //                   <p><strong>Email:</strong> {{ patient.email }}</p>
+  //                   <p>
+  //                     <strong>Social Number:</strong> {{ patient.socialNumber }}
+  //                   </p>
+  //                   <button
+  //                     type="button"
+  //                     class="nav-button"
+  //                     (click)="selectPatient(patient)"
+  //                   >
+  //                     Select
+  //                   </button>
+  //                   <hr />
+  //                 </li>
+  //               }
+  //             </ul>
+  //           </section>
+  //         }
+  //         @if (page() === 2) {
+  //           <section>
+  //             <h1>Medication</h1>
+  //             <button
+  //               type="button"
+  //               (click)="setPage(3)"
+  //               class="nav-button"
+  //               [disabled]="selectedMeds().length <= 0"
+  //             >
+  //               Continue
+  //             </button>
+  //             <form [formGroup]="medicationSearch" (input)="loadMedications()">
+  //               <input required placeholder="Search" formControlName="query" />
+  //             </form>
+  //             <ul></ul>
+  //             <ul>
+  //               @for (med of medications(); track $index) {
+  //                 <li>
+  //                   <p><strong>Name:</strong> {{ med.name }}</p>
+  //                   <p><strong>Brand:</strong> {{ med.brand }}</p>
+  //                   <p><strong>Dosage Form:</strong> {{ med.form }}</p>
+  //                   <p><strong>Storing:</strong> {{ med.storing }}</p>
+  //                   <button
+  //                     type="button"
+  //                     class="nav-button"
+  //                     (click)="addMed(med)"
+  //                   >
+  //                     Add
+  //                   </button>
+  //                   <button
+  //                     type="button"
+  //                     class="logout-btn"
+  //                     (click)="removeMed(med)"
+  //                   >
+  //                     Remove
+  //                   </button>
+  //                   <hr />
+  //                 </li>
+  //               }
+  //             </ul>
+  //           </section>
+  //         }
+  //         @if (page() === 3) {
+  //           <div class="form-group">
+  //             <label for="CAS">CAS Number</label>
+  //             <div class="input-wrapper">
+  //               <input type="text" formControlName="CAS" required />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="CUI">CUI Number</label>
-              <div class="input-wrapper">
-                <input type="text" formControlName="CUI" required />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="CUI">CUI Number</label>
+  //             <div class="input-wrapper">
+  //               <input type="text" formControlName="CUI" required />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="daysNumber">Number of Days</label>
-              <div class="input-wrapper">
-                <input type="number" formControlName="daysNumber" required />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="daysNumber">Number of Days</label>
+  //             <div class="input-wrapper">
+  //               <input type="number" formControlName="daysNumber" required />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="diagnostic">Diagnostic</label>
-              <div class="input-wrapper">
-                <input type="text" formControlName="diagnostic" required />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="diagnostic">Diagnostic</label>
+  //             <div class="input-wrapper">
+  //               <input type="text" formControlName="diagnostic" required />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="medUnit">Medication Unit</label>
-              <div class="input-wrapper">
-                <input type="text" formControlName="medUnit" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="isApproved">Is Approved</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isApproved" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="medUnit">Medication Unit</label>
+  //             <div class="input-wrapper">
+  //               <input type="text" formControlName="medUnit" required />
+  //             </div>
+  //           </div>
 
-            <div class="form-group">
-              <label for="isMF">Is MF</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isMF" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isApproved">Is approved by a doctor</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isApproved" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isAmbulatory">Is Ambulatory</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isAmbulatory" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isMF">Is prescribed by family doctor</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isMF" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isHospital">Is Hospital</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isHospital" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isAmbulatory">Is ambulatory</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isAmbulatory" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isOther">Is Other</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isOther" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isHospital">Is hospital treatment</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isHospital" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isMFMM">Is MFMM</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isMFMM" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isOther">Is other type of care</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isOther" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isSalariat">Is Salariat</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isSalariat" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isMFMM">Is mixed-mode care</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isMFMM" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isCoasigurat">Is Coasigurat</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isCoasigurat" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isSalariat">Is employed</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isSalariat" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isLiberProfesionist">Is Liber Profesionist</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isLiberProfesionist" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isCoasigurat">Is co-insured</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isCoasigurat" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isCopil">Is Copil</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isCopil" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isLiberProfesionist">Is freelancer</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isLiberProfesionist" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isStudent">Is Student</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isStudent" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isCopil">Is child</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isCopil" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isGravida">Is Gravida</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isGravida" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isStudent">Is student</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isStudent" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isPensionar">Is Pensionar</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isPensionar" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isGravida">Is pregnant</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isGravida" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isVeteran">Is Veteran</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isVeteran" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isPensionar">Is pensioner</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isPensionar" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isLowIncome">Is Low Income</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isLowIncome" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isVeteran">Is veteran</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isVeteran" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isRevolutionar">Is Revolutionar</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isRevolutionar" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isLowIncome">Is low-income</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isLowIncome" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isHandicap">Is Handicap</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isHandicap" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isRevolutionar">Is revolutionary</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isRevolutionar" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isAjutorSocial">Is Ajutor Social</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isAjutorSocial" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isHandicap">Is handicapped</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isHandicap" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isSomaj">Is Somaj</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isSomaj" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isAjutorSocial">Is social welfare recipient</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isAjutorSocial" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isPersonalContractual">Is Personal Contractual</label>
-              <div class="input-wrapper">
-                <input
-                  type="checkbox"
-                  formControlName="isPersonalContractual"
-                />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isSomaj">Is unemployed</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isSomaj" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isCardEuropean">Is Card European</label>
-              <div class="input-wrapper">
-                <input type="checkbox" formControlName="isCardEuropean" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isPersonalContractual">Is contracted personnel</label>
+  //             <div class="input-wrapper">
+  //               <input
+  //                 type="checkbox"
+  //                 formControlName="isPersonalContractual"
+  //               />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isAcorduriInternationale"
-                >Is Acorduri Internationale</label
-              >
-              <div class="input-wrapper">
-                <input
-                  type="checkbox"
-                  formControlName="isAcorduriInternationale"
-                />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isCardEuropean">Has European Health Insurance Card</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isCardEuropean" />
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <div class="form-group">
-              <label for="isOtherCategories">Is Other Categories</label>
-              <div class="input-wrapper">
-                <input type="text" formControlName="isOtherCategories" />
-              </div>
-            </div>
-            <br />
+  //           <div class="form-group">
+  //             <label for="isAcorduriInternationale">Is covered under international health agreements</label>
+  //             <div class="input-wrapper">
+  //               <input type="checkbox" formControlName="isAcorduriInternationale"/>
+  //             </div>
+  //           </div>
+  //           <br />
 
-            <button type="submit" [disabled]="form.invalid" class="nav-button">
-              Submit
-            </button>
-          }
-        </form>
-        <aside style="width: 33%">
-          <p>
-            <strong>Patient:</strong> {{ selectedPatient().name }}
-            {{ selectedPatient().surname }}
-          </p>
-          <div>
-            <strong>Medication:</strong>
-            <ul>
-              @for (med of selectedMeds(); track $index) {
-                <li>{{ med.name }} - {{ med.brand }}</li>
-              }
-            </ul>
-          </div>
-        </aside>
-      </div>
-    </div>
-  `,
+  //           <div class="form-group">
+  //             <label for="isOtherCategories">Other categories</label>
+  //             <div class="input-wrapper">
+  //               <input type="text" formControlName="isOtherCategories" />
+  //             </div>
+  //           </div>
+  //           <br />
+
+  //           <button type="submit" [disabled]="form.invalid" class="nav-button">
+  //             Submit
+  //           </button>
+  //         }
+  //       </form>
+  //       <aside style="width: 33%">
+  //         <p>
+  //           <strong>Patient:</strong> {{ selectedPatient().name }}
+  //           {{ selectedPatient().surname }}
+  //         </p>
+  //         <div>
+  //           <strong>Medication:</strong>
+  //           <ul>
+  //             @for (med of selectedMeds(); track $index) {
+  //               <li>{{ med.name }} - {{ med.brand }}</li>
+  //             }
+  //           </ul>
+  //         </div>
+  //       </aside>
+  //     </div>
+  //   </div>
+  // `,
 })
 export class CreatePrescriptionComponent {
   readonly page = signal<number>(1);

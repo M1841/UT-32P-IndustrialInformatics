@@ -1,0 +1,168 @@
+/*=========================================
+                  PROFILE
+==========================================*/
+.profile-container {
+    width: clamp(200px, 50%, 600px);
+    margin: auto;
+    margin-top: clamp(20px, 25%, 250px);
+    margin-bottom: clamp(20px, 25%, 50px);
+    background: linear-gradient(
+        var(--primary-light-color),
+        #f9f9f9
+    );
+    border: 2px solid rgba(221, 235, 157, 0.85);
+    padding: 10px;
+    border-radius: 24px;
+}
+
+.profile-title {
+    margin: 0;
+    padding-left: var(--spacing-lg);
+}
+
+.profile-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-details { 
+    border: 1px solid rgba(221, 235, 157, 0.85);
+    background: linear-gradient(
+        0deg,
+        white 60%,
+        var(--background-color)
+    );
+    border-radius: var(--corner-radius);
+    margin: 0;
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+}
+
+.profile-details-text {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.profile-details p {
+  margin: 0;
+}
+
+.profile-details p > strong {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-details p {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .profile-details {
+    padding: var(--spacing-md);
+    /* gap: var(--spacing-md); */
+  }
+  /* .profile-details p > strong {
+    font-size: 0.7rem;
+  }
+  .profile-details p {
+    font-size: 0.95rem;
+  } */
+}
+
+/*=========================================
+       EDIT PROFILE & PASSWORD FORMS
+==========================================*/
+.edit-profile-container,
+.edit-password-container {
+  background-color: var(--secondary-color);
+  border-radius: var(--corner-radius);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+ margin-left: auto;
+  margin-right: auto;
+
+  max-width: 600px;
+
+  /* existing hover transition */
+  transition: transform var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.edit-profile-container:hover,
+.edit-password-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.edit-profile-container h1,
+.edit-password-container h1 {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  color: var(--primary-light-color);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+    width: unset;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    color: var(--label-color);
+    margin-bottom: var(--spacing-xs);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--corner-radius);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--input-focus-color);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+.form-group span {
+  margin-top: var(--spacing-xs);
+  font-size: 0.85rem;
+  color: var(--error-color);
+}
+
+/* Submit Buttons */
+button.nav-button[type="submit"] {
+  margin-top: var(--spacing-sm);
+  width: 100%;
+}
+
+button.nav-button:disabled[type="submit"] {
+  background-color: #a5b4fc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 480px) {
+.edit-profile-container,
+  .edit-password-container {
+    margin: var(--spacing-lg) var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
+}

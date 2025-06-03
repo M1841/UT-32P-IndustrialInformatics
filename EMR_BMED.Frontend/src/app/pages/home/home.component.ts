@@ -5,7 +5,6 @@ import { ApiService } from '@/services/api/api.service';
 @Component({
   selector: 'app-home',
   imports: [],
-  styleUrls: ['./auth.css'],
   templateUrl: './home.html',
   // template: `
   //   @if (isAuthenticated() && user() !== null) {
