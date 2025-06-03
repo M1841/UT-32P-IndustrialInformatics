@@ -57,7 +57,8 @@
               "src/assets/auth.css",
               "src/assets/home.css",
               "src/assets/profile.css",
-              "src/assets/medication.css"
+              "src/assets/medication.css",
+              "src/assets/prescription.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",

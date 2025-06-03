@@ -1,0 +1,85 @@
+ @if (user() != null) {
+      <div class="profile-details">
+      <div style="padding-left: 3rem; padding-right: 3rem">
+        <h2>Your prescriptions:</h2>
+        @if (this.user()!.isDoctor) {
+          <a [routerLink]="['create']" class="nav-button">New Prescription</a>
+          <br />
+        }
+
+        <div class="profile-details">
+        <ul>
+          @for (prescription of prescriptions(); track $index) {
+            <li>
+              <strong>CAS:</strong> {{ prescription.cas }}<br />
+              <strong>CUI:</strong> {{ prescription.cui }}<br />
+              <strong>Days Number:</strong> {{ prescription.daysNumber }}<br />
+              <strong>Diagnostic:</strong> {{ prescription.diagnostic }}<br />
+              <strong>Doctor:</strong> {{ prescription.doctor.name }}
+              {{ prescription.doctor.surname }}<br />
+              <strong>Issued:</strong> {{ prescription.issued }}<br />
+              <strong>Medical Unit:</strong> {{ prescription.medUnit }}<br />
+              <strong>Medication:</strong>
+              @for (medName of prescription.medicationNames; track $index) {
+                {{ medName }}
+                @if ($index + 1 < prescription.medicationNames.length) {
+                  ,
+                }
+              }
+              <br />
+              <strong>Patient:</strong> {{ prescription.patient.name }}
+              {{ prescription.patient.surname }}
+              @if (this.user()!.isDoctor) {
+                <br />
+                <a
+                  [routerLink]="['edit']"
+                  [queryParams]="{
+                    id: prescription.id,
+                  }"
+                  class="nav-button"
+                >
+                  Edit
+                </a>
+                <button
+                  (click)="openDeleteDialog(prescription)"
+                  class="logout-btn"
+                >
+                  Delete
+                </button>
+              }
+            </li>
+          }
+        </ul>
+        </div>
+        <dialog>
+          <form method="dialog">
+            @if (selectedPrescription() !== null) {
+              <p>Are you sure you want to delete the selected prescription?</p>
+              <strong>Medication:</strong>
+              @for (
+                medName of selectedPrescription()!.medicationNames;
+                track $index
+              ) {
+                {{ medName }}
+                @if (
+                  $index + 1 < selectedPrescription()!.medicationNames.length
+                ) {
+                  ,
+                }
+              }
+              <br />
+              <strong>Patient:</strong>
+              {{ selectedPrescription()!.patient.name }}
+              {{ selectedPrescription()!.patient.surname }}
+              <menu style="padding: 0">
+                <button class="nav-button">No, cancel</button>
+                <button (click)="handleDelete()" class="logout-btn">
+                  Yes, delete
+                </button>
+              </menu>
+            }
+          </form>
+        </dialog>
+      </div>
+      </div>
+    }
