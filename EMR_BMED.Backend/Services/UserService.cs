@@ -72,6 +72,16 @@ namespace EMR_BMED.Backend.Services
     {
       UserModel user = await GetOneAsync(id);
 
+      PrescriptionModel[] prescriptions = dbService.Prescriptions
+        .Where(p =>
+          p.PatientId == user.Id
+          || p.DoctorId == user.Id)
+        .ToArray();
+      foreach (PrescriptionModel prescription in prescriptions)
+      {
+        dbService.Remove(prescription);
+      }
+
       dbService.Remove(user);
       await dbService.SaveChangesAsync();
     }

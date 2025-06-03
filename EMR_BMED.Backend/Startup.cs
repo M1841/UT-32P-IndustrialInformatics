@@ -22,11 +22,6 @@ namespace EMR_BMED.Backend
       services.AddDbContext<DbService>(options =>
         options.UseSqlServer(Configuration!.GetConnectionString("DefaultConnectionString")));
 
-      services.AddHttpLogging(logging =>
-      {
-        logging.LoggingFields = HttpLoggingFields.RequestBody;
-      });
-
       services.AddScoped<DbService>();
       services.AddScoped<AuthService>();
       services.AddScoped<UserService>();
@@ -59,8 +54,6 @@ namespace EMR_BMED.Backend
         app.UseDeveloperExceptionPage();
       }
 
-      app.UseHttpLogging();
-
       app.UseHttpsRedirection();
       app.UseCors();
       app.UseRouting();
@@ -73,7 +66,7 @@ namespace EMR_BMED.Backend
         endpoints.MapControllers();
       });
 
-      //DbService.SeedTestData(false);
+      // DbService.SeedTestData(false);
     }
   }
 }

@@ -18,7 +18,6 @@ namespace EMR_BMED.Backend.Services
       var pattern = $"%{query}%";
 
       return dbService.Medication
-        .Take(1000)
         .AsEnumerable()
         .Where(m =>
           new string[] {
@@ -26,7 +25,7 @@ namespace EMR_BMED.Backend.Services
             m.Brand ?? ""
           }.Any(s =>
             s.Contains(
-              HttpUtility.UrlDecode(query), 
+              HttpUtility.UrlDecode(query),
               StringComparison.CurrentCultureIgnoreCase)
           )
         ).Take(50)

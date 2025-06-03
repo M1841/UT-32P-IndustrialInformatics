@@ -113,8 +113,6 @@ namespace EMR_BMED.Backend.Services
 
     public async Task UpdateAsync(Guid id, PrescriptionUpdateDto dto)
     {
-      Console.WriteLine(dto);
-
       PrescriptionModel prescription = await GetOneAsync(id);
 
       if (dto.MedUnit != null) { prescription.MedUnit = dto.MedUnit; }

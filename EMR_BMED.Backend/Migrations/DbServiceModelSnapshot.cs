@@ -70,7 +70,7 @@ namespace EMR_BMED.Backend.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("Medication");
+                    b.ToTable("Medication", (string)null);
                 });
 
             modelBuilder.Entity("EMR_BMED.Backend.Models.PrescriptionModel", b =>
@@ -204,7 +204,7 @@ namespace EMR_BMED.Backend.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Prescriptions");
+                    b.ToTable("Prescriptions", (string)null);
                 });
 
             modelBuilder.Entity("EMR_BMED.Backend.Models.UserModel", b =>
@@ -255,7 +255,7 @@ namespace EMR_BMED.Backend.Migrations
 
                     b.HasIndex("Surname");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasDiscriminator<bool>("IsDoctor");
 
@@ -280,7 +280,7 @@ namespace EMR_BMED.Backend.Migrations
 
                     b.HasIndex("PrescriptionsGlobalID", "PrescriptionsSeriesID", "PrescriptionsNumberID");
 
-                    b.ToTable("PrescriptionRecord");
+                    b.ToTable("PrescriptionRecord", (string)null);
                 });
 
             modelBuilder.Entity("EMR_BMED.Backend.Models.DoctorModel", b =>
