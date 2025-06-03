@@ -94,7 +94,7 @@ label {
   flex: 1;
   display: flex;
   flex-direction: column;
-  /* max-width: 196px; */
+  /*max-width: 196px;*/
   width: 90%;
 }
 
