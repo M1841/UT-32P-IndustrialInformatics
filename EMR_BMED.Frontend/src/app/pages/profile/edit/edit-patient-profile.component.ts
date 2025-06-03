@@ -7,133 +7,6 @@ import { switchMap, EMPTY } from 'rxjs';
   selector: 'app-edit-patient-profile',
   imports: [ReactiveFormsModule],
   templateUrl: './edit-patient.html',
-  // template: `
-
-  //   <div class="edit-profile-container">
-  //     <div class="form-group">
-
-  //   <form [formGroup]="detailsForm" (submit)="updateDetails()">
-  //     <h1>Update Details</h1>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Name
-  //       <input required formControlName="name" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Surname
-  //       <input required formControlName="surname" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Email
-  //       <input required formControlName="email" />
-  //       @if (errors.email() !== '') {
-  //         <span>{{ errors.email() }}</span>
-  //       }
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Phone Number
-  //       <input required formControlName="phone" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Citizenship
-  //       <input required formControlName="citizenship" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Allergies
-  //       <input required formControlName="allergies" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Intolerances
-  //       <input required formControlName="intolerances" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Conditions
-  //       <input required formControlName="conditions" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Blood Type
-  //       <input required formControlName="blood" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <button
-  //       type="submit"
-  //       class="nav-button"
-  //       [disabled]="!this.detailsForm.valid">
-  //       Submit
-  //     </button>
-
-  //     </form>
-  //     </div>
-  //   </div>
-
-  //   <div class="edit-password-container">
-  //   <form [formGroup]="passwordForm" (submit)="changePassword()">
-  //     <h1>Change Password</h1>
-      
-  //     <div class="form-group">
-  //     <label>
-  //       Old Password
-  //       <input required formControlName="oldPassword" type="password" />
-  //       @if (errors.password() !== '') {
-  //         <span>{{ errors.password() }}</span>
-  //       }
-  //     </label>
-  //     <br />
-  //     </div>
-     
-  //     <div class="form-group">
-  //     <label>
-  //       New Password
-  //       <input required formControlName="newPassword" type="password" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <button
-  //       type="submit"
-  //       class="nav-button"
-  //       [disabled]="!this.passwordForm.valid">
-  //       Submit
-  //     </button>
-
-
-  // `,
-  // styles: ``,
 })
 export class EditPatientProfileComponent {
   readonly patient = signal<any>({});
@@ -153,49 +26,56 @@ export class EditPatientProfileComponent {
     newPassword: new FormControl(''),
   });
   readonly errors = {
+    name: signal<string>(''),
+    surname: signal<string>(''),
     email: signal<string>(''),
     password: signal<string>(''),
   };
 
   updateDetails() {
-    if (this.detailsForm.valid) {
+    if (
+      this.detailsForm.valid &&
+      !!this.detailsForm.value.name?.trim() &&
+      !!this.detailsForm.value.surname?.trim() &&
+      !!this.detailsForm.value.email?.trim()
+    ) {
       this.api
         .put(`user/patient/${this.patient().id}`, {
           name:
             this.detailsForm.value.name !== this.patient().name
-              ? this.detailsForm.value.name
+              ? this.detailsForm.value.name.trim()
               : null,
           surname:
             this.detailsForm.value.surname !== this.patient().surname
-              ? this.detailsForm.value.surname
+              ? this.detailsForm.value.surname.trim()
               : null,
           email:
             this.detailsForm.value.email !== this.patient().email
-              ? this.detailsForm.value.email
+              ? this.detailsForm.value.email.trim()
               : null,
           phone:
             this.detailsForm.value.phone !== this.patient().phone
-              ? this.detailsForm.value.phone
+              ? this.detailsForm.value.phone.trim()
               : null,
           citizenship:
             this.detailsForm.value.citizenship !== this.patient().citizenship
-              ? this.detailsForm.value.citizenship
+              ? this.detailsForm.value.citizenship.trim()
               : null,
           allergies:
             this.detailsForm.value.allergies !== this.patient().allergies
-              ? this.detailsForm.value.allergies
+              ? this.detailsForm.value.allergies.trim()
               : null,
           intolerances:
             this.detailsForm.value.intolerances !== this.patient().intolerances
-              ? this.detailsForm.value.intolerances
+              ? this.detailsForm.value.intolerances.trim()
               : null,
           conditions:
             this.detailsForm.value.conditions !== this.patient().conditions
-              ? this.detailsForm.value.conditions
+              ? this.detailsForm.value.conditions.trim()
               : null,
           blood:
             this.detailsForm.value.blood !== this.patient().blood
-              ? this.detailsForm.value.blood
+              ? this.detailsForm.value.blood.trim()
               : null,
         })
         .subscribe({
@@ -210,11 +90,28 @@ export class EditPatientProfileComponent {
             this.errors.email.set(error?.email ?? '');
           },
         });
+    } else {
+      this.errors.name.set(
+        !this.detailsForm.value.name?.trim()
+          ? 'First name cannot be empty'
+          : '',
+      );
+      this.errors.surname.set(
+        !this.detailsForm.value.surname?.trim()
+          ? 'Last name cannot be empty'
+          : '',
+      );
+      this.errors.email.set(
+        !this.detailsForm.value.email?.trim() ? 'Email cannot be empty' : '',
+      );
     }
   }
 
   changePassword() {
-    if (this.passwordForm.valid) {
+    if (
+      this.passwordForm.valid &&
+      this.passwordForm.value.newPassword?.trim()
+    ) {
       this.api
         .login({
           email: this.patient().email,
@@ -241,6 +138,12 @@ export class EditPatientProfileComponent {
             this.errors.password.set(error?.password ?? '');
           },
         });
+    } else {
+      this.errors.password.set(
+        !this.passwordForm.value.newPassword?.trim()
+          ? 'Password cannot be empty'
+          : '',
+      );
     }
   }
 

@@ -35,7 +35,15 @@ export class RegisterComponent {
   };
 
   handleSubmit() {
-    if (this.form.valid) {
+    if (
+      this.form.valid &&
+      !!this.form.value.name?.trim() &&
+      !!this.form.value.surname?.trim() &&
+      !!this.form.value.email?.trim() &&
+      !!this.form.value.password?.trim() &&
+      !!this.form.value.gender?.trim() &&
+      new Date() < new Date(this.form.value.birthday?.trim())
+    ) {
       this.api
         .post<
           {
@@ -70,22 +78,22 @@ export class RegisterComponent {
         });
     } else {
       this.errors.name.set(
-        !this.form.value.name ? 'First name cannot be empty' : '',
+        !this.form.value.name?.trim() ? 'First name cannot be empty' : '',
       );
       this.errors.surname.set(
-        !this.form.value.surname ? 'Last name cannot be empty' : '',
+        !this.form.value.surname?.trim() ? 'Last name cannot be empty' : '',
       );
       this.errors.email.set(
-        !this.form.value.email ? 'Email cannot be empty' : '',
+        !this.form.value.email?.trim() ? 'Email cannot be empty' : '',
       );
       this.errors.password.set(
-        !this.form.value.password ? 'Password cannot be empty' : '',
+        !this.form.value.password?.trim() ? 'Password cannot be empty' : '',
       );
       this.errors.gender.set(
-        !this.form.value.gender ? 'Gender cannot be empty' : '',
+        !this.form.value.gender?.trim() ? 'Gender cannot be empty' : '',
       );
       this.errors.birthday.set(
-        !this.form.value.birthday ? 'Birthday cannot be empty' : '',
+        !this.form.value.birthday?.trim() ? 'Birthday cannot be empty' : '',
       );
     }
   }

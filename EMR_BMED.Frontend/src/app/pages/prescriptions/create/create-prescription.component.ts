@@ -8,337 +8,6 @@ import { map, tap } from 'rxjs';
   selector: 'app-prescribe',
   imports: [ReactiveFormsModule],
   templateUrl: './create-prescription.html',
-  // template: `
-  //   <div class="register-container">
-  //     <a href="/" class="home-icon">
-  //       <img src="Logo.png" alt="Home" width="64" height="64" />
-  //     </a>
-
-  //     <h1>Prescription Form</h1>
-  //     <div style="width:100%; display: flex">
-  //       <form [formGroup]="form" (ngSubmit)="handleSubmit()" style="width: 66%">
-  //         <input required type="hidden" formControlName="doctorId" />
-  //         @if (page() === 1) {
-  //           <section>
-  //             <h1>Patient</h1>
-  //             <form [formGroup]="patientSearch" (input)="loadPatients()">
-  //               <input required placeholder="Search" formControlName="query" />
-  //             </form>
-  //             <ul>
-  //               @for (patient of patients(); track $index) {
-  //                 <li>
-  //                   <p>
-  //                     <strong>Full Name:</strong> {{ patient.name }}
-  //                     {{ patient.surname }}
-  //                   </p>
-  //                   <p><strong>Email:</strong> {{ patient.email }}</p>
-  //                   <p>
-  //                     <strong>Social Number:</strong> {{ patient.socialNumber }}
-  //                   </p>
-  //                   <button
-  //                     type="button"
-  //                     class="nav-button"
-  //                     (click)="selectPatient(patient)"
-  //                   >
-  //                     Select
-  //                   </button>
-  //                   <hr />
-  //                 </li>
-  //               }
-  //             </ul>
-  //           </section>
-  //         }
-  //         @if (page() === 2) {
-  //           <section>
-  //             <h1>Medication</h1>
-  //             <button
-  //               type="button"
-  //               (click)="setPage(3)"
-  //               class="nav-button"
-  //               [disabled]="selectedMeds().length <= 0"
-  //             >
-  //               Continue
-  //             </button>
-  //             <form [formGroup]="medicationSearch" (input)="loadMedications()">
-  //               <input required placeholder="Search" formControlName="query" />
-  //             </form>
-  //             <ul></ul>
-  //             <ul>
-  //               @for (med of medications(); track $index) {
-  //                 <li>
-  //                   <p><strong>Name:</strong> {{ med.name }}</p>
-  //                   <p><strong>Brand:</strong> {{ med.brand }}</p>
-  //                   <p><strong>Dosage Form:</strong> {{ med.form }}</p>
-  //                   <p><strong>Storing:</strong> {{ med.storing }}</p>
-  //                   <button
-  //                     type="button"
-  //                     class="nav-button"
-  //                     (click)="addMed(med)"
-  //                   >
-  //                     Add
-  //                   </button>
-  //                   <button
-  //                     type="button"
-  //                     class="logout-btn"
-  //                     (click)="removeMed(med)"
-  //                   >
-  //                     Remove
-  //                   </button>
-  //                   <hr />
-  //                 </li>
-  //               }
-  //             </ul>
-  //           </section>
-  //         }
-  //         @if (page() === 3) {
-  //           <div class="form-group">
-  //             <label for="CAS">CAS Number</label>
-  //             <div class="input-wrapper">
-  //               <input type="text" formControlName="CAS" required />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="CUI">CUI Number</label>
-  //             <div class="input-wrapper">
-  //               <input type="text" formControlName="CUI" required />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="daysNumber">Number of Days</label>
-  //             <div class="input-wrapper">
-  //               <input type="number" formControlName="daysNumber" required />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="diagnostic">Diagnostic</label>
-  //             <div class="input-wrapper">
-  //               <input type="text" formControlName="diagnostic" required />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="medUnit">Medication Unit</label>
-  //             <div class="input-wrapper">
-  //               <input type="text" formControlName="medUnit" required />
-  //             </div>
-  //           </div>
-
-  //           <div class="form-group">
-  //             <label for="isApproved">Is approved by a doctor</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isApproved" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isMF">Is prescribed by family doctor</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isMF" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isAmbulatory">Is ambulatory</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isAmbulatory" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isHospital">Is hospital treatment</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isHospital" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isOther">Is other type of care</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isOther" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isMFMM">Is mixed-mode care</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isMFMM" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isSalariat">Is employed</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isSalariat" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isCoasigurat">Is co-insured</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isCoasigurat" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isLiberProfesionist">Is freelancer</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isLiberProfesionist" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isCopil">Is child</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isCopil" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isStudent">Is student</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isStudent" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isGravida">Is pregnant</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isGravida" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isPensionar">Is pensioner</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isPensionar" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isVeteran">Is veteran</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isVeteran" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isLowIncome">Is low-income</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isLowIncome" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isRevolutionar">Is revolutionary</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isRevolutionar" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isHandicap">Is handicapped</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isHandicap" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isAjutorSocial">Is social welfare recipient</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isAjutorSocial" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isSomaj">Is unemployed</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isSomaj" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isPersonalContractual">Is contracted personnel</label>
-  //             <div class="input-wrapper">
-  //               <input
-  //                 type="checkbox"
-  //                 formControlName="isPersonalContractual"
-  //               />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isCardEuropean">Has European Health Insurance Card</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isCardEuropean" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isAcorduriInternationale">Is covered under international health agreements</label>
-  //             <div class="input-wrapper">
-  //               <input type="checkbox" formControlName="isAcorduriInternationale"/>
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <div class="form-group">
-  //             <label for="isOtherCategories">Other categories</label>
-  //             <div class="input-wrapper">
-  //               <input type="text" formControlName="isOtherCategories" />
-  //             </div>
-  //           </div>
-  //           <br />
-
-  //           <button type="submit" [disabled]="form.invalid" class="nav-button">
-  //             Submit
-  //           </button>
-  //         }
-  //       </form>
-  //       <aside style="width: 33%">
-  //         <p>
-  //           <strong>Patient:</strong> {{ selectedPatient().name }}
-  //           {{ selectedPatient().surname }}
-  //         </p>
-  //         <div>
-  //           <strong>Medication:</strong>
-  //           <ul>
-  //             @for (med of selectedMeds(); track $index) {
-  //               <li>{{ med.name }} - {{ med.brand }}</li>
-  //             }
-  //           </ul>
-  //         </div>
-  //       </aside>
-  //     </div>
-  //   </div>
-  // `,
 })
 export class CreatePrescriptionComponent {
   readonly page = signal<number>(1);
@@ -519,7 +188,15 @@ export class CreatePrescriptionComponent {
   }
 
   handleSubmit() {
-    if (this.form.valid) {
+    if (
+      this.form.valid &&
+      !!this.form.value.doctorId?.trim() &&
+      !!this.form.value.CAS?.trim() &&
+      !!this.form.value.CUI?.trim() &&
+      !!this.form.value.daysNumber?.trim() &&
+      !!this.form.value.diagnostic?.trim() &&
+      !!this.form.value.medUnit?.trim()
+    ) {
       this.api
         .post('prescription', {
           ...this.form.value,
@@ -533,19 +210,23 @@ export class CreatePrescriptionComponent {
         });
     } else {
       this.errors.CAS.set(
-        !this.form.value.CAS ? 'CAS number cannot be empty' : '',
+        !this.form.value.CAS?.trim() ? 'CAS number cannot be empty' : '',
       );
       this.errors.CUI.set(
-        !this.form.value.CUI ? 'CUI number cannot be empty' : '',
+        !this.form.value.CUI?.trim() ? 'CUI number cannot be empty' : '',
       );
       this.errors.daysNumber.set(
-        !this.form.value.daysNumber ? 'Days number cannot be empty' : '',
+        !this.form.value.daysNumber?.trim()
+          ? 'Days number cannot be empty'
+          : '',
       );
       this.errors.diagnostic.set(
-        !this.form.value.diagnostic ? 'Diagnostic cannot be empty' : '',
+        !this.form.value.diagnostic?.trim() ? 'Diagnostic cannot be empty' : '',
       );
       this.errors.medUnit.set(
-        !this.form.value.medUnit ? 'Medication unit cannot be empty' : '',
+        !this.form.value.medUnit?.trim()
+          ? 'Medication unit cannot be empty'
+          : '',
       );
     }
   }

@@ -1,162 +1,167 @@
- <div class="wrapper">
-    <main class="content">
-        <div class="login-container">
-            <div class="login-content" id="register-form">
-      <a href="/" class="home-icon">
-        <img src="Logo.png" alt="Home" width="64" height="64" />
-      </a>
+<div class="wrapper">
+  <main class="content">
+    <div class="login-container">
+      <div class="login-content" id="register-form">
+        <a href="/" class="home-icon">
+          <img src="Logo.png" alt="Home" width="64" height="64" />
+        </a>
 
-      <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-        <h2><b>Patient Registration Form</b></h2>
-        <a href="auth/register/doctor" class="link">Are you a doctor?</a> <br />
-        <a href="auth/login" class="link">Already have an account?</a> <br />
+        <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+          <h2><b>Patient Registration Form</b></h2>
+          <a href="auth/register/doctor" class="link">Are you a doctor?</a>
+          <br />
+          <a href="auth/login" class="link">Already have an account?</a> <br />
 
-         <div class="nav-section">
-          <label for="name">First Name</label>
-          <div class="input-wrapper">
-            <input required id="name" type="text" formControlName="name" />
-            @if (errors.name() !== '') {
+          <div class="nav-section">
+            <label for="name">First Name</label>
+            <div class="input-wrapper">
+              <input required id="name" type="text" formControlName="name" />
+              @if (errors.name() !== '') {
               <span>{{ errors.name() }}</span>
-            }
+              }
+            </div>
           </div>
-        </div>
 
-         <div class="nav-section">
-          <label for="surname">Last Name</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="surname"
-              type="text"
-              formControlName="surname"
-            />
-            @if (errors.surname() !== '') {
+          <div class="nav-section">
+            <label for="surname">Last Name</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="surname"
+                type="text"
+                formControlName="surname"
+              />
+              @if (errors.surname() !== '') {
               <span>{{ errors.surname() }}</span>
-            }
+              }
+            </div>
           </div>
-        </div>
 
-         <div class="nav-section">
-          <label for="email">Email</label>
-          <div class="input-wrapper">
-            <input required id="email" type="text" formControlName="email" />
-            @if (errors.email() !== '') {
+          <div class="nav-section">
+            <label for="email">Email</label>
+            <div class="input-wrapper">
+              <input required id="email" type="text" formControlName="email" />
+              @if (errors.email() !== '') {
               <span>{{ errors.email() }}</span>
-            }
+              }
+            </div>
           </div>
-        </div>
 
-         <div class="nav-section">
-          <label for="password">Password</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="password"
-              type="password"
-              formControlName="password"
-            />
-            @if (errors.password() !== '') {
+          <div class="nav-section">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="password"
+                type="password"
+                formControlName="password"
+              />
+              @if (errors.password() !== '') {
               <span>{{ errors.password() }}</span>
-            }
+              }
+            </div>
           </div>
-        </div>
 
-        <div class="nav-section">
-          <label for="gender">Gender</label>
-          <div class="input-wrapper">
-            <select required formControlName="gender">
-              @for (gender of ['Female', 'Male', 'Other']; track $index) {
+          <div class="nav-section">
+            <label for="gender">Gender</label>
+            <div class="input-wrapper">
+              <select required formControlName="gender">
+                @for (gender of ['Female', 'Male', 'Other']; track $index) {
                 <option value="{{ gender }}">{{ gender }}</option>
-              }
-            </select>
-            @if (errors.gender() !== '') {
+                }
+              </select>
+              @if (errors.gender() !== '') {
               <span>{{ errors.gender() }}</span>
-            }
-          </div>
-        </div>
-
-        <div class="nav-section">
-          <label for="birthday">Birthday</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="birthday"
-              type="date"
-              formControlName="birthday"
-            />
-            @if (errors.birthday() !== '') {
-              <span>{{ errors.birthday() }}</span>
-            }
-          </div>
-        </div>
-
-         <div class="nav-section">
-          <label for="socialNumber">Social Number</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="socialNumber"
-              type="text"
-              formControlName="socialNumber"
-            />
-          </div>
-        </div>
-
-         <div class="nav-section">
-          <label for="citizenship">Citizenship</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="citizenship"
-              type="text"
-              formControlName="citizenship"
-            />
-          </div>
-        </div>
-         <div class="nav-section">
-          <label for="phone">Phone Number (Optional)</label>
-          <div class="input-wrapper">
-            <input id="phone" type="text" formControlName="phoneNumber" />
-          </div>
-        </div>
-
-         <div class="nav-section">
-          <label for="allergies">Allergies (Optional)</label>
-          <div class="input-wrapper">
-            <textarea id="allergies" formControlName="allergies"></textarea>
-          </div>
-        </div>
-
-         <div class="nav-section">
-          <label for="intolerances">Intolerances (Optional)</label>
-          <div class="input-wrapper">
-            <textarea
-              id="intolerances"
-              formControlName="intolerances"
-            ></textarea>
-          </div>
-        </div>
-
-         <div class="nav-section">
-          <label for="conditions">Conditions (Optional)</label>
-          <div class="input-wrapper">
-            <textarea id="conditions" formControlName="conditions"></textarea>
-          </div>
-        </div>
-
-         <div class="nav-section">
-          <label for="bloodType">Blood Type (Optional)</label>
-          <div class="input-wrapper">
-            <select id="bloodType" formControlName="bloodType">
-              <option selected value>-</option>
-              @for (bloodType of ['A', 'B', 'AB', 'O']; track $index) {
-                <option value="{{ bloodType }}">{{ bloodType }}</option>
               }
-            </select>
+            </div>
           </div>
-        </div>
 
-        <button type="submit" class="nav-button" id="register-nav-button">Register</button>
-      </form>
+          <div class="nav-section">
+            <label for="birthday">Birthday</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="birthday"
+                type="date"
+                formControlName="birthday"
+              />
+              @if (errors.birthday() !== '') {
+              <span>{{ errors.birthday() }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <label for="socialNumber">Social Number</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="socialNumber"
+                type="text"
+                formControlName="socialNumber"
+              />
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <label for="citizenship">Citizenship</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="citizenship"
+                type="text"
+                formControlName="citizenship"
+              />
+            </div>
+          </div>
+          <div class="nav-section">
+            <label for="phone">Phone Number (Optional)</label>
+            <div class="input-wrapper">
+              <input id="phone" type="text" formControlName="phoneNumber" />
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <label for="allergies">Allergies (Optional)</label>
+            <div class="input-wrapper">
+              <textarea id="allergies" formControlName="allergies"></textarea>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <label for="intolerances">Intolerances (Optional)</label>
+            <div class="input-wrapper">
+              <textarea
+                id="intolerances"
+                formControlName="intolerances"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <label for="conditions">Conditions (Optional)</label>
+            <div class="input-wrapper">
+              <textarea id="conditions" formControlName="conditions"></textarea>
+            </div>
+          </div>
+
+          <div class="nav-section">
+            <label for="bloodType">Blood Type (Optional)</label>
+            <div class="input-wrapper">
+              <select id="bloodType" formControlName="bloodType">
+                <option selected value>-</option>
+                @for (bloodType of ['A', 'B', 'AB', 'O']; track $index) {
+                <option value="{{ bloodType }}">{{ bloodType }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="nav-button" id="register-nav-button">
+            Register
+          </button>
+        </form>
+      </div>
     </div>
-    </div>
+  </main>
+</div>

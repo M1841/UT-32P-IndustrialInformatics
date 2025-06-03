@@ -7,92 +7,6 @@ import { EMPTY, switchMap } from 'rxjs';
   selector: 'app-edit-doctor-profile',
   imports: [ReactiveFormsModule],
   templateUrl: './edit-doctor-profile.html',
-  // template: `
-  // <div class="edit-profile-container">
-  //     <div class="form-group">
-  //   <form [formGroup]="detailsForm" (submit)="updateDetails()">
-  //     <h1>Update Details</h1>
-  //     <div class="form-group">
-  //     <label>
-  //       Name
-  //       <input required formControlName="name" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Surname
-  //       <input required formControlName="surname" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Email
-  //       <input required formControlName="email" />
-  //       @if (errors.email() !== '') {
-  //         <span>{{ errors.email() }}</span>
-  //       }
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Phone Number
-  //       <input required formControlName="phone" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <div class="form-group">
-  //     <label>
-  //       Address
-  //       <input required formControlName="address" />
-  //     </label>
-  //     <br />
-  //     </div>
-
-  //     <button
-  //       type="submit"
-  //       class="nav-button"
-  //       [disabled]="!this.detailsForm.valid"
-  //     >
-  //       Submit
-  //     </button>
-  //   </form>
-
-  //   <form [formGroup]="passwordForm" (submit)="changePassword()">
-  //     <h1>Change Password</h1>
-  //     <label>
-  //       Old Password
-  //       <input required formControlName="oldPassword" type="password" />
-  //       @if (errors.password() !== '') {
-  //         <span>{{ errors.password() }}</span>
-  //       }
-  //     </label>
-  //     <br />
-
-  //     <label>
-  //       New Password
-  //       <input required formControlName="newPassword" type="password" />
-  //     </label>
-  //     <br />
-
-  //     <button
-  //       type="submit"
-  //       class="nav-button"
-  //       [disabled]="!this.passwordForm.valid"
-  //     >
-  //       Submit
-  //     </button>
-  //   </form>
-  //     </div>
-  // </div>
-  // `,
-  // styles: ``,
 })
 export class EditDoctorProfileComponent {
   readonly doctor = signal<any>({});
@@ -108,12 +22,19 @@ export class EditDoctorProfileComponent {
     newPassword: new FormControl(''),
   });
   readonly errors = {
+    name: signal<string>(''),
+    surname: signal<string>(''),
     email: signal<string>(''),
     password: signal<string>(''),
   };
 
   updateDetails() {
-    if (this.detailsForm.valid) {
+    if (
+      this.detailsForm.valid &&
+      !!this.detailsForm.value.name?.trim() &&
+      !!this.detailsForm.value.surname?.trim() &&
+      !!this.detailsForm.value.email?.trim()
+    ) {
       this.api
         .put(`user/doctor/${this.doctor().id}`, {
           name:
@@ -149,6 +70,20 @@ export class EditDoctorProfileComponent {
             this.errors.email.set(error?.email ?? '');
           },
         });
+    } else {
+      this.errors.name.set(
+        !this.detailsForm.value.name?.trim()
+          ? 'First name cannot be empty'
+          : '',
+      );
+      this.errors.surname.set(
+        !this.detailsForm.value.surname?.trim()
+          ? 'Last name cannot be empty'
+          : '',
+      );
+      this.errors.email.set(
+        !this.detailsForm.value.email?.trim() ? 'Email cannot be empty' : '',
+      );
     }
   }
 
@@ -180,6 +115,12 @@ export class EditDoctorProfileComponent {
             this.errors.password.set(error?.password ?? '');
           },
         });
+    } else {
+      this.errors.password.set(
+        !this.passwordForm.value.newPassword?.trim()
+          ? 'Password cannot be empty'
+          : '',
+      );
     }
   }
 

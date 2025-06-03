@@ -8,46 +8,6 @@ import { ApiService } from '@/services/api/api.service';
   selector: 'app-login',
   imports: [ReactiveFormsModule],
   templateUrl: './login.html',
-  // template: `
-  //   <div class="login-container">
-  //     <a href="/" class="home-icon">
-  //       <img src="Logo.png" alt="Home" width="64" height="64" />
-  //     </a>
-
-  //     <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-  //       <h2><b>Login Form</b></h2>
-  //       <a href="auth/register" class="link">Don't have an account?</a><br />
-  //       <br />
-
-  //       <div class="form-group">
-  //         <label for="email">Email</label>
-  //         <div class="input-wrapper">
-  //           <input required id="email" type="text" formControlName="email" />
-  //           @if (errors.email() !== '') {
-  //             <span>{{ errors.email() }}</span>
-  //           }
-  //         </div>
-  //       </div>
-  //       <br />
-
-  //       <div class="form-group">
-  //         <label for="password">Password</label>
-  //         <div class="input-wrapper">
-  //           <input
-  //             required
-  //             id="password"
-  //             type="password"
-  //             formControlName="password"
-  //           />
-  //           @if (errors.password() !== '') {
-  //             <span>{{ errors.password() }}</span>
-  //           }
-  //         </div>
-  //       </div>
-  //       <button type="submit" class="nav-button">Login</button>
-  //     </form>
-  //   </div>
-  // `,
 })
 export class LoginComponent {
   readonly form = new FormGroup({
@@ -60,25 +20,34 @@ export class LoginComponent {
   };
 
   handleSubmit() {
-    if (this.form.valid && !!this.form.value.email.trim && !!this.form.value.password.trim) {
-      this.api.login(this.form.value).subscribe({
-        next: () => {
-          this.errors.email.set('');
-          this.errors.password.set('');
-          this.router.navigate(['/']);
-          window.location.href = '/';
-        },
-        error: ({ error }) => {
-          this.errors.email.set(error?.email ?? '');
-          this.errors.password.set(error?.password ?? '');
-        },
-      });
+    if (
+      this.form.valid &&
+      !!this.form.value.email?.trim() &&
+      !!this.form.value.password?.trim()
+    ) {
+      this.api
+        .login({
+          email: this.form.value.email.trim(),
+          password: this.form.value.password.trim(),
+        })
+        .subscribe({
+          next: () => {
+            this.errors.email.set('');
+            this.errors.password.set('');
+            this.router.navigate(['/']);
+            window.location.href = '/';
+          },
+          error: ({ error }) => {
+            this.errors.email.set(error?.email ?? '');
+            this.errors.password.set(error?.password ?? '');
+          },
+        });
     } else {
       this.errors.email.set(
-        !this.form.value.email ? 'Email cannot be empty' : '',
+        !this.form.value.email?.trim() ? 'Email cannot be empty' : '',
       );
       this.errors.password.set(
-        !this.form.value.password ? 'Passord cannot be empty' : '',
+        !this.form.value.password?.trim() ? 'Passord cannot be empty' : '',
       );
     }
   }
