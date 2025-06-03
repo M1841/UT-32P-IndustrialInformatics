@@ -39,7 +39,7 @@ export class RegisterDoctorComponent {
       !!this.form.value.password?.trim() &&
       !!this.form.value.gender?.trim() &&
       !!this.form.value.birthday?.trim() &&
-      new Date() < new Date(this.form.value.birthday?.trim())
+      new Date() >= new Date(this.form.value.birthday?.trim())
     ) {
       this.api
         .post<
@@ -49,8 +49,8 @@ export class RegisterDoctorComponent {
               password?: string;
             };
           },
-          typeof this.form.value
-        >('auth/register/doctor', this.form.value)
+          any
+        >('auth/register/doctor', { ...this.form.value, isDoctor: true })
         .subscribe({
           next: () => {
             this.api
@@ -73,36 +73,34 @@ export class RegisterDoctorComponent {
             this.errors.password.set(error?.password ?? '');
           },
         });
-    } else {
-      this.errors.name.set(
-        !this.form.value.name?.trim() ? 'First name cannot be empty' : '',
-      );
-      this.errors.surname.set(
-        !this.form.value.surname?.trim() ? 'Last name cannot be empty' : '',
-      );
-      this.errors.email.set(
-        !this.form.value.email?.trim() ? 'Email cannot be empty' : '',
-      );
-      this.errors.password.set(
-        !this.form.value.password?.trim() ? 'Password cannot be empty' : '',
-      );
-      this.errors.gender.set(
-        !this.form.value.gender?.trim() ? 'Gender cannot be empty' : '',
-      );
-      this.errors.birthday.set(
-        !this.form.value.birthday?.trim() ? 'Birthday cannot be empty' : '',
-      );
-      this.errors.birthday.set(
-        new Date() < new Date(this.form.value.birthday?.trim())
+    }
+    this.errors.name.set(
+      !this.form.value.name?.trim() ? 'First name cannot be empty' : '',
+    );
+    this.errors.surname.set(
+      !this.form.value.surname?.trim() ? 'Last name cannot be empty' : '',
+    );
+    this.errors.email.set(
+      !this.form.value.email?.trim() ? 'Email cannot be empty' : '',
+    );
+    this.errors.password.set(
+      !this.form.value.password?.trim() ? 'Password cannot be empty' : '',
+    );
+    this.errors.gender.set(
+      !this.form.value.gender?.trim() ? 'Gender cannot be empty' : '',
+    );
+    this.errors.birthday.set(
+      !this.form.value.birthday?.trim()
+        ? 'Birthday cannot be empty'
+        : new Date() < new Date(this.form.value.birthday?.trim())
           ? 'Birthday cannot be in the future'
           : '',
-      );
-      this.errors.medicalField.set(
-        !this.form.value.medicalField?.trim()
-          ? 'Medical field cannot be empty'
-          : '',
-      );
-    }
+    );
+    this.errors.medicalField.set(
+      !this.form.value.medicalField?.trim()
+        ? 'Medical field cannot be empty'
+        : '',
+    );
   }
 
   private api = inject(ApiService);

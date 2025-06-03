@@ -100,6 +100,9 @@
                 type="text"
                 formControlName="socialNumber"
               />
+              @if (errors.socialNumber() !== '') {
+              <span>{{ errors.socialNumber() }}</span>
+              }
             </div>
           </div>
 
@@ -112,6 +115,9 @@
                 type="text"
                 formControlName="citizenship"
               />
+              @if (errors.citizenship() !== '') {
+              <span>{{ errors.citizenship() }}</span>
+              }
             </div>
           </div>
           <div class="nav-section">

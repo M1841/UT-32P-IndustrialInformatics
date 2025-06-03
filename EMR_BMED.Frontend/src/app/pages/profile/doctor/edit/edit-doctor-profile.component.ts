@@ -133,8 +133,8 @@ export class EditDoctorProfileComponent {
             name: res.body.name,
             surname: res.body.surname,
             email: res.body.email,
-            phone: res.body.phone,
-            address: res.body.address,
+            phone: res.body.phone ?? '',
+            address: res.body.address ?? '',
           });
         },
         error: () => {

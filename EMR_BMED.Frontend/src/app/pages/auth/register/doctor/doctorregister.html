@@ -1,126 +1,129 @@
 <div class="wrapper">
-    <main class="content">
-        <div class="login-container">
-            <div class="login-content" id="register-form">
-      <a href="/" class="home-icon">
-        <img src="Logo.png" alt="Home" width="64" height="64" />
-      </a>
+  <main class="content">
+    <div class="login-container">
+      <div class="login-content" id="register-form">
+        <a href="/" class="home-icon">
+          <img src="Logo.png" alt="Home" width="64" height="64" />
+        </a>
 
-      <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-        <h2><b>Doctor Registration Form</b></h2>
-        <a href="auth/register" class="link">Are you a patient?</a> <br />
-        <a href="auth/login" class="link">Already have an account?</a> <br />
+        <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+          <h2><b>Doctor Registration Form</b></h2>
+          <a href="auth/register" class="link">Are you a patient?</a> <br />
+          <a href="auth/login" class="link">Already have an account?</a> <br />
 
-        <div class="form-group">
-          <label for="name">First Name</label>
-          <div class="input-wrapper">
-            <input required id="name" type="text" formControlName="name" />
-            @if (errors.name() !== '') {
+          <div class="form-group">
+            <label for="name">First Name</label>
+            <div class="input-wrapper">
+              <input required id="name" type="text" formControlName="name" />
+              @if (errors.name() !== '') {
               <span>{{ errors.name() }}</span>
-            }
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="surname">Last Name</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="surname"
-              type="text"
-              formControlName="surname"
-            />
-            @if (errors.surname() !== '') {
-              <span>{{ errors.surname() }}</span>
-            }
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email</label>
-          <div class="input-wrapper">
-            <input required id="email" type="text" formControlName="email" />
-            @if (errors.email() !== '') {
-              <span>{{ errors.email() }}</span>
-            }
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="password">Password</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="password"
-              type="password"
-              formControlName="password"
-            />
-            @if (errors.password() !== '') {
-              <span>{{ errors.password() }}</span>
-            }
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="gender">Gender</label>
-          <div class="input-wrapper">
-            <select required formControlName="gender">
-              @for (gender of ['Female', 'Male', 'Other']; track $index) {
-                <option value="{{ gender }}">{{ gender }}</option>
               }
-            </select>
-            @if (errors.gender() !== '') {
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="surname">Last Name</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="surname"
+                type="text"
+                formControlName="surname"
+              />
+              @if (errors.surname() !== '') {
+              <span>{{ errors.surname() }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-wrapper">
+              <input required id="email" type="text" formControlName="email" />
+              @if (errors.email() !== '') {
+              <span>{{ errors.email() }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="password"
+                type="password"
+                formControlName="password"
+              />
+              @if (errors.password() !== '') {
+              <span>{{ errors.password() }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <div class="input-wrapper">
+              <select required formControlName="gender">
+                @for (gender of ['Female', 'Male', 'Other']; track $index) {
+                <option value="{{ gender }}">{{ gender }}</option>
+                }
+              </select>
+              @if (errors.gender() !== '') {
               <span>{{ errors.gender() }}</span>
-            }
+              }
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="birthday">Birthday</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="birthday"
-              type="date"
-              formControlName="birthday"
-            />
-            @if (errors.birthday() !== '') {
+          <div class="form-group">
+            <label for="birthday">Birthday</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="birthday"
+                type="date"
+                formControlName="birthday"
+              />
+              @if (errors.birthday() !== '') {
               <span>{{ errors.birthday() }}</span>
-            }
+              }
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="medicalField">Medical Field</label>
-          <div class="input-wrapper">
-            <input
-              required
-              id="medicalField"
-              type="text"
-              formControlName="medicalField"
-            />
-            @if (errors.medicalField() !== '') {
+          <div class="form-group">
+            <label for="medicalField">Medical Field</label>
+            <div class="input-wrapper">
+              <input
+                required
+                id="medicalField"
+                type="text"
+                formControlName="medicalField"
+              />
+              @if (errors.medicalField() !== '') {
               <span>{{ errors.medicalField() }}</span>
-            }
+              }
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="phone">Phone Number (Optional)</label>
-          <div class="input-wrapper">
-            <input id="phone" type="text" formControlName="phoneNumber" />
+          <div class="form-group">
+            <label for="phone">Phone Number (Optional)</label>
+            <div class="input-wrapper">
+              <input id="phone" type="text" formControlName="phoneNumber" />
+            </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label for="address">Address (Optional)</label>
-          <div class="input-wrapper">
-            <input id="address" type="text" formControlName="address" />
+          <div class="form-group">
+            <label for="address">Address (Optional)</label>
+            <div class="input-wrapper">
+              <input id="address" type="text" formControlName="address" />
+            </div>
           </div>
-        </div>
 
-        <button type="submit" class="nav-button" id="register-nav-button">Register</button>
-      </form>
+          <button type="submit" class="nav-button" id="register-nav-button">
+            Register
+          </button>
+        </form>
+      </div>
     </div>
-    </div>
-</main>
+  </main>
+</div>

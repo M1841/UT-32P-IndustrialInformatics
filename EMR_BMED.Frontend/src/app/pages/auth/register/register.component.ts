@@ -32,6 +32,8 @@ export class RegisterComponent {
     password: signal<string>(''),
     gender: signal<string>(''),
     birthday: signal<string>(''),
+    socialNumber: signal<string>(''),
+    citizenship: signal<string>(''),
   };
 
   handleSubmit() {
@@ -42,7 +44,7 @@ export class RegisterComponent {
       !!this.form.value.email?.trim() &&
       !!this.form.value.password?.trim() &&
       !!this.form.value.gender?.trim() &&
-      new Date() < new Date(this.form.value.birthday?.trim())
+      new Date() >= new Date(this.form.value.birthday?.trim())
     ) {
       this.api
         .post<
@@ -76,26 +78,37 @@ export class RegisterComponent {
             this.errors.password.set(error?.password ?? '');
           },
         });
-    } else {
-      this.errors.name.set(
-        !this.form.value.name?.trim() ? 'First name cannot be empty' : '',
-      );
-      this.errors.surname.set(
-        !this.form.value.surname?.trim() ? 'Last name cannot be empty' : '',
-      );
-      this.errors.email.set(
-        !this.form.value.email?.trim() ? 'Email cannot be empty' : '',
-      );
-      this.errors.password.set(
-        !this.form.value.password?.trim() ? 'Password cannot be empty' : '',
-      );
-      this.errors.gender.set(
-        !this.form.value.gender?.trim() ? 'Gender cannot be empty' : '',
-      );
-      this.errors.birthday.set(
-        !this.form.value.birthday?.trim() ? 'Birthday cannot be empty' : '',
-      );
     }
+    this.errors.name.set(
+      !this.form.value.name?.trim() ? 'First name cannot be empty' : '',
+    );
+    this.errors.surname.set(
+      !this.form.value.surname?.trim() ? 'Last name cannot be empty' : '',
+    );
+    this.errors.email.set(
+      !this.form.value.email?.trim() ? 'Email cannot be empty' : '',
+    );
+    this.errors.password.set(
+      !this.form.value.password?.trim() ? 'Password cannot be empty' : '',
+    );
+    this.errors.gender.set(
+      !this.form.value.gender?.trim() ? 'Gender cannot be empty' : '',
+    );
+    this.errors.birthday.set(
+      !this.form.value.birthday?.trim()
+        ? 'Birthday cannot be empty'
+        : new Date() < new Date(this.form.value.birthday?.trim())
+          ? 'Birthday cannot be in the future'
+          : '',
+    );
+    this.errors.citizenship.set(
+      !this.form.value.citizenship?.trim() ? 'Citizenship cannot be empty' : '',
+    );
+    this.errors.socialNumber.set(
+      !this.form.value.socialNumber?.trim()
+        ? 'Social Number cannot be empty'
+        : '',
+    );
   }
 
   private api = inject(ApiService);

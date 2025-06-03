@@ -22,9 +22,11 @@ const register = (user) => {
   if (db.users.some((u) => u.email === user.email)) {
     throw { name: "EmailIsTakenError", message: "Email is taken" };
   }
+  console.log(user);
   db.users.push({
     ...user,
     password: bcrypt.hashSync(user.password, 1),
+    phone: user.phoneNumber,
     id: randomUUID(),
   });
   dbService.saveChanges(db);

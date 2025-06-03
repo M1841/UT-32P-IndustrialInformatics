@@ -151,6 +151,7 @@ export class EditPatientProfileComponent {
     if (this.api.isAuthenticated()) {
       this.api.get<any>('auth/whoami').subscribe({
         next: (res) => {
+          console.log(res.body);
           this.patient.set(res.body);
           this.detailsForm.setValue({
             name: res.body.name,
@@ -158,10 +159,10 @@ export class EditPatientProfileComponent {
             email: res.body.email,
             phone: res.body.phone,
             citizenship: res.body.citizenship,
-            allergies: res.body.allergies,
-            intolerances: res.body.intolerances,
-            conditions: res.body.conditions,
-            blood: res.body.blood,
+            allergies: res.body.allergies ?? '',
+            intolerances: res.body.intolerances ?? '',
+            conditions: res.body.conditions ?? '',
+            blood: res.body.blood ?? '',
           });
         },
         error: () => {
