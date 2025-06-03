@@ -79,3 +79,68 @@
     display: block;
     margin: 0 auto;
 }
+
+#register-form {
+    min-width: 400px;
+}
+
+#register-form label {
+    margin-top: 20px;
+    padding-top: 10px;
+    font-size: 16px;
+    padding: 0;
+    font-weight: 600;
+    color: var(--label-color);
+    display: flex;
+    width: 88%;
+}
+
+#register-form input,
+#register-form select,
+#register-form textarea {
+    min-height: 25px;
+    max-height: 30px;
+    min-width: 350px;
+    font-size: 16px;
+    margin: 3px;
+    padding: 2px;
+    padding-left: 10px;
+    font-family: var(--font-base);
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+}
+
+#login-form input,
+#register-form .form-group input,
+#register-form .form-group select,
+#register-form .form-group textarea {
+    min-height: 25px;
+    max-height: 30px;
+    min-width: 280px;
+    box-shadow: none;
+    font-size: 16px;
+    margin: 3px;
+    padding: 2px;
+    padding-left: 10px;
+    font-family: var(--font-base);
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+}
+
+#register-form .form-group {
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+}
+
+#register-form textarea {
+    min-height: 50px;
+}
+
+#register-nav-button {
+    width: auto;
+}
+
+.nav-section:first-child label {
+    margin-top: 10px;
+}

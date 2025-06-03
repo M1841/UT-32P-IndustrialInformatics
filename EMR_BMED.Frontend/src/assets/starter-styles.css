@@ -98,6 +98,10 @@ label {
   width: 90%;
 }
 
+.input-wrapper input {
+  max-width: 100px;
+}
+
 input {
   padding: 0.5rem 0.75rem;
   border-radius: 3px;
