@@ -4,7 +4,8 @@
 .profile-container {
     width: clamp(200px, 50%, 600px);
     margin: auto;
-    margin-top: clamp(20px, 25%, 250px);
+    margin-top: 20px;
+    /* margin-top: clamp(20px, 25%, 250px); */
     margin-bottom: clamp(20px, 25%, 50px);
     background: linear-gradient(
         var(--primary-light-color),
