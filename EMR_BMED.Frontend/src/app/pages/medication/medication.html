@@ -62,18 +62,18 @@
 
     <aside class="med-details">
       @if (displayedMed() !== null) {
-        <h2>{{ displayedMed().name }} – {{ displayedMed().brand }}</h2>
-        <p><strong>Dosage Form:</strong> {{ displayedMed().form }}</p>
-        <p><strong>Administration Method:</strong> {{ displayedMed().method }}</p>
+        <h2>{{ displayedMed().name }} – {{ !!displayedMed().brand  ? displayedMed().brand : 'Not set yet' }}</h2>
+        <p><strong>Dosage Form:</strong> {{ !!displayedMed().form ? displayedMed().form : 'Not set yet' }}</p>
+        <p><strong>Administration Method:</strong> {{ !!displayedMed().method ? displayedMed().method : 'Not set yet' }}</p>
         <p>
           <strong>Requires Prescription:</strong>
           {{ displayedMed().isPresRequired ? 'Yes' : 'No' }}
         </p>
-        <p><strong>Indications:</strong> {{ displayedMed().indications }}</p>
-        <p><strong>Contraindications:</strong> {{ displayedMed().contraindications }}</p>
-        <p><strong>Side Effects:</strong> {{ displayedMed().sideEffects }}</p>
-        <p><strong>Warnings:</strong> {{ displayedMed().warnings }}</p>
-        <p><strong>Storing:</strong> {{ displayedMed().storing }}</p>
+        <p><strong>Indications:</strong> {{ !!displayedMed().indications ? displayedMed().indications : 'Not set yet' }}</p>
+        <p><strong>Contraindications:</strong> {{ !!displayedMed().contraindications ? displayedMed().contraindications : 'Not set yet' }}</p>
+        <p><strong>Side Effects:</strong> {{ !!displayedMed().sideEffects ? displayedMed().sideEffects : 'Not set yet' }}</p>
+        <p><strong>Warnings:</strong> {{ !!displayedMed().warnings ? displayedMed().warnings : 'Not set yet' }}</p>
+        <p><strong>Storing:</strong> {{ !!displayedMed().storing ? displayedMed().storing : 'Not set yet' }}</p>
         @if (isDoctor()) {
           <a
             [routerLink]="['../prescriptions/create']"

@@ -60,7 +60,7 @@ export class LoginComponent {
   };
 
   handleSubmit() {
-    if (this.form.valid) {
+    if (this.form.valid && !!this.form.value.email.trim && !!this.form.value.password.trim) {
       this.api.login(this.form.value).subscribe({
         next: () => {
           this.errors.email.set('');

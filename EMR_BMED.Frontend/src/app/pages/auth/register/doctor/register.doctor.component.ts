@@ -31,7 +31,11 @@ export class RegisterDoctorComponent {
   };
 
   handleSubmit() {
-    if (this.form.valid) {
+    if (this.form.valid
+      && !!this.form.value.name.trim()
+      && !!this.form.value.surname.trim()
+      && !!this.form.value.email.trim()
+    ) {
       this.api
         .post<
           {
